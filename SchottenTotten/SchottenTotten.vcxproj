@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Cartes.h" />
+    <ClInclude Include="Borne.h" />
     <ClInclude Include="Joueur.h" />
     <ClInclude Include="Partie.h" />
   </ItemGroup>
@@ -132,6 +133,7 @@
     <ClCompile Include="Joueur.cpp" />
     <ClCompile Include="Cartes.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Borne.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
