@@ -7,7 +7,6 @@ class Cartes
 private:
     int iCARnuméro;
     std::string sCARcouleur;
-
 public:
     Cartes();
     Cartes(int iCARnuméro, std::string sCARcouleur);

@@ -1,13 +1,21 @@
 #pragma once
 #include <string>
-using namespace std;
+#include <vector>
+#include "Cartes.h"
 
 class Joueur
 {
 private:
+    std::string sJOUnom;
+    std::vector<Cartes> vJOUCartesMain;
 
 public:
     Joueur();
+    Joueur(const std::string& nom);
 
+    std::string getNom() const;
+    void setNom(const std::string& nouveauNom);
+    void ajouterCarte(const Cartes& carte);
+    void retirerCarte(int index);
+    std::vector<Cartes> getMain() const;
 };
-
