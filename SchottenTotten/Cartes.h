@@ -13,6 +13,6 @@ public:
     int getnumero() { return iCARnuméro; }
     std::string getcouleur() { return sCARcouleur; }
     void setnumero(int numero) {iCARnuméro = numero; }
-    void setcouleur(const std::string& couleur) { sCARcouleur = couleur; }
+    void setcouleur(std::string& couleur) { sCARcouleur = couleur; }
 };
 

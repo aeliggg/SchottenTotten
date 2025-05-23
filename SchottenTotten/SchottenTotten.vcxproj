@@ -131,6 +131,7 @@
     <ClCompile Include="Partie.cpp" />
     <ClCompile Include="Joueur.cpp" />
     <ClCompile Include="Cartes.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

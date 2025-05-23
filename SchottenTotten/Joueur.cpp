@@ -2,17 +2,19 @@
 
 Joueur::Joueur() {}
 
-Joueur::Joueur(const std::string& sJOUnom) {}
+Joueur::Joueur(std::string& sNom) {
+    sJOUnom = sNom;
+}
 
-std::string Joueur::getsJOUnom() {
+std::string Joueur::getNom() {
     return sJOUnom;
 }
 
-void Joueur::setsJOUnom(const std::string& nouveausJOUnom) {
+void Joueur::setNom(std::string& nouveausJOUnom) {
     sJOUnom = nouveausJOUnom;
 }
 
-void Joueur::ajouterCarte(const Cartes& carte) {
+void Joueur::ajouterCarte(Cartes& carte) {
     vJOUCartesMain.push_back(carte);
 }
 
@@ -22,6 +24,6 @@ void Joueur::retirerCarte(int index) {
     }
 }
 
-std::vector<Cartes> Joueur::getMain() const {
+std::vector<Cartes> Joueur::getMain() {
     return vJOUCartesMain;
 }
