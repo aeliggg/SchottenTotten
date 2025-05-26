@@ -111,35 +111,36 @@ void Partie::jouer() {
         }
         bornes[choixfrontiere].ajouterCarteJ2(joueur2->getMain()[choixCarte]);
 
+        std::cout << "\n=== Résumé des cartes sur les bornes ===\n";
+        for (unsigned int i = 0; i < bornes.size(); ++i) {
+            std::cout << "\nBorne " << bornes[i].getnumero() << " :\n";
+
+            std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
+            std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
+
+            std::cout << "  Cartes de " << joueur1->getNom() << " : ";
+            if (cartesJ1.empty()) {
+                std::cout << "aucune\n";
+            }
+            else {
+                for (unsigned int j = 0; j < cartesJ1.size(); ++j) {
+                    std::cout << "[" << cartesJ1[j].getnumero() << " " << cartesJ1[j].getcouleur() << "] ";
+                }
+                std::cout << "\n";
+            }
+
+            std::cout << "  Cartes de " << joueur2->getNom() << " : ";
+            if (cartesJ2.empty()) {
+                std::cout << "aucune\n";
+            }
+            else {
+                for (unsigned int j = 0; j < cartesJ2.size(); ++j) {
+                    std::cout << "[" << cartesJ2[j].getnumero() << " " << cartesJ2[j].getcouleur() << "] ";
+                }
+                std::cout << "\n";
+            }
+
     }
-    std::cout << "\n=== Résumé des cartes sur les bornes ===\n";
-    for (unsigned int i = 0; i < bornes.size(); ++i) {
-        std::cout << "\nBorne " << bornes[i].getnumero() << " :\n";
-
-        std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
-        std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
-
-        std::cout << "  Cartes de " << joueur1->getNom() << " : ";
-        if (cartesJ1.empty()) {
-            std::cout << "aucune\n";
-        }
-        else {
-            for (unsigned int j = 0; j < cartesJ1.size(); ++j) {
-                std::cout << "[" << cartesJ1[j].getnumero() << " " << cartesJ1[j].getcouleur() << "] ";
-            }
-            std::cout << "\n";
-        }
-
-        std::cout << "  Cartes de " << joueur2->getNom() << " : ";
-        if (cartesJ2.empty()) {
-            std::cout << "aucune\n";
-        }
-        else {
-            for (unsigned int j = 0; j < cartesJ2.size(); ++j) {
-                std::cout << "[" << cartesJ2[j].getnumero() << " " << cartesJ2[j].getcouleur() << "] ";
-            }
-            std::cout << "\n";
-        }
     }
 
 

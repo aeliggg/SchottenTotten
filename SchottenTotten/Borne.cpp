@@ -22,9 +22,19 @@ std::vector<Cartes> Borne::getCarteJ2() {
 
 
 void Borne::ajouterCarteJ1(const Cartes& carte) {
-    vBORcartesJ1.push_back(carte);
+    if (vBORcartesJ1.size() < 3) {
+        vBORcartesJ1.push_back(carte);
+    }
+    else {
+        std::cout<<" deja 3 cartes sur la borne"<<std::endl;
+    }
 }
 
 void Borne::ajouterCarteJ2(const Cartes& carte) {
-    vBORcartesJ2.push_back(carte);
+    if (vBORcartesJ2.size() < 3) {
+        vBORcartesJ2.push_back(carte);
+    }
+    else {
+        std::cout << " deja 3 cartes sur la borne" << std::endl;
+    }
 }
