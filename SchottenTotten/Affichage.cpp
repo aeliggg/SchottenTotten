@@ -1,4 +1,6 @@
 #include "Affichage.h"
+#include "Borne.h"
+#include "Cartes.h"
 
 CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "bleu") return BLEU;
@@ -33,5 +35,46 @@ void AfficheCarte(const Cartes& carte) {
     default:
         std::cout << carte.getnumero() << std::endl;
         break;
+    }
+}
+
+void AfficherBornes(std::vector<Borne> bornes, std::vector<Cartes> main1, std::vector<Cartes> main2) {
+    std::cout << "\n=== Résumé des cartes sur les bornes ===\n";
+
+    for (unsigned int i = 0; i < bornes.size(); ++i) {
+
+        std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
+        if (cartesJ1.empty()) {
+            std::cout << "    0     ";
+        }
+        else {
+            for (unsigned int j = 0; j < cartesJ1.size(); ++j) {
+                std::cout << "     ";
+                AfficheCarte(main1[j]);
+                std::cout << "     ";
+            }
+        }
+    }
+    std::cout << "\n -----------------------------------------------------------------------------------------\n";
+    for (unsigned int i = 0; i < bornes.size(); ++i) {
+
+        std::cout << "| Borne " << bornes[i].getnumero() << " ";
+    }
+    std::cout << "| ";
+    std::cout << "\n -----------------------------------------------------------------------------------------\n";
+
+    for (unsigned int i = 0; i < bornes.size(); ++i) {
+
+        std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
+        if (cartesJ2.empty()) {
+            std::cout << "    0     ";
+        }
+        else {
+            for (unsigned int j = 0; j < cartesJ2.size(); ++j) {
+                std::cout << "     ";
+                AfficheCarte(main2[j]);
+                std::cout << "     ";
+            }
+        }
     }
 }
