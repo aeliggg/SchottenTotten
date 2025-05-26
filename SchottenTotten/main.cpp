@@ -16,10 +16,7 @@ int main() {
 
     std::vector<Cartes> cartes = partie.getCartes();
     std::cout << "Nombre total de cartes dans la partie : " << cartes.size() << std::endl;
-    for (unsigned int uiIndex = 0; uiIndex < 6; ++uiIndex) {
-        joueur1.ajouterCarte(cartes[uiIndex]);
-        joueur2.ajouterCarte(cartes[uiIndex + 6]);
-    }
+
 
     std::cout << "\nMain de " << joueur1.getNom() << " :" << std::endl;
     std::vector<Cartes> main1 = joueur1.getMain();
@@ -32,6 +29,7 @@ int main() {
     for (unsigned int uiIndex = 0; uiIndex < main2.size(); ++uiIndex) {
         std::cout << "Carte " << main2[uiIndex].getnumero() << " de couleur " << main2[uiIndex].getcouleur() << std::endl;
     }
+    partie.jouer();
 
     return 0;
 }

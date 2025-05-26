@@ -12,4 +12,8 @@ public:
 	Borne(int numéro);
 	int getnumero();
 	void setnumero(int numéro);
+	vector<Cartes> getCarteJ1();
+	vector<Cartes> getCarteJ2();
+	void ajouterCarteJ1(const Cartes& carte);
+	void ajouterCarteJ2(const Cartes& carte);
 };

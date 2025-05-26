@@ -1,29 +1,27 @@
 #include "Joueur.h"
 
-Joueur::Joueur() {}
+Joueur::Joueur() : sJOUnom("Inconnu") {}
 
-Joueur::Joueur(std::string& sNom) {
-    sJOUnom = sNom;
-}
+Joueur::Joueur(const std::string& sNom) : sJOUnom(sNom) {}
 
-std::string Joueur::getNom() {
+std::string Joueur::getNom() const {
     return sJOUnom;
 }
 
-void Joueur::setNom(std::string& nouveausJOUnom) {
-    sJOUnom = nouveausJOUnom;
+void Joueur::setNom(const std::string& nouveauNom) {
+    sJOUnom = nouveauNom;
 }
 
-void Joueur::ajouterCarte(Cartes& carte) {
+void Joueur::ajouterCarte(const Cartes& carte) {
     vJOUCartesMain.push_back(carte);
 }
 
 void Joueur::retirerCarte(int index) {
-    if (index >= 0 && index < static_cast<int>(vJOUCartesMain.size())) {
+    if (index >= 0 && static_cast<size_t>(index) < vJOUCartesMain.size()) {
         vJOUCartesMain.erase(vJOUCartesMain.begin() + index);
     }
 }
 
-std::vector<Cartes> Joueur::getMain() {
+std::vector<Cartes> Joueur::getMain() const {
     return vJOUCartesMain;
 }

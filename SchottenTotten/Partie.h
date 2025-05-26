@@ -18,4 +18,5 @@ public:
     std::vector<Cartes> getCartes();
     Joueur* getJoueur1();
     Joueur* getJoueur2();
+    void jouer();
 };

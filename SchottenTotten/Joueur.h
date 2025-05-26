@@ -11,11 +11,11 @@ private:
 
 public:
     Joueur();
-    Joueur(std::string& sNom);
+    Joueur(const std::string& sNom);
 
-    std::string getNom();
-    void setNom(std::string& nouveauNom);
-    void ajouterCarte(Cartes& carte);
+    std::string getNom() const;
+    void setNom(const std::string& nouveauNom);
+    void ajouterCarte(const Cartes& carte);
     void retirerCarte(int index);
-    std::vector<Cartes> getMain();
+    std::vector<Cartes> getMain() const;
 };
