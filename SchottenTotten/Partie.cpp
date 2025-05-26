@@ -79,8 +79,17 @@ void Partie::jouer() {
     std::cout << "Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
     for (int tour = 0; tour < 2; ++tour) {
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
+        int Tour;
+        std::cout << "\n C'est au tour de "<< joueur1->getNom()<<"\n";
+        std::cout << "\n Ecrire 1 si vous etes pret a voir la main \n";
+        std::cin >> Tour;
         std::cout << "\n Voici la main de "<<joueur1->getNom()<<" : \n";
         std::vector<Cartes> main1 = joueur1->getMain();
+        std::sort(main1.begin(), main1.end(), [](const Cartes& a, const Cartes& b) {
+            if (a.getcouleur() != b.getcouleur())
+                return a.getcouleur() < b.getcouleur(); 
+            return a.getnumero() < b.getnumero();       
+            });
         for (unsigned int uiIndex = 0; uiIndex < main1.size(); ++uiIndex) {
             AfficheCarte(main1[uiIndex]);
         }
@@ -104,8 +113,16 @@ void Partie::jouer() {
         joueur1->ajouterCarte(cartes.back());;
 
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
+        std::cout << "\n C'est au tour de " << joueur2->getNom() << "\n";
+        std::cout << "\n Ecrire 1 si vous etes pret a voir la main \n";
+        std::cin >> Tour;
         std::cout << "\n Voici la main de " << joueur2->getNom() << " : \n";
         std::vector<Cartes> main2 = joueur2->getMain();
+        std::sort(main2.begin(), main2.end(), [](const Cartes& a, const Cartes& b) {
+            if (a.getcouleur() != b.getcouleur())
+                return a.getcouleur() < b.getcouleur();
+            return a.getnumero() < b.getnumero();
+            });
         for (unsigned int uiIndex = 0; uiIndex < main2.size(); ++uiIndex) {
             AfficheCarte(main2[uiIndex]);
         }
