@@ -1,6 +1,6 @@
 #include "Partie.h"
 #include "Affichage.h"
-
+#include <limits>
 Partie::Partie(){
     std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
 
@@ -82,7 +82,12 @@ void Partie::jouer() {
         int Tour;
         std::cout << "\n C'est au tour de "<< joueur1->getNom()<<"\n";
         std::cout << "\n Ecrire 1 si vous etes pret a voir la main \n";
-        std::cin >> Tour;
+        while (!(std::cin >> Tour) || Tour != 1) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrée invalide. Veuillez saisir 1 pour continuer : ";
+        }
+
         std::cout << "\n Voici la main de "<<joueur1->getNom()<<" : \n";
         std::vector<Cartes> main1 = joueur1->getMain();
         std::sort(main1.begin(), main1.end(), [](const Cartes& a, const Cartes& b) {
@@ -97,25 +102,33 @@ void Partie::jouer() {
         int choixfrontiere;
         std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (1 a 6) : ";
         std::cin >> choixCarte;
-        while (choixCarte > 6 || choixCarte < 1) {
-            std::cout << "Erreur dans l'index" << endl;
-            std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (1 a 6): ";
+        while (std::cin.fail() || choixCarte < 1 || choixCarte > 6) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Erreur dans l'index. Veuillez entrer un nombre entre 1 et 6 : ";
             std::cin >> choixCarte;
         }
+
         std::cout << joueur1->getNom() << ", entrez l'index de la carte frontiere ou vous voulez placer la carte (1 a 9): ";
         std::cin >> choixfrontiere;
-        while (choixfrontiere > 9 || choixfrontiere < 1) {
-            std::cout << "Erreur dans l'index" << endl;
-            std::cout << joueur1->getNom() << ", entrez l'index de la frontiere ou vous voulez placer la carte (1 a 9):  ";
+        while (std::cin.fail() || choixfrontiere < 1 || choixfrontiere > 9) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Erreur dans l'index. Veuillez entrer un nombre entre 1 et 9 : ";
             std::cin >> choixfrontiere;
         }
+
         bornes[choixfrontiere-1].ajouterCarteJ1(joueur1->getMain()[choixCarte-1]);
         joueur1->ajouterCarte(cartes.back());;
 
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         std::cout << "\n C'est au tour de " << joueur2->getNom() << "\n";
         std::cout << "\n Ecrire 1 si vous etes pret a voir la main \n";
-        std::cin >> Tour;
+        while (!(std::cin >> Tour) || Tour != 1) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrée invalide. Veuillez saisir 1 pour continuer : ";
+        }
         std::cout << "\n Voici la main de " << joueur2->getNom() << " : \n";
         std::vector<Cartes> main2 = joueur2->getMain();
         std::sort(main2.begin(), main2.end(), [](const Cartes& a, const Cartes& b) {
