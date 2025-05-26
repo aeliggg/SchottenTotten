@@ -1,4 +1,5 @@
 #include "Partie.h"
+#include "Affichage.h"
 
 Partie::Partie(){
     std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
@@ -81,7 +82,7 @@ void Partie::jouer() {
         std::cout << "\n Voici la main de "<<joueur1->getNom()<<" : \n";
         std::vector<Cartes> main1 = joueur1->getMain();
         for (unsigned int uiIndex = 0; uiIndex < main1.size(); ++uiIndex) {
-            std::cout << "Carte " << main1[uiIndex].getnumero() << " de couleur " << main1[uiIndex].getcouleur() << std::endl;
+            AfficheCarte(main1[uiIndex]);
         }
         int choixCarte;
         int choixfrontiere;
@@ -106,7 +107,7 @@ void Partie::jouer() {
         std::cout << "\n Voici la main de " << joueur2->getNom() << " : \n";
         std::vector<Cartes> main2 = joueur2->getMain();
         for (unsigned int uiIndex = 0; uiIndex < main2.size(); ++uiIndex) {
-            std::cout << "Carte " << main2[uiIndex].getnumero() << " de couleur " << main2[uiIndex].getcouleur() << std::endl;
+            AfficheCarte(main2[uiIndex]);
         }
         std::cout << joueur2->getNom() << ", entrez l'index de la carte a jouer (0 a 5) : ";
         std::cin >> choixCarte;
