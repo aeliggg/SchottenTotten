@@ -28,7 +28,7 @@ void AfficheCarte(const Cartes& carte) {
         std::cout << "\033[35m" << carte.getnumero() << "\033[0m ";
         break;
     case ORANGE:
-        std::cout << "\033[38;5;208m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[38;5;208m" << carte.getnumero() << "\033[0m ";
         break;
     default:
         std::cout << carte.getnumero() << std::endl;

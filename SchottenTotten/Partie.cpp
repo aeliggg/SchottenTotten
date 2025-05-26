@@ -86,21 +86,21 @@ void Partie::jouer() {
         }
         int choixCarte;
         int choixfrontiere;
-        std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (0 a 5) : ";
+        std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (1 a 6) : ";
         std::cin >> choixCarte;
-        while (choixCarte > 5 || choixCarte < 0) {
+        while (choixCarte > 6 || choixCarte < 1) {
             std::cout << "Erreur dans l'index" << endl;
-            std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (0 a 5): ";
+            std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (1 a 6): ";
             std::cin >> choixCarte;
         }
-        std::cout << joueur1->getNom() << ", entrez l'index de la carte frontiere ou vous voulez placer la carte (0 a 8): ";
+        std::cout << joueur1->getNom() << ", entrez l'index de la carte frontiere ou vous voulez placer la carte (1 a 9): ";
         std::cin >> choixfrontiere;
-        while (choixfrontiere > 8 || choixfrontiere < 0) {
+        while (choixfrontiere > 9 || choixfrontiere < 1) {
             std::cout << "Erreur dans l'index" << endl;
-            std::cout << joueur1->getNom() << ", entrez l'index de la frontiere ou vous voulez placer la carte (0 a 8):  ";
+            std::cout << joueur1->getNom() << ", entrez l'index de la frontiere ou vous voulez placer la carte (1 a 9):  ";
             std::cin >> choixfrontiere;
         }
-        bornes[choixfrontiere].ajouterCarteJ1(joueur1->getMain()[choixCarte]);
+        bornes[choixfrontiere-1].ajouterCarteJ1(joueur1->getMain()[choixCarte-1]);
         joueur1->ajouterCarte(cartes.back());;
 
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
@@ -109,21 +109,21 @@ void Partie::jouer() {
         for (unsigned int uiIndex = 0; uiIndex < main2.size(); ++uiIndex) {
             AfficheCarte(main2[uiIndex]);
         }
-        std::cout << joueur2->getNom() << ", entrez l'index de la carte a jouer (0 a 5) : ";
+        std::cout << joueur2->getNom() << ", entrez l'index de la carte a jouer (1 a 6) : ";
         std::cin >> choixCarte;
-        while (choixCarte > 5 || choixCarte < 0) {
+        while (choixCarte > 6 || choixCarte < 1) {
             std::cout << "Erreur dans l'index" << endl;
-            std::cout << joueur2->getNom() << ", entrez l'index de la carte a jouer (0 a 5): ";
+            std::cout << joueur2->getNom() << ", entrez l'index de la carte a jouer (1 a 6): ";
             std::cin >> choixCarte;
         }
-        std::cout << joueur2->getNom() << ", entrez l'index de la carte frontiere ou vous voulez placer la carte (0 a 8): ";
+        std::cout << joueur2->getNom() << ", entrez l'index de la borne ou vous voulez placer la carte (1 a 9): ";
         std::cin >> choixfrontiere;
-        while (choixfrontiere > 8 || choixfrontiere < 0) {
+        while (choixfrontiere > 9 || choixfrontiere < 1) {
             std::cout << "Erreur dans l'index" << endl;
-            std::cout << joueur2->getNom() << ", entrez l'index de la frontiere ou vous voulez placer la carte (0 a 8):  ";
+            std::cout << joueur2->getNom() << ", entrez l'index de la borne ou vous voulez placer la carte (1 a 9):  ";
             std::cin >> choixfrontiere;
         }
-        bornes[choixfrontiere].ajouterCarteJ2(joueur2->getMain()[choixCarte]);
+        bornes[choixfrontiere-1].ajouterCarteJ2(joueur2->getMain()[choixCarte-1]);
 
         std::cout << "\n=== Résumé des cartes sur les bornes ===\n";
         for (unsigned int i = 0; i < bornes.size(); ++i) {
