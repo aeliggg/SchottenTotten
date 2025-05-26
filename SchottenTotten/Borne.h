@@ -3,9 +3,14 @@
 #include "Cartes.h"
 #include <string>
 #include <vector>
+
+// DÉCLARATION ANTICIPÉE DE PARTIE
+class Partie;
+
 class Borne {
 private:
 	int iBORnuméro;
+	Partie* BORpartie;
 	std::vector<Cartes> vBORcartesJ1;
 	std::vector<Cartes> vBORcartesJ2;
 public:
@@ -13,6 +18,7 @@ public:
 	Borne(int numéro);
 	int getnumero();
 	void setnumero(int numéro);
+	void setpartie(Partie* partie) { BORpartie = partie; }
 	vector<Cartes> getCarteJ1();
 	vector<Cartes> getCarteJ2();
 	void ajouterCarteJ1(const Cartes& carte);

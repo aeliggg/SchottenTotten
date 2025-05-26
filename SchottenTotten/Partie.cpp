@@ -9,6 +9,11 @@ Partie::Partie(){
             ajouterCarte(carte);
         }
     }
+    for (int i = 0; i < 9; ++i) {
+        Borne borne(i + 1);
+        borne.setpartie(this);
+        bornes.push_back(borne);
+    }
 }
 
 Partie::Partie(Joueur* j1, Joueur* j2): joueur1(j1), joueur2(j2) {
@@ -20,14 +25,28 @@ Partie::Partie(Joueur* j1, Joueur* j2): joueur1(j1), joueur2(j2) {
             ajouterCarte(carte);
         }
     }
+    for (int i = 0; i < 9; ++i) {
+        Borne borne(i + 1);
+        borne.setpartie(this);
+        bornes.push_back(borne);
+    }
 }
 
 void Partie::ajouterCarte(const Cartes& carte) {
     cartes.push_back(carte);
 }
 
+void Partie::ajouterBorne(const Borne& borne) {
+    bornes.push_back(borne);
+}
+
+
 std::vector<Cartes> Partie::getCartes() {
     return cartes;
+}
+
+std::vector<Borne> Partie::getBornes() {
+    return bornes;
 }
 
 Joueur* Partie::getJoueur1() {
@@ -41,21 +60,14 @@ Joueur* Partie::getJoueur2() {
 #include "Partie.h"
 #include "Borne.h"
 #include <iostream>
-#include <algorithm> // pour std::shuffle
+#include <algorithm>
 #include <random>
 #include <ctime>
 
 void Partie::jouer() {
-    std::vector<Borne> bornes;
-    for (int i = 0; i < 9; ++i) {
-        bornes.push_back(Borne(i + 1));
-    }
-
-    // Mélanger les cartes
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
 
-    // Distribuer 6 cartes a chaque joueur
     for (int i = 0; i < 6; ++i) {
         joueur1->ajouterCarte(cartes.back());
         cartes.pop_back();
@@ -88,6 +100,7 @@ void Partie::jouer() {
             std::cin >> choixfrontiere;
         }
         bornes[choixfrontiere].ajouterCarteJ1(joueur1->getMain()[choixCarte]);
+        joueur1->ajouterCarte(cartes.back());;
 
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         std::cout << "\n Voici la main de " << joueur2->getNom() << " : \n";

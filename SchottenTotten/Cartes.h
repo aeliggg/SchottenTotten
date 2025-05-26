@@ -10,8 +10,8 @@ private:
 public:
     Cartes();
     Cartes(int iCARnuméro, std::string sCARcouleur);
-    int getnumero() { return iCARnuméro; }
-    std::string getcouleur() { return sCARcouleur; }
+    int getnumero() const { return iCARnuméro; }
+    std::string getcouleur() const { return sCARcouleur; }
     void setnumero(int numero) {iCARnuméro = numero; }
     void setcouleur(std::string& couleur) { sCARcouleur = couleur; }
 };

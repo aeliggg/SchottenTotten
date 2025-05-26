@@ -16,12 +16,14 @@ void Joueur::ajouterCarte(const Cartes& carte) {
     vJOUCartesMain.push_back(carte);
 }
 
-void Joueur::retirerCarte(int index) {
-    if (index >= 0 && static_cast<size_t>(index) < vJOUCartesMain.size()) {
-        vJOUCartesMain.erase(vJOUCartesMain.begin() + index);
+void Joueur::retirerCarte(const Cartes& carte) {
+    for (size_t i = 0; i < vJOUCartesMain.size(); ++i) {
+        if (vJOUCartesMain[i].getnumero() == carte.getnumero() && vJOUCartesMain[i].getcouleur() == carte.getcouleur()) {
+            vJOUCartesMain.erase(vJOUCartesMain.begin() + i);
+            break;
+        }
     }
 }
-
 std::vector<Cartes> Joueur::getMain() const {
     return vJOUCartesMain;
 }

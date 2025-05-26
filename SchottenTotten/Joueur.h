@@ -16,6 +16,6 @@ public:
     std::string getNom() const;
     void setNom(const std::string& nouveauNom);
     void ajouterCarte(const Cartes& carte);
-    void retirerCarte(int index);
+    void retirerCarte(const Cartes& carte);
     std::vector<Cartes> getMain() const;
 };
