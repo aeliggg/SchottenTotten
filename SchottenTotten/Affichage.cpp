@@ -39,7 +39,7 @@ void AfficheCarte(const Cartes& carte) {
 }
 
 void AfficherBornes(std::vector<Borne> bornes, std::vector<Cartes> main1, std::vector<Cartes> main2) {
-    std::cout << "\n=== Résumé des cartes sur les bornes ===\n";
+    std::cout << "\n=== Resume des cartes sur les bornes ===\n";
 
     for (unsigned int i = 0; i < bornes.size(); ++i) {
 

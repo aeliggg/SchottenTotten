@@ -4,6 +4,7 @@
 #include "Partie.h"
 
 int main() {
+
     std::string Nom1 = "Alice";
     std::string Nom2 = "Bob";
     Joueur joueur1(Nom1);

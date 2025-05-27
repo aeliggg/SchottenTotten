@@ -76,20 +76,21 @@ void Partie::jouer() {
         cartes.pop_back();
     }
 
-    std::cout << "Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
+    std::cout << "Debut de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
     for (int tour = 0; tour < 2; ++tour) {
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         int Tour;
-        std::cout << "\n C'est au tour de "<< joueur1->getNom()<<"\n";
-        std::cout << "\n Ecrire 1 si vous etes pret a voir la main \n";
+        std::cout << "\nC'est au tour de "<< joueur1->getNom()<<"\n";
+        std::cout << "\nEcrire 1 si vous etes pret a voir la main \n";
         while (!(std::cin >> Tour) || Tour != 1) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Entrée invalide. Veuillez saisir 1 pour continuer : ";
+            std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
         }
 
         std::cout << "\n Voici la main de "<<joueur1->getNom()<<" : \n";
         std::vector<Cartes> main1 = joueur1->getMain();
+        std::vector<Cartes> main2 = joueur2->getMain();
         std::sort(main1.begin(), main1.end(), [](const Cartes& a, const Cartes& b) {
             if (a.getcouleur() != b.getcouleur())
                 return a.getcouleur() < b.getcouleur(); 
@@ -110,6 +111,9 @@ void Partie::jouer() {
         }
 
         std::cout << joueur1->getNom() << ", entrez l'index de la carte frontiere ou vous voulez placer la carte (1 a 9): ";
+        AfficherBornes(bornes, main1, main2);
+        std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
+        std::cout << "\net " << joueur2->getNom() << " joue en bas\n";
         std::cin >> choixfrontiere;
         while (std::cin.fail() || choixfrontiere < 1 || choixfrontiere > 9) {
             std::cin.clear();
@@ -127,10 +131,9 @@ void Partie::jouer() {
         while (!(std::cin >> Tour) || Tour != 1) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Entrée invalide. Veuillez saisir 1 pour continuer : ";
+            std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
         }
         std::cout << "\n Voici la main de " << joueur2->getNom() << " : \n";
-        std::vector<Cartes> main2 = joueur2->getMain();
         std::sort(main2.begin(), main2.end(), [](const Cartes& a, const Cartes& b) {
             if (a.getcouleur() != b.getcouleur())
                 return a.getcouleur() < b.getcouleur();
@@ -147,6 +150,9 @@ void Partie::jouer() {
             std::cin >> choixCarte;
         }
         std::cout << joueur2->getNom() << ", entrez l'index de la borne ou vous voulez placer la carte (1 a 9): ";
+        AfficherBornes(bornes, main1, main2);
+        std::cout << "\n"<<joueur1->getNom() << " joue en haut\n";
+        std::cout << "\net " << joueur2->getNom() << " joue en bas\n";
         std::cin >> choixfrontiere;
         while (choixfrontiere > 9 || choixfrontiere < 1) {
             std::cout << "Erreur dans l'index" << endl;
