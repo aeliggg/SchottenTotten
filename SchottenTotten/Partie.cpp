@@ -80,7 +80,7 @@ void Partie::jouer() {
 
     std::cout << "Debut de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
 
-    for (int tour = 0; tour < 6; ++tour) {
+    for (int tour = 0; tour < 27; ++tour) {
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         {
             int ready;
@@ -129,13 +129,29 @@ void Partie::jouer() {
                 joueur1->ajouterCarte(cartes.back());
                 cartes.pop_back();
             }
-            if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(),joueur1,joueur2)) {
-                cout << "\n La frontiere est gagnee par "<<joueur1->getNom() << endl;
-                joueur1->setBorne(joueur1->getBorne() + 1);
+            if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
+                cout << "\n La frontiere est gagnee par " << joueur1->getNom() << endl;
+                joueur1->AjouterBorne(bornes[choixBorne - 1]);
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
                 cout << "\n La frontiere est gagnee par " << joueur2->getNom() << endl;
-                joueur2->setBorne(joueur2->getBorne() + 1);
+                joueur2->AjouterBorne(bornes[choixBorne - 1]);
+            }
+            if (joueur1->getBorne().size() == 5) {
+                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                return;
+            }
+            if (joueur2->getBorne().size() == 5) {
+                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                return;
+            }
+            if (joueur2->EstGagnant()) {
+                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                return;
+            }
+            if (joueur1->EstGagnant()) {
+                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                return;
             }
         }
         {
@@ -190,11 +206,27 @@ void Partie::jouer() {
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
                 cout << "\n La frontiere est gagnee par " << joueur1->getNom() << endl;
-                joueur1->setBorne(joueur1->getBorne() + 1);
+                joueur1->AjouterBorne(bornes[choixBorne - 1]);
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
                 cout << "\n La frontiere est gagnee par " << joueur2->getNom() << endl;
-                joueur2->setBorne(joueur2->getBorne() + 1);
+                joueur2->AjouterBorne(bornes[choixBorne - 1]);
+            }
+            if (joueur1->getBorne().size() == 5) {
+                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                return;
+            }
+            if (joueur2->getBorne().size() == 5) {
+                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                return;
+            }
+            if (joueur2->EstGagnant()) {
+                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                return;
+            }
+            if (joueur1->EstGagnant()) {
+                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                return;
             }
         }
 

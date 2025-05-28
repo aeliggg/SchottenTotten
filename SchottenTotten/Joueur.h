@@ -1,23 +1,27 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Cartes.h"
+#include "Borne.h"
 
 class Joueur
 {
 private:
     std::string sJOUnom;
     std::vector<Cartes> vJOUCartesMain;
-    int nbBorne;
+    std::vector<Borne> BorneGagnee;
 
 public:
     Joueur();
     Joueur(const std::string& sNom);
-    int getBorne() { return nbBorne; }
-    void setBorne(int NewNbBorne) { nbBorne = NewNbBorne; }
+    vector<Borne> getBorne() { return BorneGagnee; }
+    void setBorne(vector<Borne> NewBorne) {BorneGagnee=NewBorne ; }
+    void AjouterBorne(Borne NewNbBorne) { BorneGagnee.push_back(NewNbBorne); }
     std::string getNom() const;
     void setNom(const std::string& nouveauNom);
     void ajouterCarte(const Cartes& carte);
     void retirerCarte(const Cartes& carte);
     const std::vector<Cartes>& getMain() const;
+    bool EstGagnant();
 };
