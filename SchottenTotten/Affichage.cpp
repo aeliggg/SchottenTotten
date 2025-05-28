@@ -36,45 +36,38 @@ void AfficheCarte(const Cartes& carte) {
         std::cout << carte.getnumero() << std::endl;
         break;
     }
+
 }
 
-void AfficherBornes(std::vector<Borne> bornes, std::vector<Cartes> main1, std::vector<Cartes> main2) {
+void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
     std::cout << "\n=== Resume des cartes sur les bornes ===\n";
-
     for (unsigned int i = 0; i < bornes.size(); ++i) {
-
         std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
         if (cartesJ1.empty()) {
             std::cout << "    0     ";
         }
         else {
-            for (unsigned int j = 0; j < cartesJ1.size(); ++j) {
-                std::cout << "     ";
-                AfficheCarte(main1[j]);
-                std::cout << "     ";
-            }
+            std::cout << "    ";
+            AfficheCarte(cartesJ1[0]);
+            std::cout << "    ";
         }
     }
     std::cout << "\n -----------------------------------------------------------------------------------------\n";
     for (unsigned int i = 0; i < bornes.size(); ++i) {
-
         std::cout << "| Borne " << bornes[i].getnumero() << " ";
     }
-    std::cout << "| ";
-    std::cout << "\n -----------------------------------------------------------------------------------------\n";
-
+    std::cout << "|\n";
+    std::cout << " -----------------------------------------------------------------------------------------\n";
     for (unsigned int i = 0; i < bornes.size(); ++i) {
-
         std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
         if (cartesJ2.empty()) {
             std::cout << "    0     ";
         }
         else {
-            for (unsigned int j = 0; j < cartesJ2.size(); ++j) {
-                std::cout << "     ";
-                AfficheCarte(main2[j]);
-                std::cout << "     ";
-            }
+            std::cout << "    ";
+            AfficheCarte(cartesJ2[0]);
+            std::cout << "    ";
         }
     }
+    std::cout << "\n";
 }

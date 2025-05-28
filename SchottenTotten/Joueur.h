@@ -17,5 +17,5 @@ public:
     void setNom(const std::string& nouveauNom);
     void ajouterCarte(const Cartes& carte);
     void retirerCarte(const Cartes& carte);
-    std::vector<Cartes> getMain() const;
+    const std::vector<Cartes>& getMain() const;
 };

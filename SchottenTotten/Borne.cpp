@@ -5,7 +5,7 @@ Borne::Borne() : iBORnuméro(0) {}
 
 Borne::Borne(int numéro) : iBORnuméro(numéro) {}
 
-int Borne::getnumero() {
+int Borne::getnumero() const {
     return iBORnuméro;
 }
 
@@ -13,11 +13,11 @@ void Borne::setnumero(int numéro) {
     iBORnuméro = numéro;
 }
 
-std::vector<Cartes> Borne::getCarteJ1() {
+std::vector<Cartes> Borne::getCarteJ1() const{
     return vBORcartesJ1;
 }
 
-std::vector<Cartes> Borne::getCarteJ2() {
+std::vector<Cartes> Borne::getCarteJ2() const{
     return vBORcartesJ2;
 }
 

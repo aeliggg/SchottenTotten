@@ -24,6 +24,6 @@ void Joueur::retirerCarte(const Cartes& carte) {
         }
     }
 }
-std::vector<Cartes> Joueur::getMain() const {
+const std::vector<Cartes>& Joueur::getMain() const {
     return vJOUCartesMain;
 }

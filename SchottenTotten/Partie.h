@@ -23,4 +23,10 @@ public:
     Joueur* getJoueur1();
     Joueur* getJoueur2();
     void jouer();
+    bool EstSuite(std::vector<Cartes> trioDeCarte);
+    bool EstCouleur(std::vector<Cartes> trioDeCarte);
+    bool EstSuiteCouleur(std::vector<Cartes> trioDeCarte);
+    bool EstBrelan(std::vector<Cartes> trioDeCarte);
+    int getRangCombinaison(std::vector<Cartes> trio);
+    bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2);
 };
