@@ -174,19 +174,19 @@ void Partie::jouer() {
                 std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
             if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
 
@@ -278,19 +278,19 @@ void Partie::jouer() {
                 std::this_thread::sleep_for(std::chrono::seconds(4)); // attend 4 secondes
             }
             if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
             if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
         }
