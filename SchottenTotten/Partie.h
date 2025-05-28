@@ -28,5 +28,5 @@ public:
     bool EstSuiteCouleur(std::vector<Cartes> trioDeCarte);
     bool EstBrelan(std::vector<Cartes> trioDeCarte);
     int getRangCombinaison(std::vector<Cartes> trio);
-    bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2);
+    bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2);
 };

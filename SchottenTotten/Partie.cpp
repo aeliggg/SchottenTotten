@@ -85,11 +85,11 @@ void Partie::jouer() {
         {
             int ready;
             std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
-            std::cout << "Ecrire 1 si vous êtes prêt à voir la main : ";
+            std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Entrée invalide. Veuillez saisir 1 pour continuer : ";
+                std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
             }
 
             auto mainJ1 = joueur1->getMain();
@@ -105,7 +105,7 @@ void Partie::jouer() {
             }
 
             int choixCarte;
-            std::cout << joueur1->getNom() << ", entrez l'index de la carte à jouer (1 à " << mainJ1.size() << ") : ";
+            std::cout << joueur1->getNom() << ", entrez l'index de la carte a jouer (1 a " << mainJ1.size() << ") : ";
             while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)mainJ1.size()) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -116,7 +116,7 @@ void Partie::jouer() {
             AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
             std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
             std::cout << "et " << joueur2->getNom() << " joue en bas\n";
-            std::cout << joueur1->getNom() << ", entrez l'index de la borne où placer la carte (1 à 9) : ";
+            std::cout << joueur1->getNom() << ", entrez l'index de la borne ou placer la carte (1 a 9) : ";
             while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -129,16 +129,24 @@ void Partie::jouer() {
                 joueur1->ajouterCarte(cartes.back());
                 cartes.pop_back();
             }
+            if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(),joueur1,joueur2)) {
+                cout << "\n La frontiere est gagnee par "<<joueur1->getNom() << endl;
+                joueur1->setBorne(joueur1->getBorne() + 1);
+            }
+            if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
+                cout << "\n La frontiere est gagnee par " << joueur2->getNom() << endl;
+                joueur2->setBorne(joueur2->getBorne() + 1);
+            }
         }
         {
             int ready;
             std::cout << "\n--- Tour " << tour + 1 << " ---\n";
             std::cout << "\nC'est au tour de " << joueur2->getNom() << "\n";
-            std::cout << "Ecrire 1 si vous êtes prêt à voir la main : ";
+            std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Entrée invalide. Veuillez saisir 1 pour continuer : ";
+                std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
             }
 
             auto mainJ2 = joueur2->getMain();
@@ -154,7 +162,7 @@ void Partie::jouer() {
             }
 
             int choixCarte;
-            std::cout << joueur2->getNom() << ", entrez l'index de la carte à jouer (1 à " << mainJ2.size() << ") : ";
+            std::cout << joueur2->getNom() << ", entrez l'index de la carte a jouer (1 a " << mainJ2.size() << ") : ";
             while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)mainJ2.size()) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -165,7 +173,7 @@ void Partie::jouer() {
             AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
             std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
             std::cout << "et " << joueur2->getNom() << " joue en bas\n";
-            std::cout << joueur2->getNom() << ", entrez l'index de la borne où placer la carte (1 à 9) : ";
+            std::cout << joueur2->getNom() << ", entrez l'index de la borne ou placer la carte (1 a 9) : ";
             while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -179,6 +187,14 @@ void Partie::jouer() {
             if (!cartes.empty()) {
                 joueur2->ajouterCarte(cartes.back());
                 cartes.pop_back();
+            }
+            if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
+                cout << "\n La frontiere est gagnee par " << joueur1->getNom() << endl;
+                joueur1->setBorne(joueur1->getBorne() + 1);
+            }
+            if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
+                cout << "\n La frontiere est gagnee par " << joueur2->getNom() << endl;
+                joueur2->setBorne(joueur2->getBorne() + 1);
             }
         }
 
@@ -224,7 +240,7 @@ void Partie::jouer() {
         trioDeCarte[1].getnumero(),
         trioDeCarte[2].getnumero()
         };
-        return (numeros[0] == numeros[1] == numeros[2]);
+        return (numeros[0] == numeros[1] &&  numeros[1] == numeros[2]);
     }
 
     int Partie::getRangCombinaison(std::vector<Cartes> trio) {
@@ -235,26 +251,31 @@ void Partie::jouer() {
         return 1;
     }
 
-    bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCarteJ2){
-        int rangJ1 = getRangCombinaison(trioDeCarteJ1);
-        int rangJ2 = getRangCombinaison(trioDeCarteJ2);
+    bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCarteJ2, Joueur* J1, Joueur* J2){
+        if (trioDeCarteJ1.size() == 3 && trioDeCarteJ2.size()==3) {
+            int rangJ1 = getRangCombinaison(trioDeCarteJ1);
+            int rangJ2 = getRangCombinaison(trioDeCarteJ2);
 
-        if (rangJ1 > rangJ2) {
-            return true;
-        }
-        else if (rangJ1 < rangJ2) {
+            if (rangJ1 > rangJ2) {
+                return true;
+            }
+            else if (rangJ1 < rangJ2) {
+                return false;
+            }
+            int sommeJ1 = trioDeCarteJ1[0].getnumero() + trioDeCarteJ1[1].getnumero() + trioDeCarteJ1[2].getnumero();
+            int sommeJ2 = trioDeCarteJ2[0].getnumero() + trioDeCarteJ2[1].getnumero() + trioDeCarteJ2[2].getnumero();
+
+            if (sommeJ1 > sommeJ2) {
+                return true;
+            }
+            else if (sommeJ1 < sommeJ2) {
+                return false;
+            }
             return false;
         }
-        int sommeJ1 = trioDeCarteJ1[0].getnumero() + trioDeCarteJ1[1].getnumero() + trioDeCarteJ1[2].getnumero();
-        int sommeJ2 = trioDeCarteJ2[0].getnumero() + trioDeCarteJ2[1].getnumero() + trioDeCarteJ2[2].getnumero();
-
-        if (sommeJ1 > sommeJ2) {
-            return true;
+        else {
+            cout << "\n Il y'a seulement " << trioDeCarteJ1.size() << " cartes sur la borne pour "<<J1->getNom()<<" et " << trioDeCarteJ2.size() << " pour "<<J2->getNom() << endl;
         }
-        else if (sommeJ1 < sommeJ2) {
-            return false;
-        }
-        return false;
     }
 
 
