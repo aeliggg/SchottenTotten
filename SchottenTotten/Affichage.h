@@ -2,6 +2,7 @@
 
 #include "Cartes.h"
 #include "Borne.h"
+#include "Joueur.h"
 #include <iostream>
 #include <string>
 
