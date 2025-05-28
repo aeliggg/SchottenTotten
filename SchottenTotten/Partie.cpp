@@ -1,6 +1,9 @@
-#include "Partie.h"
+ï»¿#include "Partie.h"
 #include "Affichage.h"
 #include <limits>
+#include <iomanip>   // Pour std::setw
+#include <thread>    // Pour sleep_for
+#include <chrono>
 
 
 
@@ -81,9 +84,15 @@ void Partie::jouer() {
     std::cout << "Debut de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
 
     for (int tour = 0; tour < 27; ++tour) {
+        if (tour != 0) {
+            clearConsole();
+        }
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         {
             int ready;
+            AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
+            std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
+            std::cout << "et " << joueur2->getNom() << " joue en bas\n";
             std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
             std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
@@ -113,50 +122,82 @@ void Partie::jouer() {
             }
 
             int choixBorne;
-            AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
-            std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
-            std::cout << "et " << joueur2->getNom() << " joue en bas\n";
-            std::cout << joueur1->getNom() << ", entrez l'index de la borne ou placer la carte (1 a 9) : ";
-            while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
+            std::cout << joueur1->getNom() << ", entrez l'index de la borne oÃ¹ placer la carte (1 a 9) : ";
+
+            while (true) {
+                while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
+                }
+
+                if (bornes[choixBorne - 1].getCarteJ1().size() < 3) {
+                    break;
+                }
+                else {
+                    std::cout << "Erreur : La borne " << choixBorne << " a deja 3 cartes. Choisissez une autre borne : ";
+                }
             }
             Cartes carteChoisie = mainJ1[choixCarte - 1];
             bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
             joueur1->retirerCarte(carteChoisie);
+
             if (!cartes.empty()) {
                 joueur1->ajouterCarte(cartes.back());
                 cartes.pop_back();
             }
+
+
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
-                cout << "\n La frontiere est gagnee par " << joueur1->getNom() << endl;
+                clearConsole();
                 joueur1->AjouterBorne(bornes[choixBorne - 1]);
+                std::string couleur = "\033[1;31m";
+                std::string reset = "\033[0m";
+
+                std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur1->getNom();
+                int largeurConsole = 80;
+                int espaceGauche = (largeurConsole - message.length()) / 2;
+                std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
+
+                std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
-                cout << "\n La frontiere est gagnee par " << joueur2->getNom() << endl;
+                clearConsole();
                 joueur2->AjouterBorne(bornes[choixBorne - 1]);
+                std::string couleur = "\033[1;31m";
+                std::string reset = "\033[0m";
+                std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur2->getNom();
+                int largeurConsole = 80;
+                int espaceGauche = (largeurConsole - message.length()) / 2;
+                std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
+
+                std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur1->getNom() << endl;
                 return;
             }
             if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur1->getNom() << endl;
                 return;
             }
+
         }
         {
             int ready;
+            clearConsole();
             std::cout << "\n--- Tour " << tour + 1 << " ---\n";
+            AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
+            std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
+            std::cout << "et " << joueur2->getNom() << " joue en bas\n";
             std::cout << "\nC'est au tour de " << joueur2->getNom() << "\n";
             std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
@@ -184,18 +225,23 @@ void Partie::jouer() {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Erreur. Veuillez entrer un nombre entre 1 et " << mainJ2.size() << " : ";
             }
-
             int choixBorne;
-            AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
-            std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
-            std::cout << "et " << joueur2->getNom() << " joue en bas\n";
-            std::cout << joueur2->getNom() << ", entrez l'index de la borne ou placer la carte (1 a 9) : ";
-            while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
-            }
+            std::cout << joueur2->getNom() << ", entrez l'index de la borne oÃ¹ placer la carte (1 a 9) : ";
 
+            while (true) {
+                while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
+                }
+
+                if (bornes[choixBorne - 1].getCarteJ2().size() < 3) {
+                    break;
+                }
+                else {
+                    std::cout << "Erreur : La borne " << choixBorne << " a deja 3 cartes. Choisissez une autre borne : ";
+                }
+            }
             Cartes carteChoisie = mainJ2[choixCarte - 1];
             bornes[choixBorne - 1].ajouterCarteJ2(carteChoisie);
             joueur2->retirerCarte(carteChoisie);
@@ -204,28 +250,47 @@ void Partie::jouer() {
                 joueur2->ajouterCarte(cartes.back());
                 cartes.pop_back();
             }
+
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
-                cout << "\n La frontiere est gagnee par " << joueur1->getNom() << endl;
+                clearConsole();
                 joueur1->AjouterBorne(bornes[choixBorne - 1]);
+                std::string couleur = "\033[1;31m";
+                std::string reset = "\033[0m";
+                std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur1->getNom();
+                int largeurConsole = 80;
+                int espaceGauche = (largeurConsole - message.length()) / 2;
+                std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
+
+                std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
-                cout << "\n La frontiere est gagnee par " << joueur2->getNom() << endl;
+                clearConsole();
                 joueur2->AjouterBorne(bornes[choixBorne - 1]);
+                // Couleur rouge clair (ANSI)
+                std::string couleur = "\033[1;31m"; // Bold Red
+                std::string reset = "\033[0m";
+                std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur2->getNom();
+                // Centrer le texte (environ au centre de 80 colonnes)
+                int largeurConsole = 80;
+                int espaceGauche = (largeurConsole - message.length()) / 2;
+                std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
+
+                std::this_thread::sleep_for(std::chrono::seconds(4)); // attend 4 secondes
             }
             if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur1->getNom() << endl;
                 return;
             }
             if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnÃ©e par " << joueur1->getNom() << endl;
                 return;
             }
         }
