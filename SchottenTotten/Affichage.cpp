@@ -1,6 +1,8 @@
 #include "Affichage.h"
 #include "Borne.h"
 #include "Cartes.h"
+#include <cstdlib>
+
 
 CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "bleu") return BLEU;
@@ -41,15 +43,20 @@ void AfficheCarte(const Cartes& carte) {
 
 void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
     std::cout << "\n=== Resume des cartes sur les bornes ===\n";
-    for (unsigned int i = 0; i < bornes.size(); ++i) {
-        std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
-        if (cartesJ1.empty()) {
-            std::cout << "    0     ";
+    for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
+        for (unsigned int i = 0; i < bornes.size(); ++i) {
+            std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
+            if (cartesJ1.size()<=uiLigneDeCartes) {
+                std::cout << "    0     ";
+            }
+            else {
+                std::cout << "    ";
+                AfficheCarte(cartesJ1[uiLigneDeCartes]);
+                std::cout << "    ";
+            }
         }
-        else {
-            std::cout << "    ";
-            AfficheCarte(cartesJ1[0]);
-            std::cout << "    ";
+        if (uiLigneDeCartes != 2) {
+            std::cout << "\n";
         }
     }
     std::cout << "\n -----------------------------------------------------------------------------------------\n";
@@ -58,16 +65,27 @@ void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>&
     }
     std::cout << "|\n";
     std::cout << " -----------------------------------------------------------------------------------------\n";
-    for (unsigned int i = 0; i < bornes.size(); ++i) {
-        std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
-        if (cartesJ2.empty()) {
-            std::cout << "    0     ";
+    for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
+        for (unsigned int i = 0; i < bornes.size(); ++i) {
+            std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
+            if (cartesJ2.size()<=uiLigneDeCartes) {
+                std::cout << "    0     ";
+            }
+            else {
+                std::cout << "    ";
+                AfficheCarte(cartesJ2[uiLigneDeCartes]);
+                std::cout << "    ";
+            }
         }
-        else {
-            std::cout << "    ";
-            AfficheCarte(cartesJ2[0]);
-            std::cout << "    ";
-        }
+        std::cout << "\n";
     }
-    std::cout << "\n";
+}
+
+
+void clearConsole() {
+    #if defined(_WIN32)
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }
