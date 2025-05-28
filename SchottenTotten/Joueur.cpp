@@ -1,5 +1,6 @@
 #include "Joueur.h"
-
+#include <limits>
+#include <algorithm>
 Joueur::Joueur() : sJOUnom("Inconnu") {}
 
 Joueur::Joueur(const std::string& sNom) : sJOUnom(sNom) {}
@@ -24,6 +25,22 @@ void Joueur::retirerCarte(const Cartes& carte) {
         }
     }
 }
-std::vector<Cartes> Joueur::getMain() const {
+const std::vector<Cartes>& Joueur::getMain() const {
     return vJOUCartesMain;
+}
+bool Joueur::EstGagnant() {
+    if (BorneGagnee.size() < 3) return false;
+    std::vector<int> numeros;
+    for (size_t i = 0; i < BorneGagnee.size(); ++i) {
+        numeros.push_back(BorneGagnee[i].getnumero());
+    }
+    std::sort(numeros.begin(), numeros.end());
+    for (size_t i = 0; i <= numeros.size() - 3; ++i) {
+        if (numeros[i + 1] == numeros[i] + 1 &&
+            numeros[i + 2] == numeros[i + 1] + 1) {
+            return true;
+        }
+    }
+
+    return false;
 }
