@@ -9,6 +9,10 @@ int Borne::getnumero() const {
     return iBORnuméro;
 }
 
+Joueur* Borne::getGagnant() const {
+    return GagnantBorne; 
+}
+
 void Borne::setnumero(int numéro) {
     iBORnuméro = numéro;
 }

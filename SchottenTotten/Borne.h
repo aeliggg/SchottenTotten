@@ -4,23 +4,26 @@
 #include <string>
 #include <vector>
 
-// DÉCLARATION ANTICIPÉE DE PARTIE
-class Partie;
 
+class Partie;
+class Joueur;
 class Borne {
 private:
 	int iBORnuméro;
 	Partie* BORpartie;
+	Joueur* GagnantBorne;
 	std::vector<Cartes> vBORcartesJ1;
 	std::vector<Cartes> vBORcartesJ2;
 public:
 	Borne();
 	Borne(int numéro);
 	int getnumero() const;
+	Joueur* getGagnant() const;
 	void setnumero(int numéro);
 	void setpartie(Partie* partie) { BORpartie = partie; }
-	vector<Cartes> getCarteJ1() const;
-	vector<Cartes> getCarteJ2() const;
+	void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
+	std::vector<Cartes> getCarteJ1() const;
+	std::vector<Cartes> getCarteJ2() const;
 	void ajouterCarteJ1(const Cartes& carte);
 	void ajouterCarteJ2(const Cartes& carte);
 };

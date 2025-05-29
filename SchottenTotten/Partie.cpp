@@ -98,11 +98,24 @@ void Partie::jouer() {
             //std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
             //std::cout << "et " << joueur2->getNom() << " joue en bas\n";
             std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
-            std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
+            if (joueur1->getBorne().size() != 0) {
+                std::cout << "\nLes bornes revendiquees par " << joueur1->getNom() << " sont : ";
+                for (unsigned int uiIndex = 0; uiIndex < joueur1->getBorne().size(); uiIndex++) {
+                    std::cout << "Borne " << joueur1->getBorne()[uiIndex].getnumero();
+                }
+            }
+            if (joueur2->getBorne().size() != 0) {
+                std::cout << "\nLes bornes revendiquees par " << joueur2->getNom() << " sont : ";
+                for (unsigned int uiIndex = 0; uiIndex < joueur2->getBorne().size(); uiIndex++) {
+                    std::cout << "Borne " << joueur2->getBorne()[uiIndex].getnumero();
+                }
+            }
+ 
+            std::cout << "\nEcrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
+                std::cout << "\nEntree invalide. Veuillez saisir 1 pour continuer : ";
             }
 
             auto mainJ1 = joueur1->getMain();
@@ -126,7 +139,7 @@ void Partie::jouer() {
             }
 
             int choixBorne;
-            std::cout << joueur1->getNom() << ", entrez l'index de la borne où placer la carte (1 a 9) : ";
+            std::cout << joueur1->getNom() << ", entrez l'index de la borne ou placer la carte (1 a 9) : ";
 
             while (true) {
                 while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
@@ -153,6 +166,8 @@ void Partie::jouer() {
 
 
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
+
+                bornes[choixBorne - 1].setGagnant(joueur1);
                 clearConsole();
                 joueur1->AjouterBorne(bornes[choixBorne - 1]);
                 std::string couleur = "\033[1;31m";
@@ -166,6 +181,7 @@ void Partie::jouer() {
                 std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
+                bornes[choixBorne - 1].setGagnant(joueur2);
                 clearConsole();
                 joueur2->AjouterBorne(bornes[choixBorne - 1]);
                 std::string couleur = "\033[1;31m";
@@ -178,19 +194,19 @@ void Partie::jouer() {
                 std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
             if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
 
@@ -205,11 +221,23 @@ void Partie::jouer() {
             //std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
             //std::cout << "et " << joueur2->getNom() << " joue en bas\n";
             std::cout << "\nC'est au tour de " << joueur2->getNom() << "\n";
-            std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
+            if (joueur1->getBorne().size() != 0) {
+                std::cout << "\nLes bornes revendiquees par " << joueur1->getNom() << " sont : ";
+                for (unsigned int uiIndex = 0; uiIndex < joueur1->getBorne().size(); uiIndex++) {
+                    std::cout << "Borne " << joueur1->getBorne()[uiIndex].getnumero();
+                }
+            }
+            if (joueur2->getBorne().size() != 0) {
+                std::cout << "\nLes bornes revendiquees par " << joueur2->getNom() << " sont : ";
+                for (unsigned int uiIndex = 0; uiIndex < joueur2->getBorne().size(); uiIndex++) {
+                    std::cout << "Borne " << joueur2->getBorne()[uiIndex].getnumero();
+                }
+            }
+            std::cout << "\nEcrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
+                std::cout << "\nEntree invalide. Veuillez saisir 1 pour continuer : ";
             }
             auto mainJ2 = joueur2->getMain();
             std::sort(mainJ2.begin(), mainJ2.end(), [](const Cartes& a, const Cartes& b) {
@@ -257,6 +285,7 @@ void Partie::jouer() {
             }
 
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
+                bornes[choixBorne - 1].setGagnant(joueur1);
                 clearConsole();
                 joueur1->AjouterBorne(bornes[choixBorne - 1]);
                 std::string couleur = "\033[1;31m";
@@ -269,6 +298,7 @@ void Partie::jouer() {
                 std::this_thread::sleep_for(std::chrono::seconds(4));
             }
             if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
+                bornes[choixBorne - 1].setGagnant(joueur2);
                 clearConsole();
                 joueur2->AjouterBorne(bornes[choixBorne - 1]);
                 // Couleur rouge clair (ANSI)
@@ -283,19 +313,19 @@ void Partie::jouer() {
                 std::this_thread::sleep_for(std::chrono::seconds(4)); // attend 4 secondes
             }
             if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
             if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur2->getNom() << endl;
                 return;
             }
             if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+                cout << "\nLa partie est gagnee par " << joueur1->getNom() << endl;
                 return;
             }
         }
