@@ -70,7 +70,9 @@ Joueur* Partie::getJoueur2() {
 #include <algorithm>
 #include <random>
 #include <ctime>
+
 void Partie::jouer() {
+
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
 
@@ -90,9 +92,11 @@ void Partie::jouer() {
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         {
             int ready;
+            AfficheASCII(joueur1->getNom());
             AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
-            std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
-            std::cout << "et " << joueur2->getNom() << " joue en bas\n";
+            AfficheASCII(joueur2->getNom());
+            //std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
+            //std::cout << "et " << joueur2->getNom() << " joue en bas\n";
             std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
             std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
@@ -155,8 +159,8 @@ void Partie::jouer() {
                 std::string reset = "\033[0m";
 
                 std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur1->getNom();
-                int largeurConsole = 80;
-                int espaceGauche = (largeurConsole - message.length()) / 2;
+                size_t largeurConsole = 80;
+                size_t espaceGauche = (largeurConsole - message.length()) / 2;
                 std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
 
                 std::this_thread::sleep_for(std::chrono::seconds(4));
@@ -167,8 +171,8 @@ void Partie::jouer() {
                 std::string couleur = "\033[1;31m";
                 std::string reset = "\033[0m";
                 std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur2->getNom();
-                int largeurConsole = 80;
-                int espaceGauche = (largeurConsole - message.length()) / 2;
+                size_t largeurConsole = 80;
+                size_t espaceGauche = (largeurConsole - message.length()) / 2;
                 std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
 
                 std::this_thread::sleep_for(std::chrono::seconds(4));
@@ -195,9 +199,11 @@ void Partie::jouer() {
             int ready;
             clearConsole();
             std::cout << "\n--- Tour " << tour + 1 << " ---\n";
+            AfficheASCII(joueur1->getNom());
             AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
-            std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
-            std::cout << "et " << joueur2->getNom() << " joue en bas\n";
+            AfficheASCII(joueur2->getNom());
+            //std::cout << "\n" << joueur1->getNom() << " joue en haut\n";
+            //std::cout << "et " << joueur2->getNom() << " joue en bas\n";
             std::cout << "\nC'est au tour de " << joueur2->getNom() << "\n";
             std::cout << "Ecrire 1 si vous etes pret a voir la main : ";
             while (!(std::cin >> ready) || ready != 1) {
@@ -205,7 +211,6 @@ void Partie::jouer() {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Entree invalide. Veuillez saisir 1 pour continuer : ";
             }
-
             auto mainJ2 = joueur2->getMain();
             std::sort(mainJ2.begin(), mainJ2.end(), [](const Cartes& a, const Cartes& b) {
                 if (a.getcouleur() != b.getcouleur())
@@ -257,8 +262,8 @@ void Partie::jouer() {
                 std::string couleur = "\033[1;31m";
                 std::string reset = "\033[0m";
                 std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur1->getNom();
-                int largeurConsole = 80;
-                int espaceGauche = (largeurConsole - message.length()) / 2;
+                size_t largeurConsole = 80;
+                size_t espaceGauche = (largeurConsole - message.length()) / 2;
                 std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
 
                 std::this_thread::sleep_for(std::chrono::seconds(4));
@@ -271,8 +276,8 @@ void Partie::jouer() {
                 std::string reset = "\033[0m";
                 std::string message = "LA FRONTIERE " + std::to_string(bornes[choixBorne - 1].getnumero()) + " EST GAGNEE PAR " + joueur2->getNom();
                 // Centrer le texte (environ au centre de 80 colonnes)
-                int largeurConsole = 80;
-                int espaceGauche = (largeurConsole - message.length()) / 2;
+                size_t largeurConsole = 80;
+                size_t espaceGauche = (largeurConsole - message.length()) / 2;
                 std::cout << std::endl << std::setw(espaceGauche + message.length()) << couleur << message << reset << std::endl;
 
                 std::this_thread::sleep_for(std::chrono::seconds(4)); // attend 4 secondes

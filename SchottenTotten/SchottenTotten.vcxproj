@@ -126,16 +126,20 @@
     <ClInclude Include="Affichage.h" />
     <ClInclude Include="Cartes.h" />
     <ClInclude Include="Borne.h" />
+    <ClInclude Include="Figlet.hh" />
     <ClInclude Include="Joueur.h" />
     <ClInclude Include="Partie.h" />
+    <ClInclude Include="StandartFont.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Affichage.cpp" />
+    <ClCompile Include="Figlet.cc" />
     <ClCompile Include="Partie.cpp" />
     <ClCompile Include="Joueur.cpp" />
     <ClCompile Include="Cartes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Borne.cpp" />
+    <ClCompile Include="StandartFont.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

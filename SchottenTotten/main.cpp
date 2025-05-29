@@ -1,12 +1,16 @@
-﻿/*#include <iostream>
+﻿#include <iostream>
 #include "Cartes.h"
 #include "Joueur.h"
 #include "Partie.h"
 
 int main() {
 
-    std::string Nom1 = "Alice";
-    std::string Nom2 = "Bob";
+    std::string Nom1;
+    std::cout << "Joueur 1 veuillez entrer votre prenom\n";
+    std::cin >> Nom1;
+    std::string Nom2;
+    std::cout << "Joueur 2 veuillez entrer votre prenom\n";
+    std::cin >> Nom2;
     Joueur joueur1(Nom1);
     Joueur joueur2(Nom2);
     Partie partie(&joueur1, &joueur2);
@@ -21,18 +25,17 @@ int main() {
 
     return 0;
 }
-*/
+
 #include <iostream>
 #include <windows.h>
 #include <string>
 #include <codecvt>
 #include <locale>
-
+/*
 int main() {
     // Configure la console pour utiliser UTF-8
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-
 
     // Utilisation de std::wstring pour les caractères Unicode
     std::wstring message = L"Bonjour ✅, voici un emoji dans la console !❎";
@@ -44,4 +47,4 @@ int main() {
     std::cout << utf8Message << std::endl;
 
     return 0;
-}
+}*/

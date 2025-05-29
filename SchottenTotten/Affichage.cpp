@@ -2,7 +2,9 @@
 #include "Borne.h"
 #include "Cartes.h"
 #include <cstdlib>
-
+#include <sstream>
+#include <string>
+#include "Figlet.hh" 
 
 CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "bleu") return BLEU;
@@ -13,6 +15,29 @@ CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "orange") return ORANGE;
     return INCONNU;
 }
+
+unsigned int getTailleTexteASCII(const std::string& texte) {
+    std::ostringstream oss;
+    Figlet::standard.print(texte.c_str(), oss);
+    std::istringstream iss(oss.str());
+    std::string line;
+    unsigned int max_width = 0;
+    while (std::getline(iss, line)) {
+        if (line.length() > max_width) max_width = line.length();
+    }
+    return max_width;
+}
+
+void AfficheASCII(const std::string& texte) {
+    std::ostringstream oss;
+    Figlet::standard.print(texte.c_str(), oss);
+    std::istringstream iss(oss.str());
+    std::string line;
+    while (std::getline(iss, line)) {
+        std::cout << std::string(44-(getTailleTexteASCII(texte)/2), ' ') << line << std::endl;
+    }
+}
+
 
 void AfficheCarte(const Cartes& carte) {
     switch (CouleurToEnum(carte.getcouleur())) {
@@ -42,7 +67,6 @@ void AfficheCarte(const Cartes& carte) {
 }
 
 void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
-    std::cout << "\n=== Resume des cartes sur les bornes ===\n";
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {
             std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
