@@ -9,6 +9,8 @@
 #include <windows.h>
 #include <codecvt>
 #include <locale>
+#include <thread>
+#include <chrono>
 
 CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "bleu") return BLEU;
@@ -40,6 +42,14 @@ void AfficheASCII(const std::string& texte) {
     while (std::getline(iss, line)) {
         std::cout << std::string(45-(getTailleTexteASCII(texte)/2), ' ') << line << std::endl;
     }
+}
+
+void AffichePlateau(const std::vector<Borne>& bornes,Joueur*joueur1, Joueur*joueur2 ) {
+    AfficheASCII(joueur1->getNom());
+    AfficherBornesRevendiquees(joueur1);
+    AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
+    AfficherBornesRevendiquees(joueur2);
+    AfficheASCII(joueur2->getNom());
 }
 
 void AfficheCarte(const Cartes& carte) {
@@ -154,6 +164,14 @@ std::vector<Cartes> AfficherMain(Joueur* joueur){
         AfficheCarte(main[i]);
     }
     return main;
+}
+
+void AfficherBorneGagnee(Joueur* joueur1, Borne borne) {
+    std::string message = "Borne " + std::to_string(borne.getnumero()) + " :";
+    AfficheASCII(message);
+    AfficheASCII(joueur1->getNom());
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 void AfficherVictoire(Joueur* joueur1, Joueur* joueur2) {

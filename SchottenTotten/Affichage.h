@@ -18,10 +18,12 @@ enum CouleurCarte {
 
 void AfficherBornesRevendiquees(Joueur* joueur);
 void AfficheASCII(const std::string& texte);
+void AffichePlateau(const std::vector<Borne>& bornes, Joueur* joueur1, Joueur* joueur2);
 CouleurCarte CouleurToEnum(const std::string& couleur);
 void AfficheCarte(const Cartes& carte);
 void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2);
 int AfficherReady(int ready);
 std::vector<Cartes> AfficherMain(Joueur* joueur);
+void AfficherBorneGagnee(Joueur* joueur1, Borne borne);
 void AfficherVictoire(Joueur* joueur1, Joueur* joueur2);
 void clearConsole();
