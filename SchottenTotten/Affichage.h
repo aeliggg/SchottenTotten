@@ -16,6 +16,7 @@ enum CouleurCarte {
     INCONNU
 };
 
+void AfficherBornesRevendiquees(Joueur* joueur);
 void AfficheASCII(const std::string& texte);
 CouleurCarte CouleurToEnum(const std::string& couleur);
 void AfficheCarte(const Cartes& carte);

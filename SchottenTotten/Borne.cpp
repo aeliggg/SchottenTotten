@@ -45,3 +45,7 @@ void Borne::ajouterCarteJ2(const Cartes& carte) {
         std::cout << " deja 3 cartes sur la borne" << std::endl;
     }
 }
+
+bool Borne::operator<(const Borne& other) const {
+    return iBORnuméro < other.iBORnuméro;
+}

@@ -17,6 +17,12 @@ void Joueur::ajouterCarte(const Cartes& carte) {
     vJOUCartesMain.push_back(carte);
 }
 
+void Joueur::AjouterBorne(Borne NewNbBorne) { 
+    BorneGagnee.push_back(NewNbBorne); 
+    std::sort(BorneGagnee.begin(),BorneGagnee.end());
+}
+
+
 void Joueur::retirerCarte(const Cartes& carte) {
     for (size_t i = 0; i < vJOUCartesMain.size(); ++i) {
         if (vJOUCartesMain[i].getnumero() == carte.getnumero() && vJOUCartesMain[i].getcouleur() == carte.getcouleur()) {

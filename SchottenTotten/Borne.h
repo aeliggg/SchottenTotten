@@ -26,4 +26,5 @@ public:
 	std::vector<Cartes> getCarteJ2() const;
 	void ajouterCarteJ1(const Cartes& carte);
 	void ajouterCarteJ2(const Cartes& carte);
+	bool operator<(const Borne& other) const;
 };
