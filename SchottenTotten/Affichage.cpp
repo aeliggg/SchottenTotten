@@ -78,6 +78,48 @@ void AfficheCarte(const Cartes& carte) {
     }
 }
 
+int AfficheChoixCarte(Joueur* joueur, int choixCarte) {
+    std::cout << joueur->getNom() << u8", entrez l'index de la carte à jouer (1 à " << joueur->getMain().size() << ") : ";
+    while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)joueur->getMain().size()) {
+        std::cin.clear();
+        std::string dummy;
+        std::getline(std::cin, dummy);
+        std::cout << "Erreur. Veuillez entrer un nombre entre 1 et " << joueur->getMain().size() << " : ";
+    }
+    return choixCarte;
+}
+
+
+int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes, int numJoueur) {
+    std::cout << joueur->getNom() << u8", entrez l'index de la borne où placer la carte (1 à 9) : ";
+
+    while (true) {
+        while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
+            std::cin.clear();
+            std::string dummy;
+            std::getline(std::cin, dummy);
+            std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
+        }
+        if (numJoueur == 1) {
+            if (bornes[choixBorne - 1].getCarteJ1().size() < 3) {
+                break;
+            }
+            else {
+                std::cout << u8"Erreur : La borne " << choixBorne << " a déjà 3 cartes. Choisissez une autre borne : ";
+            }
+        }
+        else {
+            if (bornes[choixBorne - 1].getCarteJ2().size() < 3) {
+                break;
+            }
+            else {
+                std::cout << u8"Erreur : La borne " << choixBorne << " a déjà 3 cartes. Choisissez une autre borne : ";
+            }
+        }
+    }
+    return choixBorne;
+}
+
 void AfficherBornesRevendiquees(Joueur* joueur) {
     if (joueur->getBorne().size() != 0) {
         std::string check = u8"✅";

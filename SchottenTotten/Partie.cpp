@@ -14,8 +14,6 @@
 #include <codecvt>
 #include <locale>
 
-
-
 Partie::Partie(){
     std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
 
@@ -48,42 +46,11 @@ Partie::Partie(Joueur* j1, Joueur* j2): joueur1(j1), joueur2(j2) {
     }
 }
 
-void Partie::ajouterCarte(const Cartes& carte) {
-    cartes.push_back(carte);
-}
-
-void Partie::ajouterBorne(const Borne& borne) {
-    bornes.push_back(borne);
-}
-
-
-std::vector<Cartes> Partie::getCartes() {
-    return cartes;
-}
-
-std::vector<Borne> Partie::getBornes() {
-    return bornes;
-}
-
-Joueur* Partie::getJoueur1() {
-    return joueur1;
-}
-
-Joueur* Partie::getJoueur2() {
-    return joueur2;
-}
-
 void Partie::jouer() {
-
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
 
-    for (int i = 0; i < 6; ++i) {
-        joueur1->ajouterCarte(cartes.back());
-        cartes.pop_back();
-        joueur2->ajouterCarte(cartes.back());
-        cartes.pop_back();
-    }
+    DistribuerCartes();
 
     std::cout << u8"Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
 
@@ -103,33 +70,12 @@ void Partie::jouer() {
 
             std::vector<Cartes> mainJ1 = AfficherMain(joueur1);
 
-            int choixCarte;
-            std::cout << joueur1->getNom() << u8", entrez l'index de la carte à jouer (1 à " << mainJ1.size() << ") : ";
-            while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)mainJ1.size()) {
-                std::cin.clear();
-                std::string dummy;
-                std::getline(std::cin, dummy);
-                std::cout << "Erreur. Veuillez entrer un nombre entre 1 et " << mainJ1.size() << " : ";
-            }
+            int choixCarte = 0;
+            choixCarte = AfficheChoixCarte(joueur1, choixCarte);
 
-            int choixBorne;
-            std::cout << joueur1->getNom() << u8", entrez l'index de la borne où placer la carte (1 à 9) : ";
+            int choixBorne = 0;
+            choixBorne = AfficheChoixBorne(joueur1, choixBorne, bornes, 1);
 
-            while (true) {
-                while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
-                    std::cin.clear();
-                    std::string dummy;
-                    std::getline(std::cin, dummy);
-                    std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
-                }
-
-                if (bornes[choixBorne - 1].getCarteJ1().size() < 3) {
-                    break;
-                }
-                else {
-                    std::cout << u8"Erreur : La borne " << choixBorne << " a déjà 3 cartes. Choisissez une autre borne : ";
-                }
-            }
             Cartes carteChoisie = mainJ1[choixCarte - 1];
             bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
             joueur1->retirerCarte(carteChoisie);
@@ -168,32 +114,12 @@ void Partie::jouer() {
             ready = AfficherReady(ready);
 
             std::vector<Cartes> mainJ2 = AfficherMain(joueur2);
-            int choixCarte;
-            std::cout << joueur2->getNom() << u8", entrez l'index de la carte à jouer (1 à " << mainJ2.size() << ") : ";
-            while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)mainJ2.size()) {
-                std::cin.clear();
-                std::string dummy;
-                std::getline(std::cin, dummy);
-                std::cout << "Erreur. Veuillez entrer un nombre entre 1 et " << mainJ2.size() << " : ";
-            }
-            int choixBorne;
-            std::cout << joueur2->getNom() << u8", entrez l'index de la borne où placer la carte (1 à 9) : ";
+            int choixCarte = 0;
+            choixCarte = AfficheChoixCarte(joueur2, choixCarte);
 
-            while (true) {
-                while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
-                    std::cin.clear();
-                    std::string dummy;
-                    std::getline(std::cin, dummy);
-                    std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
-                }
+            int choixBorne = 0;
+            choixBorne = AfficheChoixBorne(joueur2, choixBorne, bornes, 2);
 
-                if (bornes[choixBorne - 1].getCarteJ2().size() < 3) {
-                    break;
-                }
-                else {
-                    std::cout << u8"Erreur : La borne " << choixBorne << " a déjà 3 cartes. Choisissez une autre borne : ";
-                }
-            }
             Cartes carteChoisie = mainJ2[choixCarte - 1];
             bornes[choixBorne - 1].ajouterCarteJ2(carteChoisie);
             joueur2->retirerCarte(carteChoisie);
@@ -294,5 +220,14 @@ bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> t
     }
     else {
         cout << "\n Il y'a seulement " << trioDeCarteJ1.size() << " cartes sur la borne pour "<<J1->getNom()<<" et " << trioDeCarteJ2.size() << " pour "<<J2->getNom() << endl;
+    }
+}
+
+void Partie::DistribuerCartes() {
+    for (int i = 0; i < 6; ++i) {
+        joueur1->ajouterCarte(cartes.back());
+        cartes.pop_back();
+        joueur2->ajouterCarte(cartes.back());
+        cartes.pop_back();
     }
 }

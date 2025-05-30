@@ -17,12 +17,12 @@ private:
 public:
     Partie();
     Partie(Joueur* j1, Joueur* j2);
-    void ajouterCarte(const Cartes& carte);
-    std::vector<Cartes> getCartes();
-    void ajouterBorne(const Borne& borne);
-    std::vector<Borne> getBornes();
-    Joueur* getJoueur1();
-    Joueur* getJoueur2();
+    void ajouterCarte(const Cartes& carte) { cartes.push_back(carte); };
+    std::vector<Cartes> getCartes() { return cartes; };
+    void ajouterBorne(const Borne& borne) { bornes.push_back(borne); };
+    std::vector<Borne> getBornes() { return bornes; };
+    Joueur* getJoueur1() { return joueur1; };
+    Joueur* getJoueur2() { return joueur2; };
     void jouer();
     bool EstSuite(std::vector<Cartes> trioDeCarte);
     bool EstCouleur(std::vector<Cartes> trioDeCarte);
@@ -30,4 +30,5 @@ public:
     bool EstBrelan(std::vector<Cartes> trioDeCarte);
     int getRangCombinaison(std::vector<Cartes> trio);
     bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2);
+    void DistribuerCartes();
 };
