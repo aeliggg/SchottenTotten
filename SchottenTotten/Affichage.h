@@ -27,5 +27,5 @@ void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>&
 int AfficherReady(int ready);
 std::vector<Cartes> AfficherMain(Joueur* joueur);
 void AfficherBorneGagnee(Joueur* joueur1, Borne borne);
-void AfficherVictoire(Joueur* joueur1, Joueur* joueur2);
+bool AfficherVictoire(std::vector<Borne> bornes, Joueur* joueur1, Joueur* joueur2);
 void clearConsole();

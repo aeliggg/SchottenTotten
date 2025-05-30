@@ -31,4 +31,7 @@ public:
     int getRangCombinaison(std::vector<Cartes> trio);
     bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2);
     void DistribuerCartes();
+    void VerifieBorneGagnee(int choixBorne);
+    void FinDePartie();
+    void UpdateBoardApresChoixCarte(Joueur* joueur, int choixCarte, std::vector<Borne> bornes, int choixBorne, int numJoueur);
 };

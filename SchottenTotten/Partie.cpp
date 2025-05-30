@@ -53,57 +53,43 @@ void Partie::jouer() {
     DistribuerCartes();
 
     std::cout << u8"Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
-
-    for (int tour = 0; tour < 27; ++tour) {
+    bool bPartieFinie = 0;
+    int tour = 0;
+    while (bPartieFinie == 0){
         if (tour != 0) {
             clearConsole();
         }
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
-        {
-            SetConsoleOutputCP(CP_UTF8);
-            AffichePlateau(bornes, joueur1, joueur2);
+        SetConsoleOutputCP(CP_UTF8);
+        AffichePlateau(bornes, joueur1, joueur2);
 
-            std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
+        std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
  
-            int ready = 0;
-            ready = AfficherReady(ready);
+        int ready = 0;
+        ready = AfficherReady(ready);
 
-            std::vector<Cartes> mainJ1 = AfficherMain(joueur1);
+        std::vector<Cartes> mainJ1 = AfficherMain(joueur1);
 
-            int choixCarte = 0;
-            choixCarte = AfficheChoixCarte(joueur1, choixCarte);
+        int choixCarte = 0;
+        choixCarte = AfficheChoixCarte(joueur1, choixCarte);
 
-            int choixBorne = 0;
-            choixBorne = AfficheChoixBorne(joueur1, choixBorne, bornes, 1);
+        int choixBorne = 0;
+        choixBorne = AfficheChoixBorne(joueur1, choixBorne, bornes, 1);
 
-            Cartes carteChoisie = mainJ1[choixCarte - 1];
-            bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
-            joueur1->retirerCarte(carteChoisie);
+        Cartes carteChoisie = mainJ1[choixCarte - 1];
+        bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
+        joueur1->retirerCarte(carteChoisie);
 
-            if (!cartes.empty()) {
-                joueur1->ajouterCarte(cartes.back());
-                cartes.pop_back();
-            }
-
-
-            if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
-
-                bornes[choixBorne - 1].setGagnant(joueur1);
-                clearConsole();
-                joueur1->AjouterBorne(bornes[choixBorne - 1]);
-                AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
-
-            }
-            if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
-                bornes[choixBorne - 1].setGagnant(joueur2);
-                clearConsole();
-                joueur2->AjouterBorne(bornes[choixBorne - 1]);
-                AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
-
-            }
-            AfficherVictoire(joueur1, joueur2);
+        if (!cartes.empty()) {
+            joueur1->ajouterCarte(cartes.back());
+            cartes.pop_back();
         }
-        {
+
+        VerifieBorneGagnee(choixBorne);
+
+        bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
+        if (bPartieFinie) { FinDePartie(); }
+        else{ // TOUR DU DEUXIEME JOUEUR
             clearConsole();
             std::cout << "\n--- Tour " << tour + 1 << " ---\n";
             AffichePlateau(bornes, joueur1, joueur2);
@@ -128,24 +114,13 @@ void Partie::jouer() {
                 joueur2->ajouterCarte(cartes.back());
                 cartes.pop_back();
             }
-
-            if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
-                bornes[choixBorne - 1].setGagnant(joueur1);
-                clearConsole();
-                joueur1->AjouterBorne(bornes[choixBorne - 1]);
-                AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
-                
-            }
-            if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
-                bornes[choixBorne - 1].setGagnant(joueur2);
-                clearConsole();
-                joueur2->AjouterBorne(bornes[choixBorne - 1]);
-                AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
-
-            }
-            AfficherVictoire(joueur1, joueur2);
+            
+            VerifieBorneGagnee(choixBorne);
+            
+            bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
+            if (bPartieFinie) { FinDePartie();}
         }
-        AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
+        tour++;
     }
 }
 
@@ -230,4 +205,25 @@ void Partie::DistribuerCartes() {
         joueur2->ajouterCarte(cartes.back());
         cartes.pop_back();
     }
+}
+
+void Partie::VerifieBorneGagnee(int choixBorne) {
+    if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
+        bornes[choixBorne - 1].setGagnant(joueur1);
+        clearConsole();
+        joueur1->AjouterBorne(bornes[choixBorne - 1]);
+        AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
+    }
+    if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
+        bornes[choixBorne - 1].setGagnant(joueur2);
+        clearConsole();
+        joueur2->AjouterBorne(bornes[choixBorne - 1]);
+        AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
+    }
+}
+
+void Partie::FinDePartie() {
+    std::string choixUtilisateur;
+    std::cout << "Voulez vous rejouer une partie ? (oui ou non)";
+    std::cin >> choixUtilisateur;
 }
