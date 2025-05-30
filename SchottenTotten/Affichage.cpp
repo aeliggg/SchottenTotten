@@ -4,7 +4,11 @@
 #include <cstdlib>
 #include <sstream>
 #include <string>
-#include "Figlet.hh" 
+#include "Figlet.hh"
+#include <iostream>
+#include <windows.h>
+#include <codecvt>
+#include <locale>
 
 CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "bleu") return BLEU;
@@ -38,7 +42,6 @@ void AfficheASCII(const std::string& texte) {
     }
 }
 
-
 void AfficheCarte(const Cartes& carte) {
     switch (CouleurToEnum(carte.getcouleur())) {
     case BLEU:
@@ -64,23 +67,6 @@ void AfficheCarte(const Cartes& carte) {
         break;
     }
 }
-
-/*
-// Utilisation de std::wstring pour les caractères Unicode
-            std::wstring message = L"     ?        ?        ?        ?        ?        ?        ?        ?        ?    ";
-
-            // Conversion de std::wstring en UTF-8 pour l'affichage
-            std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-            std::string utf8Message = converter.to_bytes(message);
-
-            std::cout << utf8Message << std::endl;
-*/
-
-#include <iostream>
-#include <windows.h>
-#include <string>
-#include <codecvt>
-#include <locale>
 
 void AfficherBornesRevendiquees(Joueur* joueur) {
     if (joueur->getBorne().size() != 0) {
@@ -143,6 +129,51 @@ void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>&
     }
 }
 
+int AfficherReady(int ready) {
+    std::cout << u8"\nÉcrire 1 si vous êtes prêt à voir votre main : ";
+    while (!(std::cin >> ready) || ready != 1) {
+        std::cin.clear();
+        std::string dummy;
+        std::getline(std::cin, dummy);
+        std::cout << u8"\nEntrée invalide. Veuillez saisir 1 pour continuer : ";
+    }
+    return ready;
+}
+
+std::vector<Cartes> AfficherMain(Joueur* joueur){
+    std::vector<Cartes> main = joueur->getMain();
+    
+    std::sort(main.begin(), main.end(), [](const Cartes& a, const Cartes& b) {  //Range les cartes par couleurs et par numero
+        if (a.getcouleur() != b.getcouleur())
+            return a.getcouleur() < b.getcouleur();
+        return a.getnumero() < b.getnumero();
+        });
+    
+    std::cout << "\nVoici la main de " << joueur->getNom() << " : \n";
+    for (size_t i = 0; i < main.size(); ++i) {
+        AfficheCarte(main[i]);
+    }
+    return main;
+}
+
+void AfficherVictoire(Joueur* joueur1, Joueur* joueur2) {
+    if (joueur1->getBorne().size() == 5) {
+        cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+        return;
+    }
+    if (joueur2->getBorne().size() == 5) {
+        cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+        return;
+    }
+    if (joueur2->EstGagnant()) {
+        cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
+        return;
+    }
+    if (joueur1->EstGagnant()) {
+        cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
+        return;
+    }
+}
 
 void clearConsole() {
     #if defined(_WIN32)

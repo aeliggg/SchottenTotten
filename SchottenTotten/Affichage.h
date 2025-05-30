@@ -21,4 +21,7 @@ void AfficheASCII(const std::string& texte);
 CouleurCarte CouleurToEnum(const std::string& couleur);
 void AfficheCarte(const Cartes& carte);
 void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2);
+int AfficherReady(int ready);
+std::vector<Cartes> AfficherMain(Joueur* joueur);
+void AfficherVictoire(Joueur* joueur1, Joueur* joueur2);
 void clearConsole();

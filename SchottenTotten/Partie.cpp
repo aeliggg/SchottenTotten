@@ -93,7 +93,6 @@ void Partie::jouer() {
         }
         std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         {
-            int ready;
             SetConsoleOutputCP(CP_UTF8);
             AfficheASCII(joueur1->getNom());
             AfficherBornesRevendiquees(joueur1);
@@ -103,26 +102,10 @@ void Partie::jouer() {
 
             std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
  
-            std::cout << u8"\nÉcrire 1 si vous êtes prêt à voir votre main : ";
-            while (!(std::cin >> ready) || ready != 1) {
-                std::cin.clear();
-                std::string dummy;
-                std::getline(std::cin, dummy); 
-                std::cout << u8"\nEntrée invalide. Veuillez saisir 1 pour continuer : ";
-            }
+            int ready = 0;
+            ready = AfficherReady(ready);
 
-
-            auto mainJ1 = joueur1->getMain();
-            std::sort(mainJ1.begin(), mainJ1.end(), [](const Cartes& a, const Cartes& b) {
-                if (a.getcouleur() != b.getcouleur())
-                    return a.getcouleur() < b.getcouleur();
-                return a.getnumero() < b.getnumero();
-                });
-
-            std::cout << "\nVoici la main de " << joueur1->getNom() << " : \n";
-            for (size_t i = 0; i < mainJ1.size(); ++i) {
-                AfficheCarte(mainJ1[i]);
-            }
+            std::vector<Cartes> mainJ1 = AfficherMain(joueur1);
 
             int choixCarte;
             std::cout << joueur1->getNom() << u8", entrez l'index de la carte à jouer (1 à " << mainJ1.size() << ") : ";
@@ -166,9 +149,6 @@ void Partie::jouer() {
                 bornes[choixBorne - 1].setGagnant(joueur1);
                 clearConsole();
                 joueur1->AjouterBorne(bornes[choixBorne - 1]);
-                std::string couleur = "\033[1;31m";
-                std::string reset = "\033[0m";
-
                 std::string message = "Borne" + std::to_string(bornes[choixBorne - 1].getnumero()) + " :";
                 AfficheASCII(message);
                 AfficheASCII(joueur1->getNom());
@@ -179,34 +159,15 @@ void Partie::jouer() {
                 bornes[choixBorne - 1].setGagnant(joueur2);
                 clearConsole();
                 joueur2->AjouterBorne(bornes[choixBorne - 1]);
-                std::string couleur = "\033[1;31m";
-                std::string reset = "\033[0m";
                 std::string message = "Borne" + std::to_string(bornes[choixBorne - 1].getnumero()) + " :";
                 AfficheASCII(message);
                 AfficheASCII(joueur2->getNom());
                 
                 std::this_thread::sleep_for(std::chrono::seconds(3));
             }
-            if (joueur1->getBorne().size() == 5) {
-                cout << u8"\nLa partie est gagnée par " << joueur1->getNom() << endl;
-                return;
-            }
-            if (joueur2->getBorne().size() == 5) {
-                cout << u8"\nLa partie est gagnée par " << joueur2->getNom() << endl;
-                return;
-            }
-            if (joueur2->EstGagnant()) {
-                cout << u8"\nLa partie est gagnée par " << joueur2->getNom() << endl;
-                return;
-            }
-            if (joueur1->EstGagnant()) {
-                cout << u8"\nLa partie est gagnée par " << joueur1->getNom() << endl;
-                return;
-            }
-
+            AfficherVictoire(joueur1, joueur2);
         }
         {
-            int ready;
             clearConsole();
             std::cout << "\n--- Tour " << tour + 1 << " ---\n";
             AfficheASCII(joueur1->getNom());
@@ -217,26 +178,10 @@ void Partie::jouer() {
 
             std::cout << "\nC'est au tour de " << joueur2->getNom() << "\n";
             
-            std::cout << u8"\nÉcrire 1 si vous êtes prêt à voir votre main : ";
-            while (!(std::cin >> ready) || ready != 1) {
-                std::cin.clear();
-                std::string dummy;
-                std::getline(std::cin, dummy);
-                std::cout << u8"\nEntrée invalide. Veuillez saisir 1 pour continuer : ";
-            }
+            int ready = 0;
+            ready = AfficherReady(ready);
 
-            auto mainJ2 = joueur2->getMain();
-            std::sort(mainJ2.begin(), mainJ2.end(), [](const Cartes& a, const Cartes& b) {
-                if (a.getcouleur() != b.getcouleur())
-                    return a.getcouleur() < b.getcouleur();
-                return a.getnumero() < b.getnumero();
-                });
-
-            std::cout << "\nVoici la main de " << joueur2->getNom() << " : \n";
-            for (size_t i = 0; i < mainJ2.size(); ++i) {
-                AfficheCarte(mainJ2[i]);
-            }
-
+            std::vector<Cartes> mainJ2 = AfficherMain(joueur2);
             int choixCarte;
             std::cout << joueur2->getNom() << u8", entrez l'index de la carte à jouer (1 à " << mainJ2.size() << ") : ";
             while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)mainJ2.size()) {
@@ -292,22 +237,7 @@ void Partie::jouer() {
                 
                 std::this_thread::sleep_for(std::chrono::seconds(3)); 
             }
-            if (joueur1->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
-                return;
-            }
-            if (joueur2->getBorne().size() == 5) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
-                return;
-            }
-            if (joueur2->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur2->getNom() << endl;
-                return;
-            }
-            if (joueur1->EstGagnant()) {
-                cout << "\nLa partie est gagnée par " << joueur1->getNom() << endl;
-                return;
-            }
+            AfficherVictoire(joueur1, joueur2);
         }
 
         AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());

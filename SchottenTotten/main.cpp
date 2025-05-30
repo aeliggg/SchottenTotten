@@ -2,19 +2,25 @@
 #include "Cartes.h"
 #include "Joueur.h"
 #include "Partie.h"
+#include <iostream>
+#include <windows.h>
+#include <string>
+#include <codecvt>
+#include <locale>
+#include "Affichage.h"
 
 int main() {
-
+    SetConsoleOutputCP(CP_UTF8);
     std::string Nom1;
-    std::cout << "Joueur 1 veuillez entrer votre prenom\n";
+    std::cout << u8"Joueur 1 veuillez entrer votre prénom\n";
     std::cin >> Nom1;
     std::string Nom2;
-    std::cout << "Joueur 2 veuillez entrer votre prenom\n";
+    std::cout << u8"Joueur 2 veuillez entrer votre prénom\n";
     std::cin >> Nom2;
     Joueur joueur1(Nom1);
     Joueur joueur2(Nom2);
     Partie partie(&joueur1, &joueur2);
-    
+
     std::cout << "Joueur 1 : " << joueur1.getNom() << std::endl;
     std::cout << "Joueur 2 : " << joueur2.getNom() << std::endl;
 
