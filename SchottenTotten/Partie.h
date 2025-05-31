@@ -33,5 +33,6 @@ public:
     void DistribuerCartes();
     void VerifieBorneGagnee(int choixBorne);
     void FinDePartie();
-    void UpdateBoardApresChoixCarte(Joueur* joueur, int choixCarte, std::vector<Borne> bornes, int choixBorne, int numJoueur);
+    void UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur, std::vector<Cartes> mainJ1);
+    void TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur);
 };

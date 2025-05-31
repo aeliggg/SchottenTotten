@@ -59,63 +59,14 @@ void Partie::jouer() {
         if (tour != 0) {
             clearConsole();
         }
-        std::cout << "\n--- Tour " << tour + 1 << " ---\n";
         SetConsoleOutputCP(CP_UTF8);
-        AffichePlateau(bornes, joueur1, joueur2);
-
-        std::cout << "\nC'est au tour de " << joueur1->getNom() << "\n";
- 
-        int ready = 0;
-        ready = AfficherReady(ready);
-
-        std::vector<Cartes> mainJ1 = AfficherMain(joueur1);
-
-        int choixCarte = 0;
-        choixCarte = AfficheChoixCarte(joueur1, choixCarte);
-
-        int choixBorne = 0;
-        choixBorne = AfficheChoixBorne(joueur1, choixBorne, bornes, 1);
-
-        Cartes carteChoisie = mainJ1[choixCarte - 1];
-        bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
-        joueur1->retirerCarte(carteChoisie);
-
-        if (!cartes.empty()) {
-            joueur1->ajouterCarte(cartes.back());
-            cartes.pop_back();
-        }
-
-        VerifieBorneGagnee(choixBorne);
+        TourDePartie(tour, bornes, joueur1, joueur2, 1);
 
         bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
         if (bPartieFinie) { FinDePartie(); }
         else{ // TOUR DU DEUXIEME JOUEUR
             clearConsole();
-            std::cout << "\n--- Tour " << tour + 1 << " ---\n";
-            AffichePlateau(bornes, joueur1, joueur2);
-
-            std::cout << "\nC'est au tour de " << joueur2->getNom() << "\n";
-            
-            int ready = 0;
-            ready = AfficherReady(ready);
-
-            std::vector<Cartes> mainJ2 = AfficherMain(joueur2);
-            int choixCarte = 0;
-            choixCarte = AfficheChoixCarte(joueur2, choixCarte);
-
-            int choixBorne = 0;
-            choixBorne = AfficheChoixBorne(joueur2, choixBorne, bornes, 2);
-
-            Cartes carteChoisie = mainJ2[choixCarte - 1];
-            bornes[choixBorne - 1].ajouterCarteJ2(carteChoisie);
-            joueur2->retirerCarte(carteChoisie);
-
-            if (!cartes.empty()) {
-                joueur2->ajouterCarte(cartes.back());
-                cartes.pop_back();
-            }
-            
-            VerifieBorneGagnee(choixBorne);
+            TourDePartie(tour, bornes, joueur2, joueur1, 2);
             
             bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
             if (bPartieFinie) { FinDePartie();}
@@ -226,4 +177,46 @@ void Partie::FinDePartie() {
     std::string choixUtilisateur;
     std::cout << "Voulez vous rejouer une partie ? (oui ou non)";
     std::cin >> choixUtilisateur;
+}
+
+void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur, std::vector<Cartes> mainTriee) {
+    Cartes carteChoisie = mainTriee[choixCarte - 1];
+    if (numJoueur == 1) {
+        bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
+    }
+    else {
+        bornes[choixBorne - 1].ajouterCarteJ2(carteChoisie);
+    }
+    joueur->retirerCarte(carteChoisie);
+
+    if (!cartes.empty()) {
+        joueur->ajouterCarte(cartes.back());
+        cartes.pop_back();
+    }
+}
+
+void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Joueur*adversaire,int numJoueur) {
+    std::cout << "\n--- Tour " << tour + 1 << " ---\n";
+    if (numJoueur == 1) {
+        AffichePlateau(bornes, joueur, adversaire);
+    }
+    else {
+        AffichePlateau(bornes, adversaire, joueur);
+    }
+
+    std::cout << "\nC'est au tour de " << joueur->getNom() << "\n";
+
+    int ready = 0;
+    ready = AfficherReady(ready);
+
+    std::vector<Cartes> mainTriee = AfficherMain(joueur);
+    int choixCarte = 0;
+    choixCarte = AfficheChoixCarte(joueur, choixCarte);
+
+    int choixBorne = 0;
+    choixBorne = AfficheChoixBorne(joueur, choixBorne, bornes, numJoueur);
+
+    UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur, mainTriee);
+
+    VerifieBorneGagnee(choixBorne);
 }
