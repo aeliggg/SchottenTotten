@@ -50,7 +50,12 @@ void AfficheASCIIPlusAJ(const std::string& texte) {
     std::istringstream iss(oss.str());
     std::string line;
     while (std::getline(iss, line)) {
-        std::cout << std::string(45 - (getTailleTexteASCII(texte) / 2), ' ') << "\033[31m" << line << std::string(48 - (getTailleTexteASCII(texte) / 2), ' ') << aideDeJeuHeader[iLigneAideAffichee] << std::endl;
+        if (getTailleTexteASCII(texte) % 2 == 0) {
+            std::cout << std::string(45 - (getTailleTexteASCII(texte) / 2), ' ') << "\033[31m" << line << std::string(49 - (getTailleTexteASCII(texte) / 2), ' ') << aideDeJeuHeader[iLigneAideAffichee] << std::endl;
+        }
+        else {
+            std::cout << std::string(45 - (getTailleTexteASCII(texte) / 2), ' ') << "\033[31m" << line << std::string(48 - (getTailleTexteASCII(texte) / 2), ' ') << aideDeJeuHeader[iLigneAideAffichee] << std::endl;
+        }
         if (iLigneAideAffichee < 5) {
             iLigneAideAffichee++;
         }
