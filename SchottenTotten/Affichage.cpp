@@ -34,23 +34,47 @@ unsigned int getTailleTexteASCII(const std::string& texte) {
     return max_width;
 }
 
+void AfficheASCIIPlusAJ(const std::string& texte) {
+    std::vector<std::string> aideDeJeuHeader = {
+        "-----------------------",
+        "|     Aide de jeu     |",
+        "-----------------------",
+        "-----------------------",
+      u8"|Suite colorée : \033[94m3 4 5\033[0m|",
+        "-----------------------"
+    };
+    int iLigneAideAffichee = 0;
+
+    std::ostringstream oss;
+    Figlet::standard.print(texte.c_str(), oss);
+    std::istringstream iss(oss.str());
+    std::string line;
+    while (std::getline(iss, line)) {
+        std::cout << std::string(45 - (getTailleTexteASCII(texte) / 2), ' ') << line << std::string(48 - (getTailleTexteASCII(texte) / 2), ' ') << aideDeJeuHeader[iLigneAideAffichee] << std::endl;
+        if (iLigneAideAffichee < 5) {
+            iLigneAideAffichee++;
+        }
+    }
+}
+
 void AfficheASCII(const std::string& texte) {
     std::ostringstream oss;
     Figlet::standard.print(texte.c_str(), oss);
     std::istringstream iss(oss.str());
     std::string line;
     while (std::getline(iss, line)) {
-        std::cout << std::string(45-(getTailleTexteASCII(texte)/2), ' ') << line << std::endl;
+        std::cout << std::string(45-(getTailleTexteASCII(texte)/2), ' ') << line << endl;
     }
 }
 
 void AffichePlateau(const std::vector<Borne>& bornes,Joueur*joueur1, Joueur*joueur2 ) {
-    AfficheASCII(joueur1->getNom());
-    AfficherBornesRevendiquees(joueur1);
-    AfficherBornes(bornes, joueur1->getMain(), joueur2->getMain());
+    AfficheASCIIPlusAJ(joueur1->getNom());
+    AfficherBornesRevendiqueesPlusAJ(joueur1);
+    AfficherBornesPlusAJ(bornes, joueur1->getMain(), joueur2->getMain());
     AfficherBornesRevendiquees(joueur2);
     AfficheASCII(joueur2->getNom());
 }
+
 
 void AfficheCarte(const Cartes& carte) {
     switch (CouleurToEnum(carte.getcouleur())) {
@@ -120,7 +144,9 @@ int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes,
     return choixBorne;
 }
 
-void AfficherBornesRevendiquees(Joueur* joueur) {
+void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur) {
+    std::string aideDeJeuBrelan = "|    Brelan : \033[32m6 \033[94m6 \033[31m6\033[0m   |";
+    int numeroDerniereBornePossedee = 0;
     if (joueur->getBorne().size() != 0) {
         std::string check = u8"✅";
 
@@ -137,6 +163,88 @@ void AfficherBornesRevendiquees(Joueur* joueur) {
             else {
                 std::cout << std::string((joueur->getBorne()[uiIndex].getnumero() - joueur->getBorne()[uiIndex - 1].getnumero() - 1) * 10 + 8, ' ') << check ;
             }
+            numeroDerniereBornePossedee = joueur->getBorne()[uiIndex].getnumero();
+        }
+        std::cout << std::string(7 + (9-numeroDerniereBornePossedee)*10, ' ') << aideDeJeuBrelan;
+    }
+    else {
+        std::cout << std::string(94, ' ') << aideDeJeuBrelan;
+    }
+    std::cout << "\n";
+}
+
+void AfficherBornesRevendiquees(Joueur* joueur) {
+    if (joueur->getBorne().size() != 0) {
+        std::string check = u8"✅";
+
+        for (unsigned int uiIndex = 0; uiIndex < joueur->getBorne().size(); uiIndex++) {
+            if (joueur->getBorne()[uiIndex].getnumero() == 1) {
+                std::cout << std::string(5, ' ') << check;
+            }
+            else if (joueur->getBorne()[uiIndex].getnumero() != 1 && uiIndex == 0) {
+                std::cout << std::string(5 + (joueur->getBorne()[uiIndex].getnumero() - 1) * 10, ' ') << check;
+            }
+            else if (joueur->getBorne()[uiIndex].getnumero() - joueur->getBorne()[uiIndex - 1].getnumero() == 1) {
+                std::cout << std::string(((joueur->getBorne()[uiIndex].getnumero() - joueur->getBorne()[uiIndex - 1].getnumero()) * 8), ' ') << check;
+            }
+            else {
+                std::cout << std::string((joueur->getBorne()[uiIndex].getnumero() - joueur->getBorne()[uiIndex - 1].getnumero() - 1) * 10 + 8, ' ') << check;
+            }
+        }
+        std::cout << "\n";
+    }
+}
+
+void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
+    std::vector<std::string> aideDeJeuSuite = {
+        "-----------------------",
+        "|   Couleur : \033[38;2;199;0;255m1 3 6\033[0m   |",
+        "-----------------------",
+        "|    Suite : \033[38;5;208m2 \033[32m3 \033[38;2;199;0;255m4\033[0m    |",
+        "-----------------------",
+        "|    Somme : \033[38;5;208m3 \033[94m7 \033[38;2;199;0;255m9\033[0m    |",
+        "-----------------------"
+    };
+    int iLigneAideAffichee = 0;
+
+
+    for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
+        for (unsigned int i = 0; i < bornes.size(); ++i) {
+            std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
+            if (cartesJ1.size() <= uiLigneDeCartes) {
+                std::cout << "     0    ";
+            }
+            else {
+                std::cout << "     ";
+                AfficheCarte(cartesJ1[uiLigneDeCartes]);
+                std::cout << "   ";
+            }
+        }
+        std::cout << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++];
+        if (uiLigneDeCartes != 2) {
+            std::cout << "\n";
+        }
+    }
+    std::cout << "\n -----------------------------------------------------------------------------------------" << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
+    for (unsigned int i = 0; i < bornes.size(); ++i) {
+        std::cout << "| Borne " << bornes[i].getnumero() << " ";
+    }
+    std::cout << "|" << std::string(3, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
+    std::cout << " -----------------------------------------------------------------------------------------" << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
+    for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
+        for (unsigned int i = 0; i < bornes.size(); ++i) {
+            std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
+            if (cartesJ2.size() <= uiLigneDeCartes) {
+                std::cout << "     0    ";
+            }
+            else {
+                std::cout << "     ";
+                AfficheCarte(cartesJ2[uiLigneDeCartes]);
+                std::cout << "   ";
+            }
+        }
+        if (iLigneAideAffichee < 7) {
+            std::cout << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++];
         }
         std::cout << "\n";
     }
@@ -221,25 +329,25 @@ bool AfficherVictoire(std::vector<Borne> bornes, Joueur* joueur1, Joueur* joueur
     if (joueur1->getBorne().size() == 5) {
         clearConsole();
         AffichePlateau(bornes,joueur1,joueur2);
-        cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << endl;
         bFinDePartie=1;
     }
     else if (joueur2->getBorne().size() == 5) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << endl;
         bFinDePartie = 1;
     }
     else if (joueur2->EstGagnant()) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << endl;
         bFinDePartie = 1;
     }
     else if (joueur1->EstGagnant()) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << endl;
         bFinDePartie = 1;
     }
 
