@@ -36,12 +36,12 @@ unsigned int getTailleTexteASCII(const std::string& texte) {
 
 void AfficheASCIIPlusAJ(const std::string& texte) {
     std::vector<std::string> aideDeJeuHeader = {
-        "-----------------------",
-        "|     Aide de jeu     |",
-        "-----------------------",
-        "-----------------------",
-      u8"|Suite colorée : \033[94m3 4 5\033[0m|",
-        "-----------------------"
+        "\033[33m-----------------------\033[0m",
+        "\033[33m|\033[0m     Aide de jeu     \033[33m|\033[0m",
+        "\033[33m-----------------------\033[0m",
+        "\033[33m-----------------------\033[0m",
+      u8"\033[33m|\033[0mSuite colorée : \033[94m3 4 5\033[33m|\033[0m",
+        "\033[33m-----------------------\033[0m"
     };
     int iLigneAideAffichee = 0;
 
@@ -50,7 +50,7 @@ void AfficheASCIIPlusAJ(const std::string& texte) {
     std::istringstream iss(oss.str());
     std::string line;
     while (std::getline(iss, line)) {
-        std::cout << std::string(45 - (getTailleTexteASCII(texte) / 2), ' ') << line << std::string(48 - (getTailleTexteASCII(texte) / 2), ' ') << aideDeJeuHeader[iLigneAideAffichee] << std::endl;
+        std::cout << std::string(45 - (getTailleTexteASCII(texte) / 2), ' ') << "\033[31m" << line << std::string(48 - (getTailleTexteASCII(texte) / 2), ' ') << aideDeJeuHeader[iLigneAideAffichee] << std::endl;
         if (iLigneAideAffichee < 5) {
             iLigneAideAffichee++;
         }
@@ -63,7 +63,7 @@ void AfficheASCII(const std::string& texte) {
     std::istringstream iss(oss.str());
     std::string line;
     while (std::getline(iss, line)) {
-        std::cout << std::string(45-(getTailleTexteASCII(texte)/2), ' ') << line << endl;
+        std::cout << std::string(45-(getTailleTexteASCII(texte)/2), ' ') << "\033[36m" << line << "\033[0m" << endl;
     }
 }
 
@@ -145,7 +145,7 @@ int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes,
 }
 
 void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur) {
-    std::string aideDeJeuBrelan = "|    Brelan : \033[32m6 \033[94m6 \033[31m6\033[0m   |";
+    std::string aideDeJeuBrelan = "\033[33m|\033[0m    Brelan : \033[32m6 \033[94m6 \033[31m6   \033[33m|\033[0m";
     int numeroDerniereBornePossedee = 0;
     if (joueur->getBorne().size() != 0) {
         std::string check = u8"✅";
@@ -197,13 +197,13 @@ void AfficherBornesRevendiquees(Joueur* joueur) {
 
 void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
     std::vector<std::string> aideDeJeuSuite = {
-        "-----------------------",
-        "|   Couleur : \033[38;2;199;0;255m1 3 6\033[0m   |",
-        "-----------------------",
-        "|    Suite : \033[38;5;208m2 \033[32m3 \033[38;2;199;0;255m4\033[0m    |",
-        "-----------------------",
-        "|    Somme : \033[38;5;208m3 \033[94m7 \033[38;2;199;0;255m9\033[0m    |",
-        "-----------------------"
+        "\033[33m-----------------------\033[0m",
+        "\033[33m|\033[0m   Couleur : \033[38;2;199;0;255m1 3 6   \033[33m|\033[0m",
+        "\033[33m-----------------------\033[0m",
+        "\033[33m|\033[0m    Suite : \033[38;5;208m2 \033[32m3 \033[38;2;199;0;255m4    \033[33m|\033[0m",
+        "\033[33m-----------------------\033[0m",
+        "\033[33m|\033[0m    Somme : \033[38;5;208m3 \033[94m7 \033[38;2;199;0;255m9    \033[33m|\033[0m",
+        "\033[33m-----------------------\033[0m"
     };
     int iLigneAideAffichee = 0;
 
