@@ -62,7 +62,7 @@ void Partie::jouer() {
         SetConsoleOutputCP(CP_UTF8);
         TourDePartie(tour, bornes, joueur1, joueur2, 1);
 
-        bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
+        bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2); // AfficherVictoire renvoie 1 dans le cas où la partie est terminée
         if (bPartieFinie) { FinDePartie(); }
         else{ // TOUR DU DEUXIEME JOUEUR
             clearConsole();
@@ -177,6 +177,22 @@ void Partie::FinDePartie() {
     std::string choixUtilisateur;
     std::cout << "Voulez vous rejouer une partie ? (oui ou non)";
     std::cin >> choixUtilisateur;
+    if (choixUtilisateur == "oui") {
+        joueur1->setMain({});
+        joueur2->setMain({});
+        Partie nouvellePartie(joueur1, joueur2);
+
+        std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
+        std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
+
+        std::vector<Cartes> cartes = nouvellePartie.getCartes();
+        std::cout << "Nombre total de cartes dans la partie : " << cartes.size() << std::endl;
+
+        nouvellePartie.jouer();
+    }
+    else {
+        std::cout << "Ah ok";
+    }
 }
 
 void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur, std::vector<Cartes> mainTriee) {

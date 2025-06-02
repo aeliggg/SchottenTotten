@@ -34,6 +34,11 @@ void Joueur::retirerCarte(const Cartes& carte) {
 const std::vector<Cartes>& Joueur::getMain() const {
     return vJOUCartesMain;
 }
+
+void Joueur::setMain(const std::vector<Cartes>& nouvelleMain) {
+    vJOUCartesMain = nouvelleMain;
+}
+
 bool Joueur::EstGagnant() {
     if (BorneGagnee.size() < 3) return false;
     std::vector<int> numeros;

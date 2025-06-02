@@ -17,6 +17,7 @@ public:
     Joueur(const std::string& sNom);
     vector<Borne> getBorne() { return BorneGagnee; }
     void setBorne(vector<Borne> NewBorne) {BorneGagnee=NewBorne ; }
+    void setMain(const std::vector<Cartes>& nouvelleMain); 
     void AjouterBorne(Borne NewNbBorne);
     std::string getNom() const;
     void setNom(const std::string& nouveauNom);
