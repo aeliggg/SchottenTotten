@@ -359,6 +359,86 @@ bool AfficherVictoire(std::vector<Borne> bornes, Joueur* joueur1, Joueur* joueur
     return bFinDePartie;
 }
 
+
+
+void AfficheBanniereAnim() {
+    SetConsoleOutputCP(CP_UTF8);
+
+    std::vector<std::wstring> lignes = {
+        L"  ██████  ██░ ██  ▒█████  ▄▄▄█████▓▄▄▄█████▓▓█████  ███▄    █ ▄▄▄█████▓ ▒█████  ▄▄▄█████▓▄▄▄█████▓▓█████  ███▄    █ ",
+        L"▒██    ▒ ▓██░ ██▒▒██▒  ██▒▓  ██▒ ▓▒▓  ██▒ ▓▒▓█   ▀  ██ ▀█   █ ▓  ██▒ ▓▒▒██▒  ██▒▓  ██▒ ▓▒▓  ██▒ ▓▒▓█   ▀  ██ ▀█   █ ",
+        L"░ ▓██▄   ▒██▀▀██░▒██░  ██▒▒ ▓██░ ▒░▒ ▓██░ ▒░▒███   ▓██  ▀█ ██▒▒ ▓██░ ▒░▒██░  ██▒▒ ▓██░ ▒░▒ ▓██░ ▒░▒███   ▓██  ▀█ ██▒",
+        L"  ▒   ██▒░▓█ ░██ ▒██   ██░░ ▓██▓ ░ ░ ▓██▓ ░ ▒▓█  ▄ ▓██▒  ▐▌██▒░ ▓██▓ ░ ▒██   ██░░ ▓██▓ ░ ░ ▓██▓ ░ ▒▓█  ▄ ▓██▒  ▐▌██▒",
+        L"▒██████▒▒░▓█▒░██▓░ ████▓▒░  ▒██▒ ░   ▒██▒ ░ ░▒████▒▒██░   ▓██░  ▒██▒ ░ ░ ████▓▒░  ▒██▒ ░   ▒██▒ ░ ░▒████▒▒██░   ▓██░",
+        L"▒ ▒▓▒ ▒ ░ ▒ ░░▒░▒░ ▒░▒░▒░   ▒ ░░     ▒ ░░   ░░ ▒░ ░░ ▒░   ▒ ▒   ▒ ░░   ░ ▒░▒░▒░   ▒ ░░     ▒ ░░   ░░ ▒░ ░░ ▒░   ▒ ▒ ",
+        L"░ ░▒  ░ ░ ▒ ░▒░ ░  ░ ▒ ▒░     ░        ░     ░ ░  ░░ ░░   ░ ▒░    ░      ░ ▒ ▒░     ░        ░     ░ ░  ░░ ░░   ░ ▒░",
+        L"░  ░  ░   ░  ░░ ░░ ░ ░ ▒    ░        ░         ░      ░   ░ ░   ░      ░ ░ ░ ▒    ░        ░         ░      ░   ░ ░ ",
+        L"      ░   ░  ░  ░    ░ ░                       ░  ░         ░              ░ ░                       ░  ░         ░ "
+    };
+
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    int nb_lignes = static_cast<int>(lignes.size());
+    std::vector<int> lens;
+    int max_len = 0;
+    for (size_t i = 0; i < lignes.size(); ++i) {
+        lens.push_back(static_cast<int>(lignes[i].length()));
+        if (lignes[i].length() > max_len) max_len = static_cast<int>(lignes[i].length());
+    }
+
+    std::vector<std::vector<bool> > rouge(nb_lignes, std::vector<bool>(max_len, false));
+    std::vector<std::pair<int, int> > ordre;
+
+    for (int r = 0; r < nb_lignes; ++r) {
+        if (r % 2 == 0) {
+            for (int c = 0; c < lens[r]; ++c)
+                ordre.push_back(std::make_pair(r, c));
+        }
+        else {
+            for (int c = lens[r] - 1; c >= 0; --c)
+                ordre.push_back(std::make_pair(r, c));
+        }
+    }
+
+    // Affiche toute la bannière en blanc une seule fois
+    for (size_t i = 0; i < lignes.size(); ++i) {
+        std::cout << converter.to_bytes(lignes[i]) << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(700));
+
+    // Animation : mise à jour uniquement de la ligne modifiée
+    for (size_t i = 0; i < ordre.size(); ++i) {
+        int r = ordre[i].first;
+        int c = ordre[i].second;
+        rouge[r][c] = true;
+
+        // Remonte le curseur sur la ligne à modifier
+        if (nb_lignes - r > 0)
+            std::cout << "\033[" << (nb_lignes - r) << "A";
+
+        // Réaffiche la ligne courante avec les cases rouges
+        for (int col = 0; col < lens[r]; ++col) {
+            if (rouge[r][col])
+                std::cout << "\033[31m" << converter.to_bytes(std::wstring(1, lignes[r][col])) << "\033[0m";
+            else
+                std::cout << converter.to_bytes(std::wstring(1, lignes[r][col]));
+        }
+        std::cout << std::endl;
+
+        // Redescend le curseur à la fin
+        if (nb_lignes - r - 1 > 0)
+            std::cout << "\033[" << (nb_lignes - r - 1) << "B";
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(0));
+    }
+
+    // À la fin, tout en rouge
+    if (nb_lignes > 0)
+        std::cout << "\033[" << nb_lignes << "A";
+    for (size_t i = 0; i < lignes.size(); ++i) {
+        std::cout << "\033[31m" << converter.to_bytes(lignes[i]) << "\033[0m" << std::endl;
+    }
+}
+
 void clearConsole() {
     #if defined(_WIN32)
         system("cls");

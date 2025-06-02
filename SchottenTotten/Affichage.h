@@ -1,10 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include "Cartes.h"
 #include "Borne.h"
 #include "Joueur.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 enum CouleurCarte {
     BLEU,
@@ -16,6 +17,8 @@ enum CouleurCarte {
     INCONNU
 };
 
+
+void AfficheBanniereAnim();
 void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur);
 void AfficherBornesRevendiquees(Joueur* joueur);
 void AfficheASCII(const std::string& texte);

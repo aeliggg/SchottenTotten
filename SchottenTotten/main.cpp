@@ -8,8 +8,16 @@
 #include <codecvt>
 #include <locale>
 #include "Affichage.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 int main() {
+    std::cout << "Chargement du jeu ..." << std::endl;
+    PlaySound(TEXT("Start_sound.wav"), NULL, SND_FILENAME | SND_ASYNC);
+    AfficheBanniereAnim();
+    PlaySound(NULL, 0, 0);
+    clearConsole();
+    PlaySound(TEXT("musique.wav"), NULL, SND_FILENAME | SND_ASYNC);
     SetConsoleOutputCP(CP_UTF8);
     std::string Nom1;
     std::cout << u8"Joueur 1 veuillez entrer votre prénom\n";
