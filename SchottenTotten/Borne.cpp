@@ -13,6 +13,10 @@ Joueur* Borne::getGagnant() const {
     return GagnantBorne; 
 }
 
+Joueur* Borne::getFirst() const {
+    return FirstPlayer;
+}
+
 void Borne::setnumero(int numéro) {
     iBORnuméro = numéro;
 }
