@@ -15,6 +15,7 @@ private:
 public:
     Joueur();
     Joueur(const std::string& sNom);
+    ~Joueur() = default;
     vector<Borne> getBorne() { return BorneGagnee; }
     void setBorne(vector<Borne> NewBorne) {BorneGagnee=NewBorne ; }
     void setMain(const std::vector<Cartes>& nouvelleMain); 

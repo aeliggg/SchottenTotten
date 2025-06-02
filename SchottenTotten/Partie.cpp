@@ -46,7 +46,13 @@ Partie::Partie(Joueur* j1, Joueur* j2): joueur1(j1), joueur2(j2) {
     }
 }
 
-void Partie::jouer() {
+Partie::~Partie() {
+    delete joueur1;
+    delete joueur2;
+}
+
+
+bool Partie::jouer() {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
 
@@ -54,6 +60,7 @@ void Partie::jouer() {
 
     std::cout << u8"Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
     bool bPartieFinie = 0;
+    bool veutRejouer = FALSE;
     int tour = 0;
     while (bPartieFinie == 0){
         if (tour != 0) {
@@ -69,10 +76,13 @@ void Partie::jouer() {
             TourDePartie(tour, bornes, joueur2, joueur1, 2);
             
             bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
-            if (bPartieFinie) { FinDePartie();}
+            if (bPartieFinie) {
+                veutRejouer = FinDePartie();
+            }
         }
         tour++;
     }
+    return veutRejouer;
 }
 
 bool Partie::EstCouleur(std::vector<Cartes> trioDeCarte) {
@@ -173,25 +183,20 @@ void Partie::VerifieBorneGagnee(int choixBorne) {
     }
 }
 
-void Partie::FinDePartie() {
+bool Partie::FinDePartie() {
     std::string choixUtilisateur;
-    std::cout << "Voulez vous rejouer une partie ? (oui ou non)";
-    std::cin >> choixUtilisateur;
-    if (choixUtilisateur == "oui") {
-        joueur1->setMain({});
-        joueur2->setMain({});
-        Partie nouvellePartie(joueur1, joueur2);
-
-        std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
-        std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
-
-        std::vector<Cartes> cartes = nouvellePartie.getCartes();
-        std::cout << "Nombre total de cartes dans la partie : " << cartes.size() << std::endl;
-
-        nouvellePartie.jouer();
-    }
-    else {
-        std::cout << "Ah ok";
+    while (choixUtilisateur != "oui" && choixUtilisateur != "non") {
+        std::cout << "Voulez vous rejouer une partie ? (oui ou non)";
+        std::cin >> choixUtilisateur;
+        if (choixUtilisateur == "oui") {
+            return TRUE;
+        }
+        else if (choixUtilisateur == "non") {
+            return FALSE;
+        }
+        else {
+            std::cout << "Erreur, veuillez choisir entre 'oui' et 'non'";
+        }
     }
 }
 
