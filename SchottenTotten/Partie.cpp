@@ -132,7 +132,7 @@ int Partie::getRangCombinaison(std::vector<Cartes> trio) {
     return 1;
 }
 
-bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCarteJ2, Joueur* J1, Joueur* J2){
+bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCarteJ2, Joueur* J1, Joueur* J2,Joueur* First){
     if (trioDeCarteJ1.size() == 3 && trioDeCarteJ2.size()==3) {
         int rangJ1 = getRangCombinaison(trioDeCarteJ1);
         int rangJ2 = getRangCombinaison(trioDeCarteJ2);
@@ -152,7 +152,14 @@ bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> t
         else if (sommeJ1 < sommeJ2) {
             return false;
         }
-        return false;
+        else if (sommeJ1 == sommeJ2) {
+            if (J1 == First) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
     }
     else {
         cout << "\n Il y'a seulement " << trioDeCarteJ1.size() << " cartes sur la borne pour "<<J1->getNom()<<" et " << trioDeCarteJ2.size() << " pour "<<J2->getNom() << endl;
@@ -169,13 +176,13 @@ void Partie::DistribuerCartes() {
 }
 
 void Partie::VerifieBorneGagnee(int choixBorne) {
-    if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)) {
+    if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2,bornes[choixBorne-1].getFirst())) {
         bornes[choixBorne - 1].setGagnant(joueur1);
         clearConsole();
         joueur1->AjouterBorne(bornes[choixBorne - 1]);
         AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
     }
-    if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)) {
+    if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1, bornes[choixBorne - 1].getFirst())) {
         bornes[choixBorne - 1].setGagnant(joueur2);
         clearConsole();
         joueur2->AjouterBorne(bornes[choixBorne - 1]);
@@ -236,7 +243,9 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
 
     int choixBorne = 0;
     choixBorne = AfficheChoixBorne(joueur, choixBorne, bornes, numJoueur);
-
+    if (bornes[choixBorne - 1].getCarteJ1().size() == 0 && bornes[choixBorne - 1].getCarteJ2().size() == 0) {
+        bornes[choixBorne - 1].setFirst(joueur);
+    }
     UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur, mainTriee);
 
     VerifieBorneGagnee(choixBorne);
