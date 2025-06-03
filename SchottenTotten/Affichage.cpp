@@ -149,7 +149,26 @@ int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes,
     return choixBorne;
 }
 
-
+int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::vector<Borne> bornes, int numJoueur) {
+    int choix;
+    std::cout << joueur->getNom() << u8", voulez-vous Revendiquez une borne ? si oui écrivez 1 sinon O : ";
+    std::cin >> choix;
+    std::cout << joueur->getNom() << u8", entrez l'index de la borne où placer la carte (1 à 9) : ";
+    while (true) {
+        while (!(std::cin >> choixBorneRevendique) || choixBorneRevendique < 1 || choixBorneRevendique > 9) {
+            std::cin.clear();
+            std::string dummy;
+            std::getline(std::cin, dummy);
+            std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
+        }
+        if (bornes[choixBorneRevendique - 1].getGagnant()!=NULL) {
+            break;
+        }
+        else {
+            std::cout << u8"Erreur : La borne " << choixBorneRevendique << u8" a déjà un gagnant. Choisissez une autre borne : ";
+        }
+    }
+}
 
 void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur) {
     std::string aideDeJeuBrelan = "\033[33m|\033[0m    Brelan : \033[32m6 \033[94m6 \033[31m6   \033[33m|\033[0m";

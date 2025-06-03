@@ -27,6 +27,7 @@ CouleurCarte CouleurToEnum(const std::string& couleur);
 void AfficheCarte(const Cartes& carte);
 int AfficheChoixCarte(Joueur* joueur, int choixCarte);
 int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes, int numJoueur);
+int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::vector<Borne> bornes, int numJoueur);
 void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2);
 void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2);
 int AfficherReady(int ready);
