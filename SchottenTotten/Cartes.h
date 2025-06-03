@@ -16,3 +16,6 @@ public:
     void setcouleur(std::string& couleur) { sCARcouleur = couleur; }
 };
 
+inline bool operator==(const Cartes& a, const Cartes& b) {
+    return a.getnumero() == b.getnumero() && a.getcouleur() == b.getcouleur();
+}

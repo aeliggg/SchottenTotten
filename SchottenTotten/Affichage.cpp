@@ -207,7 +207,40 @@ int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, const std::vector
     return bornesLibres[choixBorne].getnumero();
 }
 
-
+int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::vector<Borne> bornes, int numJoueur) {
+    int choix;
+    std::cout << joueur->getNom() << u8", voulez-vous Revendiquer une borne ? si oui écrivez 1 sinon O : ";
+    std::cin >> choix;
+    std::cout << joueur->getNom() << u8", entrez l'index de la borne que vous voulez revendiquer : ";
+    while (true) {
+        while (!(std::cin >> choixBorneRevendique) || choixBorneRevendique < 0 || choixBorneRevendique > 9) {
+            std::cin.clear();
+            std::string dummy;
+            std::getline(std::cin, dummy);
+            std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
+        }
+        if (choixBorneRevendique == 0) {
+            break;
+            return 0;
+        }
+        if (numJoueur == 1) {
+            if (bornes[choixBorneRevendique - 1].getGagnant() != NULL && bornes[choixBorneRevendique - 1].getCarteJ1().size() == 3) {
+                break;
+            }
+            else {
+                std::cout << u8"Erreur : La borne " << choixBorneRevendique << u8" a déjà un gagnant ou vous n'avez pas assez de cartes sur la borne.\n Choisissez une autre borne, si vous ne voulez plus revendiquer tapez 0: ";
+            }
+        }
+        if (numJoueur == 2) {
+            if (bornes[choixBorneRevendique - 1].getGagnant() != NULL && bornes[choixBorneRevendique - 1].getCarteJ2().size() == 3) {
+                break;
+            }
+            else {
+                std::cout << u8"Erreur : La borne " << choixBorneRevendique << u8" a déjà un gagnant ou vous n'avez pas assez de cartes sur la borne.\n Choisissez une autre borne, si vous ne voulez plus revendiquer tapez 0: ";
+            }
+        }
+    }
+}
 
 void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur) {
     std::string aideDeJeuBrelan = "\033[33m|\033[0m    Brelan : \033[32m6 \033[94m6 \033[31m6   \033[33m|\033[0m";
