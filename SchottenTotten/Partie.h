@@ -33,7 +33,9 @@ public:
     bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2,Joueur* First);
     void DistribuerCartes();
     void VerifieBorneGagnee(int choixBorne);
+    void VerifieBorneRevendique(int choixRev);
     bool FinDePartie();
+    bool EstRevendiquable(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> Cartesj2, Joueur* J1, Joueur* J2);
     void UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur, std::vector<Cartes> mainJ1);
     void TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur);
 };

@@ -6,6 +6,7 @@
 #include <chrono>
 #include "Borne.h"
 #include <iostream>
+#include <functional>
 #include <algorithm>
 #include <random>
 #include <ctime>
@@ -166,12 +167,53 @@ bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> t
     }
 }
 
+
+bool Partie::EstRevendiquable(std::vector<Cartes> cartesJoueur, std::vector<Cartes> cartesAdverse, Joueur* J, Joueur* Adverse) {
+    // Le joueur doit avoir 3 cartes
+    if (cartesJoueur.size() != 3) {
+        return false;
+    }
+
+    // Si l'adversaire a 3 cartes => on peut comparer directement
+    if (cartesAdverse.size() == 3) {
+        return EstGagnant(cartesJoueur, cartesAdverse, J, Adverse, J);
+    }
+
+    // Si l'adversaire a moins de 3 cartes, on ne peut pas encore revendiquer
+    // (version simple, on pourrait améliorer avec de la logique de déduction plus tard)
+    return false;
+}
+
+
 void Partie::DistribuerCartes() {
     for (int i = 0; i < 6; ++i) {
         joueur1->ajouterCarte(cartes.back());
         cartes.pop_back();
         joueur2->ajouterCarte(cartes.back());
         cartes.pop_back();
+    }
+}
+
+
+void Partie::VerifieBorneRevendique(int choixBorne) {
+    if (choixBorne == 1) {
+        if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)&& bornes[choixBorne - 1].getCarteJ1().size() == 3) {
+            bornes[choixBorne - 1].setGagnant(joueur1);
+            clearConsole();
+            joueur1->AjouterBorne(bornes[choixBorne - 1]);
+            AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
+        }
+        if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)&& bornes[choixBorne - 1].getCarteJ2().size() == 3) {
+            bornes[choixBorne - 1].setGagnant(joueur2);
+            clearConsole();
+            joueur2->AjouterBorne(bornes[choixBorne - 1]);
+            AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
+        }
+        else {
+            std::cout << "La borne n'est pas revendiquable...";
+        }
+    }
+    else {
     }
 }
 
@@ -243,11 +285,24 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
 
     int choixBorne = 0;
     choixBorne = AfficheChoixBorne(joueur, choixBorne, bornes, numJoueur);
-    int choixBorneRevendique = 0;
+
+
+
     if (bornes[choixBorne - 1].getCarteJ1().size() == 0 && bornes[choixBorne - 1].getCarteJ2().size() == 0) {
         bornes[choixBorne - 1].setFirst(joueur);
     }
-    UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur, mainTriee);
 
+    UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur, mainTriee);
+    clearConsole();
+    if (numJoueur == 1) {
+        AffichePlateau(bornes, joueur, adversaire);
+    }
+    else {
+        AffichePlateau(bornes, adversaire, joueur);
+    }
+    int choixBorneRevendique = 0;
+    choixBorneRevendique = AfficheChoixBorneRevendique(joueur, choixBorneRevendique, bornes, numJoueur);
+    VerifieBorneRevendique(choixBorneRevendique);
     VerifieBorneGagnee(choixBorne);
+
 }

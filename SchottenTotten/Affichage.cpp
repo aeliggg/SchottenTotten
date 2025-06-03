@@ -151,21 +151,35 @@ int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes,
 
 int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::vector<Borne> bornes, int numJoueur) {
     int choix;
-    std::cout << joueur->getNom() << u8", voulez-vous Revendiquez une borne ? si oui écrivez 1 sinon O : ";
+    std::cout << joueur->getNom() << u8", voulez-vous Revendiquer une borne ? si oui écrivez 1 sinon O : ";
     std::cin >> choix;
-    std::cout << joueur->getNom() << u8", entrez l'index de la borne où placer la carte (1 à 9) : ";
+    std::cout << joueur->getNom() << u8", entrez l'index de la borne que vous voulez revendiquer : ";
     while (true) {
-        while (!(std::cin >> choixBorneRevendique) || choixBorneRevendique < 1 || choixBorneRevendique > 9) {
+        while (!(std::cin >> choixBorneRevendique) || choixBorneRevendique < 0 || choixBorneRevendique > 9) {
             std::cin.clear();
             std::string dummy;
             std::getline(std::cin, dummy);
             std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
         }
-        if (bornes[choixBorneRevendique - 1].getGagnant()!=NULL) {
+        if (choixBorneRevendique == 0) {
             break;
+            return 0;
         }
-        else {
-            std::cout << u8"Erreur : La borne " << choixBorneRevendique << u8" a déjà un gagnant. Choisissez une autre borne : ";
+        if (numJoueur == 1) {
+            if (bornes[choixBorneRevendique - 1].getGagnant() != NULL && bornes[choixBorneRevendique - 1].getCarteJ1().size() == 3) {
+                break;
+            }
+            else {
+                std::cout << u8"Erreur : La borne " << choixBorneRevendique << u8" a déjà un gagnant ou vous n'avez pas assez de cartes sur la borne.\n Choisissez une autre borne, si vous ne voulez plus revendiquer tapez 0: ";
+            }
+        }
+        if (numJoueur == 2) {
+            if (bornes[choixBorneRevendique - 1].getGagnant() != NULL && bornes[choixBorneRevendique - 1].getCarteJ2().size() == 3) {
+                break;
+            }
+            else {
+                std::cout << u8"Erreur : La borne " << choixBorneRevendique << u8" a déjà un gagnant ou vous n'avez pas assez de cartes sur la borne.\n Choisissez une autre borne, si vous ne voulez plus revendiquer tapez 0: ";
+            }
         }
     }
 }

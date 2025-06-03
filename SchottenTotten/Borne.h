@@ -26,6 +26,7 @@ public:
 	void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
 	void setFirst(Joueur* joueur) { FirstPlayer = joueur; }
 	std::vector<Cartes> getCarteJ1() const;
+	std::vector<Cartes> getCarteJoueur(Joueur* joueur) const;
 	std::vector<Cartes> getCarteJ2() const;
 	void ajouterCarteJ1(const Cartes& carte);
 	void ajouterCarteJ2(const Cartes& carte);
