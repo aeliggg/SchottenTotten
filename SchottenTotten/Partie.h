@@ -22,6 +22,7 @@ public:
     std::vector<Cartes> getCartes() { return cartes; };
     void ajouterBorne(const Borne& borne) { bornes.push_back(borne); };
     std::vector<Borne> getBornes() { return bornes; };
+    std::vector<Borne> getBornesJouables();
     Joueur* getJoueur1() { return joueur1; };
     Joueur* getJoueur2() { return joueur2; };
     bool jouer();
@@ -34,6 +35,6 @@ public:
     void DistribuerCartes();
     void VerifieBorneGagnee(int choixBorne);
     bool FinDePartie();
-    void UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur, std::vector<Cartes> mainJ1);
+    void UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur);
     void TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur);
 };

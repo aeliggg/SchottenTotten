@@ -11,6 +11,7 @@
 #include <locale>
 #include <thread>
 #include <chrono>
+#include <conio.h>
 
 CouleurCarte CouleurToEnum(const std::string& couleur) {
     if (couleur == "bleu") return BLEU;
@@ -84,22 +85,22 @@ void AffichePlateau(const std::vector<Borne>& bornes,Joueur*joueur1, Joueur*joue
 void AfficheCarte(const Cartes& carte) {
     switch (CouleurToEnum(carte.getcouleur())) {
     case BLEU:
-        std::cout << "\033[94m" << carte.getnumero() << "\033[0m ";
+        std::cout << "\033[94m" << carte.getnumero() << "\033[0m";
         break;
     case VERT:
-        std::cout << "\033[32m" << carte.getnumero() << "\033[0m ";
+        std::cout << "\033[32m" << carte.getnumero() << "\033[0m";
         break;
     case JAUNE:
-        std::cout << "\033[38;2;255;255;85m" << carte.getnumero() << "\033[0m ";
+        std::cout << "\033[38;2;255;255;85m" << carte.getnumero() << "\033[0m";
         break;
     case ROUGE:
-        std::cout << "\033[31m" << carte.getnumero() << "\033[0m ";
+        std::cout << "\033[31m" << carte.getnumero() << "\033[0m";
         break;
     case VIOLET:
-        std::cout << "\033[38;2;199;0;255m" << carte.getnumero() << "\033[0m ";
+        std::cout << "\033[38;2;199;0;255m" << carte.getnumero() << "\033[0m";
         break;
     case ORANGE:
-        std::cout << "\033[38;5;208m" << carte.getnumero() << "\033[0m ";
+        std::cout << "\033[38;5;208m" << carte.getnumero() << "\033[0m";
         break;
     default:
         std::cout << carte.getnumero() << std::endl;
@@ -107,47 +108,106 @@ void AfficheCarte(const Cartes& carte) {
     }
 }
 
-int AfficheChoixCarte(Joueur* joueur, int choixCarte) {
-    std::cout << joueur->getNom() << u8", entrez l'index de la carte à jouer (1 à " << joueur->getMain().size() << ") : ";
-    while (!(std::cin >> choixCarte) || choixCarte < 1 || choixCarte >(int)joueur->getMain().size()) {
-        std::cin.clear();
-        std::string dummy;
-        std::getline(std::cin, dummy);
-        std::cout << "Erreur. Veuillez entrer un nombre entre 1 et " << joueur->getMain().size() << " : ";
+int AfficheChoixCarteNavigable(Joueur* joueur, int choixCarte) {
+    int nbCartes = joueur->getMain().size();
+    if (nbCartes == 0) {
+        std::cout << "Vous n'avez aucune carte en main." << std::endl;
+        return -1;
     }
-    return choixCarte;
-}
-
-
-int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes, int numJoueur) {
-    std::cout << joueur->getNom() << u8", entrez l'index de la borne où placer la carte (1 à 9) : ";
+    // S'assurer que l'index initial est correct
+    if (choixCarte < 0 || choixCarte >= nbCartes) {
+        choixCarte = 0;
+    }
 
     while (true) {
-        while (!(std::cin >> choixBorne) || choixBorne < 1 || choixBorne > 9) {
-            std::cin.clear();
-            std::string dummy;
-            std::getline(std::cin, dummy);
-            std::cout << "Erreur. Veuillez entrer un nombre entre 1 et 9 : ";
-        }
-        if (numJoueur == 1) {
-            if (bornes[choixBorne - 1].getCarteJ1().size() < 3) {
-                break;
+        // Affichage dynamique
+        std::cout << "\r" << joueur->getNom() << u8", choisissez une carte à jouer parmi : ";
+        for (int i = 0; i < nbCartes; ++i) {
+            if (i == choixCarte) {
+                std::cout << "[";
+                AfficheCarte(joueur->getMain()[i]);
+                std::cout << "]";
             }
             else {
-                std::cout << u8"Erreur : La borne " << choixBorne << u8" a déjà 3 cartes. Choisissez une autre borne : ";
+                std::cout << " ";
+                AfficheCarte(joueur->getMain()[i]);
+                std::cout << " ";
             }
         }
-        else {
-            if (bornes[choixBorne - 1].getCarteJ2().size() < 3) {
-                break;
+        std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
+
+        int key = _getch();
+        if (key == 224) { // Touche spéciale (flèche)
+            key = _getch();
+            if (key == 75) { // Flèche gauche
+                choixCarte = (choixCarte - 1 + nbCartes) % nbCartes;
+            }
+            else if (key == 77) { // Flèche droite
+                choixCarte = (choixCarte + 1) % nbCartes;
+            }
+        }
+        else if (key == 13) { // Entrée
+            break;
+        }
+    }
+    std::cout << std::endl;
+    // On retourne l'index (1-based) pour correspondre à l'affichage utilisateur
+    return choixCarte + 1;
+}
+
+int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, const std::vector<Borne>& bornesLibres, int numJoueur) {
+    int nbBornesLibres = bornesLibres.size();
+    if (nbBornesLibres == 0) {
+        std::cout << "Aucune borne disponible." << std::endl;
+        return -1;
+    }
+
+    choixBorne = bornesLibres.size() / 2;
+    while (true) {
+        // Affichage dynamique
+        std::cout << "\r" << joueur->getNom() << ", veuillez choisir une borne parmi : ";
+        for (int i = 0; i < nbBornesLibres; ++i) {
+            if (i == choixBorne)
+                std::cout << "[" << bornesLibres[i].getnumero() << "]";
+            else
+                std::cout << " " << bornesLibres[i].getnumero() << " ";
+        }
+        std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
+
+        int key = _getch();
+        if (key == 224) { // Touche spéciale (flèche)
+            key = _getch();
+            if (key == 75) { // Flèche gauche
+                choixBorne = (choixBorne - 1 + nbBornesLibres) % nbBornesLibres;
+            }
+            else if (key == 77) { // Flèche droite
+                choixBorne = (choixBorne + 1) % nbBornesLibres;
+            }
+        }
+        else if (key == 13) { // Entrée
+            if (numJoueur == 1) {
+                if (bornesLibres[choixBorne].getCarteJ1().size() < 3) {
+                    break;
+                }
+                else {
+                    std::cout << u8"\n\033[31mVous avez déjà 3 cartes sur cette borne, veuillez en choisir une autre\033[0m\n";
+                }
             }
             else {
-                std::cout << u8"Erreur : La borne " << choixBorne << u8" a déjà 3 cartes. Choisissez une autre borne : ";
+                if (bornesLibres[choixBorne].getCarteJ2().size() < 3) {
+                    break;
+                }
+                else {
+                    std::cout << u8"\n\033[31mErreur : Vous avez déjà 3 cartes sur cette borne, veuillez en choisir une autre\033[0m\n";
+                }
             }
         }
     }
-    return choixBorne;
+    std::cout << std::endl;
+    return bornesLibres[choixBorne].getnumero();
 }
+
+
 
 void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur) {
     std::string aideDeJeuBrelan = "\033[33m|\033[0m    Brelan : \033[32m6 \033[94m6 \033[31m6   \033[33m|\033[0m";
@@ -222,7 +282,7 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Ca
             else {
                 std::cout << "     ";
                 AfficheCarte(cartesJ1[uiLigneDeCartes]);
-                std::cout << "   ";
+                std::cout << "    ";
             }
         }
         std::cout << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++];
@@ -245,7 +305,7 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Ca
             else {
                 std::cout << "     ";
                 AfficheCarte(cartesJ2[uiLigneDeCartes]);
-                std::cout << "   ";
+                std::cout << "    ";
             }
         }
         if (iLigneAideAffichee < 7) {
@@ -255,57 +315,21 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Ca
     }
 }
 
-void AfficherBornes(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
-    for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
-        for (unsigned int i = 0; i < bornes.size(); ++i) {
-            std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
-            if (cartesJ1.size()<=uiLigneDeCartes) {
-                std::cout << "     0    ";
-            }
-            else {
-                std::cout << "     ";
-                AfficheCarte(cartesJ1[uiLigneDeCartes]);
-                std::cout << "   ";
-            }
+void AfficherReady() {
+    std::cout << u8"\nAppuyez sur Entrée si vous êtes prêt à voir votre main : ";
+    int key;
+    while (true) {
+        key = _getch();
+        if (key == 13) { // 13 = Entrée
+            break;
         }
-        if (uiLigneDeCartes != 2) {
-            std::cout << "\n";
+        else {
+            std::cout << u8"\nEntrée invalide. Appuyez sur Entrée pour continuer : ";
         }
-    }
-    std::cout << "\n -----------------------------------------------------------------------------------------\n";
-    for (unsigned int i = 0; i < bornes.size(); ++i) {
-        std::cout << "| Borne " << bornes[i].getnumero() << " ";
-    }
-    std::cout << "|\n";
-    std::cout << " -----------------------------------------------------------------------------------------\n";
-    for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
-        for (unsigned int i = 0; i < bornes.size(); ++i) {
-            std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
-            if (cartesJ2.size()<=uiLigneDeCartes) {
-                std::cout << "     0    ";
-            }
-            else {
-                std::cout << "     ";
-                AfficheCarte(cartesJ2[uiLigneDeCartes]);
-                std::cout << "   ";
-            }
-        }
-        std::cout << "\n";
     }
 }
 
-int AfficherReady(int ready) {
-    std::cout << u8"\nÉcrire 1 si vous êtes prêt à voir votre main : ";
-    while (!(std::cin >> ready) || ready != 1) {
-        std::cin.clear();
-        std::string dummy;
-        std::getline(std::cin, dummy);
-        std::cout << u8"\nEntrée invalide. Veuillez saisir 1 pour continuer : ";
-    }
-    return ready;
-}
-
-std::vector<Cartes> AfficherMain(Joueur* joueur){
+void TrierMain(Joueur* joueur){
     std::vector<Cartes> main = joueur->getMain();
     
     std::sort(main.begin(), main.end(), [](const Cartes& a, const Cartes& b) {  //Range les cartes par couleurs et par numero
@@ -314,11 +338,7 @@ std::vector<Cartes> AfficherMain(Joueur* joueur){
         return a.getnumero() < b.getnumero();
         });
     
-    std::cout << "\nVoici la main de " << joueur->getNom() << " : \n";
-    for (size_t i = 0; i < main.size(); ++i) {
-        AfficheCarte(main[i]);
-    }
-    return main;
+    joueur->setMain(main);
 }
 
 void AfficherBorneGagnee(Joueur* joueur1, Borne borne) {

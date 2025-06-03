@@ -13,6 +13,8 @@
 #include <string>
 #include <codecvt>
 #include <locale>
+#include <conio.h>
+
 
 Partie::Partie(){
     std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
@@ -191,24 +193,40 @@ void Partie::VerifieBorneGagnee(int choixBorne) {
 }
 
 bool Partie::FinDePartie() {
-    std::string choixUtilisateur;
-    while (choixUtilisateur != "oui" && choixUtilisateur != "non") {
-        std::cout << "Voulez vous rejouer une partie ? (oui ou non)";
-        std::cin >> choixUtilisateur;
-        if (choixUtilisateur == "oui") {
-            return TRUE;
+    int choixUtilisateur = 0;
+    std::vector<std::string> choix = { "Rejouer","Menu" };
+    while (true) {
+        std::cout << "\rQue souhaitez vous faire ? ";
+        for (int i = 0; i < 2; ++i) {
+            if (i == choixUtilisateur)
+                std::cout << "[" << choix[i] << "]";
+            else
+                std::cout << " " << choix[i] << " ";
         }
-        else if (choixUtilisateur == "non") {
-            return FALSE;
+        std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
+
+        int key = _getch();
+        if (key == 224) { // Touche spéciale (flèche)
+            key = _getch();
+            if (key == 75 || key == 77) { // Flèche gauche ou droite
+                choixUtilisateur = (choixUtilisateur + 1) % 2;
+            }
+            
         }
-        else {
-            std::cout << "Erreur, veuillez choisir entre 'oui' et 'non'";
+        else if (key == 13) {
+            if (choixUtilisateur == 0) {
+                return TRUE;
+            }
+            else if (choixUtilisateur == 1) {
+                return FALSE;
+            }
         }
     }
 }
 
-void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur, std::vector<Cartes> mainTriee) {
-    Cartes carteChoisie = mainTriee[choixCarte - 1];
+void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur) {
+    std::vector<Cartes> main = joueur->getMain();
+    Cartes carteChoisie = main[choixCarte - 1];
     if (numJoueur == 1) {
         bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
     }
@@ -234,19 +252,29 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
 
     std::cout << "\nC'est au tour de " << joueur->getNom() << "\n";
 
-    int ready = 0;
-    ready = AfficherReady(ready);
+    AfficherReady();
 
-    std::vector<Cartes> mainTriee = AfficherMain(joueur);
+    TrierMain(joueur);
     int choixCarte = 0;
-    choixCarte = AfficheChoixCarte(joueur, choixCarte);
+    choixCarte = AfficheChoixCarteNavigable(joueur, choixCarte);
 
     int choixBorne = 0;
-    choixBorne = AfficheChoixBorne(joueur, choixBorne, bornes, numJoueur);
+    std::vector<Borne> bornesJouables = getBornesJouables();
+    choixBorne = AfficheChoixBorneNavigable(joueur, choixBorne, bornesJouables, numJoueur);
     if (bornes[choixBorne - 1].getCarteJ1().size() == 0 && bornes[choixBorne - 1].getCarteJ2().size() == 0) {
         bornes[choixBorne - 1].setFirst(joueur);
     }
-    UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur, mainTriee);
+    UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur);
 
     VerifieBorneGagnee(choixBorne);
+}
+
+std::vector<Borne> Partie::getBornesJouables() {
+    std::vector<Borne> res = {};
+    for (int iBorne = 0; iBorne < bornes.size() ; iBorne++) {
+        if (bornes[iBorne].getGagnant() == nullptr) {
+            res.push_back(bornes[iBorne]);
+        }
+    }
+    return res;
 }
