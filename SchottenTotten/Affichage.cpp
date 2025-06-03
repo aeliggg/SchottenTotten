@@ -149,6 +149,8 @@ int AfficheChoixBorne(Joueur* joueur, int choixBorne, std::vector<Borne> bornes,
     return choixBorne;
 }
 
+
+
 void AfficherBornesRevendiqueesPlusAJ(Joueur* joueur) {
     std::string aideDeJeuBrelan = "\033[33m|\033[0m    Brelan : \033[32m6 \033[94m6 \033[31m6   \033[33m|\033[0m";
     int numeroDerniereBornePossedee = 0;

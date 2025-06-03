@@ -243,6 +243,7 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
 
     int choixBorne = 0;
     choixBorne = AfficheChoixBorne(joueur, choixBorne, bornes, numJoueur);
+    int choixBorneRevendique = 0;
     if (bornes[choixBorne - 1].getCarteJ1().size() == 0 && bornes[choixBorne - 1].getCarteJ2().size() == 0) {
         bornes[choixBorne - 1].setFirst(joueur);
     }
