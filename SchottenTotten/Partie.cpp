@@ -198,24 +198,20 @@ void Partie::DistribuerCartes() {
 
 
 void Partie::VerifieBorneRevendique(int choixBorne) {
-    if (choixBorne == 1) {
-        if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)&& bornes[choixBorne - 1].getCarteJ1().size() == 3) {
-            bornes[choixBorne - 1].setGagnant(joueur1);
-            clearConsole();
-            joueur1->AjouterBorne(bornes[choixBorne - 1]);
-            AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
-        }
-        if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)&& bornes[choixBorne - 1].getCarteJ2().size() == 3) {
-            bornes[choixBorne - 1].setGagnant(joueur2);
-            clearConsole();
-            joueur2->AjouterBorne(bornes[choixBorne - 1]);
-            AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
-        }
-        else {
-            std::cout << "La borne n'est pas revendiquable...";
-        }
+    if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)&& bornes[choixBorne - 1].getCarteJ1().size() == 3) {
+        bornes[choixBorne - 1].setGagnant(joueur1);
+        clearConsole();
+        joueur1->AjouterBorne(bornes[choixBorne - 1]);
+        AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
+    }
+    if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)&& bornes[choixBorne - 1].getCarteJ2().size() == 3) {
+        bornes[choixBorne - 1].setGagnant(joueur2);
+        clearConsole();
+        joueur2->AjouterBorne(bornes[choixBorne - 1]);
+        AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
     }
     else {
+        std::cout << "La borne n'est pas revendiquable...";
     }
 }
 
@@ -316,7 +312,9 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
     }
     int choixBorneRevendique = 0;
     choixBorneRevendique = AfficheChoixBorneRevendique(joueur, choixBorneRevendique, bornes, numJoueur);
-    VerifieBorneRevendique(choixBorneRevendique);
+    if (choixBorneRevendique != 0) {
+        VerifieBorneRevendique(choixBorneRevendique);
+    }
     VerifieBorneGagnee(choixBorne);
 
 }

@@ -251,20 +251,29 @@ int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::v
                 std::cout << " " << bornes[i].getnumero() << " ";
             }
         }
-        std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
+        if (choixBorne == bornes.size()) {
+            std::cout << "[X]";
+        }
+        else {
+            std::cout << " X ";
+        }
+        std::cout << u8" (X pour annuler / Flèches pour naviguer)" << std::flush;
 
         int key = _getch();
         if (key == 224) { // Touche spéciale (flèche)
             key = _getch();
             if (key == 75) { // Flèche gauche
-                choixBorne = (choixBorne - 1 + bornes.size()) % bornes.size();
+                choixBorne = (choixBorne + bornes.size()) % (bornes.size() + 1 );
             }
             else if (key == 77) { // Flèche droite
-                choixBorne = (choixBorne + 1) % bornes.size();
+                choixBorne = (choixBorne + 1) % (bornes.size() + 1);
             }
         }
         else if (key == 13) { // Entrée
             choixBorne++;
+            if (choixBorne > bornes.size()) {
+                return 0;
+            }
             if (numJoueur == 1) {
                 if (bornes[choixBorne - 1].getGagnant() != NULL && bornes[choixBorne- 1].getCarteJ1().size() == 3) {
                     break;
