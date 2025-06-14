@@ -275,19 +275,25 @@ int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::v
                 return 0;
             }
             if (numJoueur == 1) {
-                if (bornes[choixBorne - 1].getGagnant() != NULL && bornes[choixBorne- 1].getCarteJ1().size() == 3) {
-                    break;
+                if (bornes[choixBorne - 1].getGagnant() == NULL && bornes[choixBorne- 1].getCarteJ1().size() == 3) {
+                    return bornes[choixBorne - 1].getnumero();
+                }
+                else if (bornes[choixBorne - 1].getGagnant() == NULL){
+                    std::cout << u8"\n\033[31mErreur : \033[0mVous ne pouvez pas revendiquer la borne " << bornes[choixBorne-1].getnumero() << u8" car vous n'avez pas assez de cartes sur la borne.\n";
                 }
                 else {
-                    std::cout << u8"\nErreur : La borne " << choixBorne << u8" a déjà un gagnant ou vous n'avez pas assez de cartes sur la borne.\n Choisissez une autre borne, si vous ne voulez plus revendiquer tapez 0: ";
+                    std::cout << u8"\n\033[31mErreur : \033[0mLa borne " << bornes[choixBorne - 1].getnumero() << u8" a déjà un gagnant.\n";
                 }
             }
             if (numJoueur == 2) {
-                if (bornes[choixBorne- 1].getGagnant() != NULL && bornes[choixBorne - 1].getCarteJ2().size() == 3) {
-                    break;
+                if (bornes[choixBorne- 1].getGagnant() == NULL && bornes[choixBorne - 1].getCarteJ2().size() == 3) {
+                    return bornes[choixBorne - 1].getnumero();
+                }
+                else if (bornes[choixBorne - 1].getGagnant() == NULL) {
+                    std::cout << u8"\n\033[31mErreur : \033[0mVous ne pouvez pas revendiquer la borne " << bornes[choixBorne - 1].getnumero() << u8" car vous n'avez pas assez de cartes sur la borne.\n";
                 }
                 else {
-                    std::cout << u8"\nErreur : La borne " << choixBorne << u8" a déjà un gagnant ou vous n'avez pas assez de cartes sur la borne.\n Choisissez une autre borne, si vous ne voulez plus revendiquer tapez 0: ";
+                    std::cout << u8"\n\033[31mErreur : \033[0mLa borne " << bornes[choixBorne - 1].getnumero() << u8" a déjà un gagnant. \n";
                 }
             }
         }

@@ -198,21 +198,27 @@ void Partie::DistribuerCartes() {
 
 
 void Partie::VerifieBorneRevendique(int choixBorne) {
-    if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2)&& bornes[choixBorne - 1].getCarteJ1().size() == 3) {
-        bornes[choixBorne - 1].setGagnant(joueur1);
-        clearConsole();
-        joueur1->AjouterBorne(bornes[choixBorne - 1]);
-        AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
+    std::cout << "\nJE SUIS ICI" << std::endl;
+    int indexBorne = 0;
+    while (bornes[indexBorne].getnumero() != choixBorne) {
+        indexBorne++;
     }
-    if (EstRevendiquable(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1)&& bornes[choixBorne - 1].getCarteJ2().size() == 3) {
-        bornes[choixBorne - 1].setGagnant(joueur2);
+    if (EstRevendiquable(bornes[indexBorne].getCarteJ1(), bornes[indexBorne].getCarteJ2(), joueur1, joueur2)&& bornes[indexBorne].getCarteJ1().size() == 3) {
+        bornes[indexBorne].setGagnant(joueur1);
         clearConsole();
-        joueur2->AjouterBorne(bornes[choixBorne - 1]);
-        AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
+        joueur1->AjouterBorne(bornes[indexBorne]);
+        AfficherBorneGagnee(joueur1, bornes[indexBorne]);
+    }
+    if (EstRevendiquable(bornes[indexBorne].getCarteJ2(), bornes[indexBorne].getCarteJ1(), joueur2, joueur1)&& bornes[indexBorne].getCarteJ2().size() == 3) {
+        bornes[indexBorne].setGagnant(joueur2);
+        clearConsole();
+        joueur2->AjouterBorne(bornes[indexBorne]);
+        AfficherBorneGagnee(joueur2, bornes[indexBorne]);
     }
     else {
-        std::cout << "La borne n'est pas revendiquable...";
+        std::cout << "La borne n'est pas revendiquable...\n";
     }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 void Partie::VerifieBorneGagnee(int choixBorne) {
@@ -303,6 +309,7 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
         bornes[choixBorne - 1].setFirst(joueur);
     }
     UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur);
+    VerifieBorneGagnee(choixBorne);
     clearConsole();
     if (numJoueur == 1) {
         AffichePlateau(bornes, joueur, adversaire);
@@ -310,13 +317,14 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
     else {
         AffichePlateau(bornes, adversaire, joueur);
     }
-    int choixBorneRevendique = 0;
-    choixBorneRevendique = AfficheChoixBorneRevendique(joueur, choixBorneRevendique, bornes, numJoueur);
-    if (choixBorneRevendique != 0) {
-        VerifieBorneRevendique(choixBorneRevendique);
+    std::vector<Borne> bornesRevendicables = getBornesJouables();
+    int choixBorneRevendique = -1;
+    while (choixBorneRevendique != 0) {
+        choixBorneRevendique = AfficheChoixBorneRevendique(joueur, choixBorneRevendique, bornesRevendicables, numJoueur);
+        if (choixBorneRevendique != 0) {
+            VerifieBorneRevendique(choixBorneRevendique);
+        }
     }
-    VerifieBorneGagnee(choixBorne);
-
 }
 
 std::vector<Borne> Partie::getBornesJouables() {
