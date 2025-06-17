@@ -88,6 +88,38 @@ bool Partie::jouer() {
     return veutRejouer;
 }
 
+bool Partie::jouerIA() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
+    DistribuerCartes();
+    std::cout << u8"Début de la partie entre " << joueur1->getNom() << " et l'IA";
+    joueur2->setNom("IA");
+    bool bPartieFinie = 0;
+    bool veutRejouer = FALSE;
+    int tour = 0;
+    while (bPartieFinie == 0) {
+        if (tour != 0) {
+            clearConsole();
+        }
+        SetConsoleOutputCP(CP_UTF8);
+        TourDePartie(tour, bornes, joueur1, joueur2, 1);
+
+        bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2); // AfficherVictoire renvoie 1 dans le cas où la partie est terminée
+        if (bPartieFinie) { FinDePartie(); }
+        else { // TOUR DU DEUXIEME JOUEUR
+            clearConsole();
+            TourDePartieIA(tour, bornes, joueur2, joueur1, 2);
+
+            bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
+            if (bPartieFinie) {
+                veutRejouer = FinDePartie();
+            }
+        }
+        tour++;
+    }
+    return veutRejouer;
+}
+
 bool Partie::EstCouleur(std::vector<Cartes> trioDeCarte) {
     if (trioDeCarte.size() != 3) {
         return false;
@@ -178,7 +210,14 @@ bool Partie::EstRevendiquable(const std::vector<Cartes>& cartesJoueur,const std:
     int rangJoueur = this->getRangCombinaison(cartesJoueur); //Rang de la combinaison du joueur
     int sommeJoueur = cartesJoueur[0].getnumero() + cartesJoueur[1].getnumero() + cartesJoueur[2].getnumero(); //Somme des valeurs des cartes du joueur
 
-    std::vector<Cartes> cartesRestantes = this->cartes; //Cartes encore disponibles dans la pioche
+    std::vector<Cartes> cartesRestantes = this->cartes;//Cartes encore disponibles dans la pioche
+    for (int carteJ1 = 0; carteJ1 < joueur1->getMain().size(); carteJ1++) {
+        cartesRestantes.push_back(joueur1->getMain()[carteJ1]);
+    }
+    for (int carteJ2 = 0; carteJ2 < joueur2->getMain().size(); carteJ2++) {
+        cartesRestantes.push_back(joueur2->getMain()[carteJ2]);
+    }
+     
 
     unsigned int nbCartesAdverseManquantes = 3 - cartesAdverse.size(); //Cartes que l'adversaire doit encore poser
 
@@ -253,18 +292,20 @@ void Partie::VerifieBorneRevendique(int choixBorne) {
     }
     if (EstRevendiquable(bornes[indexBorne].getCarteJ1(), bornes[indexBorne].getCarteJ2(), joueur1, joueur2)&& bornes[indexBorne].getCarteJ1().size() == 3) {
         bornes[indexBorne].setGagnant(joueur1);
-        clearConsole();
+        //clearConsole();
         joueur1->AjouterBorne(bornes[indexBorne]);
-        AfficherBorneGagnee(joueur1, bornes[indexBorne]);
+        //AfficherBorneGagnee(joueur1, bornes[indexBorne]);
+        std::cout << "\nRevendication par " << joueur1->getNom() << " sur la borne " << bornes[indexBorne].getnumero() << u8"validée !" << std::endl;
     }
-    if (EstRevendiquable(bornes[indexBorne].getCarteJ2(), bornes[indexBorne].getCarteJ1(), joueur2, joueur1)&& bornes[indexBorne].getCarteJ2().size() == 3) {
+    else if (EstRevendiquable(bornes[indexBorne].getCarteJ2(), bornes[indexBorne].getCarteJ1(), joueur2, joueur1)&& bornes[indexBorne].getCarteJ2().size() == 3) {
         bornes[indexBorne].setGagnant(joueur2);
-        clearConsole();
+        //clearConsole();
         joueur2->AjouterBorne(bornes[indexBorne]);
-        AfficherBorneGagnee(joueur2, bornes[indexBorne]);
+        //AfficherBorneGagnee(joueur2, bornes[indexBorne]);
+        std::cout << "\nRevendication par " << joueur2->getNom() << " sur la borne " << bornes[indexBorne].getnumero() << u8" validée !" << std::endl;
     }
     else {
-        std::cout << "\nLa borne n'est pas revendiquable...\n";
+        std::cout << "\nVous ne pouvez pas revendiquer cette borne.\n";
     }
 }
 
@@ -371,6 +412,24 @@ void Partie::TourDePartie(int tour, std::vector<Borne>& bornes,Joueur*joueur,Jou
         if (choixBorneRevendique != 0) {
             VerifieBorneRevendique(choixBorneRevendique);
         }
+    }
+}
+
+void Partie::TourDePartieIA(int tour, std::vector<Borne>& bornes, Joueur* IA, Joueur* adversaire, int numJoueur) {
+    TrierMain(IA);
+    int choixCarte = (rand() % IA->getMain().size()) + 1;
+    int choixBorne = (rand() % 9) + 1;
+    while (bornes[choixBorne - 1].getGagnant() != NULL && bornes[choixBorne].getCarteJ2().size() != 3) {
+        int choixBorne = (rand() % 9) + 1;
+    }
+    UpdatePlateauApresCoupJoueur(IA, choixCarte, bornes, choixBorne, numJoueur);
+    VerifieBorneGagnee(choixBorne);
+    clearConsole();
+    if (numJoueur == 1) {
+        AffichePlateau(bornes, IA, adversaire);
+    }
+    else {
+        AffichePlateau(bornes, adversaire, IA);
     }
 }
 
