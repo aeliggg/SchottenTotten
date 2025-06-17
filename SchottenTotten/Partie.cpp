@@ -419,8 +419,8 @@ void Partie::TourDePartieIA(int tour, std::vector<Borne>& bornes, Joueur* IA, Jo
     TrierMain(IA);
     int choixCarte = (rand() % IA->getMain().size()) + 1;
     int choixBorne = (rand() % 9) + 1;
-    while (bornes[choixBorne - 1].getGagnant() != NULL && bornes[choixBorne].getCarteJ2().size() != 3) {
-        int choixBorne = (rand() % 9) + 1;
+    while (bornes[choixBorne - 1].getGagnant() != NULL || bornes[choixBorne - 1].getCarteJ2().size() == 3) {
+        choixBorne = (rand() % 9) + 1;
     }
     UpdatePlateauApresCoupJoueur(IA, choixCarte, bornes, choixBorne, numJoueur);
     VerifieBorneGagnee(choixBorne);

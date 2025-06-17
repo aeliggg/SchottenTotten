@@ -90,11 +90,6 @@ int main() {
         else {
             veutRejouer = partie->jouerIA(); // mode IA
         }
-
-        delete partie;
-        delete joueur1;
-        delete joueur2;
     }
-
     return 0;
 }
