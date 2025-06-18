@@ -161,7 +161,7 @@ int AfficheChoixCarteNavigable(Joueur* joueur, int choixCarte) {
     return choixCarte + 1;
 }
 
-int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, const std::vector<Borne>& bornesLibres, int numJoueur) {
+int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, std::vector<Borne>& bornesLibres, int numJoueur) {
     int nbBornesLibres = bornesLibres.size();
     if (nbBornesLibres == 0) {
         std::cout << "Aucune borne disponible." << std::endl;
@@ -357,7 +357,7 @@ void AfficherBornesRevendiquees(Joueur* joueur) {
     }
 }
 //TO DO
-void AfficherBornesPlusAJ(const std::vector<Borne>& bornes,
+void AfficherBornesPlusAJ(std::vector<Borne>& bornes,
     const std::vector<std::shared_ptr<Carte>>& main1,
     const std::vector<std::shared_ptr<Carte>>& main2)
 {

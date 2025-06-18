@@ -26,8 +26,8 @@ public:
     void setpartie(Partie* partie) { BORpartie = partie; }
     void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
     void setFirst(Joueur* joueur) { FirstPlayer = joueur; }
-    const std::vector<std::shared_ptr<Carte>>& getCarteJ1() const;
-    const std::vector<std::shared_ptr<Carte>>& getCarteJ2() const;
+    const std::vector<std::shared_ptr<Carte>>& getCarteJ1() ;
+    const std::vector<std::shared_ptr<Carte>>& getCarteJ2() ;
     void ajouterCarteJ1(std::shared_ptr<Carte> carte);
     void ajouterCarteJ2(std::shared_ptr<Carte> carte);
     bool operator<(const Borne& other) const;

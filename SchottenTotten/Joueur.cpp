@@ -2,7 +2,7 @@
 #include <algorithm>
 
 Joueur::Joueur() : sJOUnom("Inconnu") {}
-Joueur::Joueur(const std::string& sNom) : sJOUnom(sNom) {}
+Joueur::Joueur(const std::string& sNom) : sJOUnom(sNom){}
 
 std::string Joueur::getNom() const { return sJOUnom; }
 void Joueur::setNom(const std::string& nouveauNom) { sJOUnom = nouveauNom; }
