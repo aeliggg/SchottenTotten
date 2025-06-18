@@ -129,6 +129,9 @@
     <ClInclude Include="Figlet.hh" />
     <ClInclude Include="Joueur.h" />
     <ClInclude Include="Partie.h" />
+    <ClInclude Include="PartieClassique.h" />
+    <ClInclude Include="PartieClassiquePvIA.h" />
+    <ClInclude Include="PartieClassiquePvP.h" />
     <ClInclude Include="StandartFont.h" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +142,9 @@
     <ClCompile Include="Cartes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Borne.cpp" />
+    <ClCompile Include="PartieClassique.cpp" />
+    <ClCompile Include="PartieClassiquePvIA.cpp" />
+    <ClCompile Include="PartieClassiquePvP.cpp" />
     <ClCompile Include="StandartFont.cpp" />
   </ItemGroup>
   <ItemGroup>

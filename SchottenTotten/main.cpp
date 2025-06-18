@@ -2,6 +2,7 @@
 #include "Cartes.h"
 #include "Joueur.h"
 #include "Partie.h"
+#include "PartieClassique.h"
 #include <windows.h>
 #include <string>
 #include <codecvt>
@@ -10,6 +11,20 @@
 #include <mmsystem.h>
 #include <conio.h>
 #pragma comment(lib, "winmm.lib")
+
+Partie* CreationPartie(int choixVariable, int choixMode, Joueur * Joueur1, Joueur* Joueur2) {
+    if (choixVariable == 1 ) {//si la partie est classique
+        PartieClassique* partie = new PartieClassique(Joueur1,Joueur2);
+    }
+    else if (choixVariable == 2 ) {//même chose pour expert
+        PartieClassique* partie = new PartieClassique(Joueur1, Joueur2);
+    }
+    else {
+        PartieClassique* partie = new PartieClassique(Joueur1, Joueur2);
+    }
+
+
+}
 
 // === Choix du mode de jeu avec flèches HAUT / BAS ===
 int AfficheChoixModeJeuNavigable() {
@@ -46,7 +61,7 @@ int AfficheChoixModeJeuNavigable() {
     }
 }
 
-int AfficheChoixTypeJeuNavigable() {
+int AfficheChoixVariableJeuNavigable() {
     int choix = 0; // Index du mode sélectionné (0 à 2)
     const int nbModes = 3;
     const std::string modes[nbModes] = { "Normal", "Expert", "Tactique" };
@@ -93,7 +108,7 @@ int main() {
 
     std::cout << u8"=== Bienvenue dans le jeu des Bornes ===\n\n";
     int choixMode = AfficheChoixModeJeuNavigable();
-    int choixType = AfficheChoixTypeJeuNavigable();
+    int choixVariable = AfficheChoixVariableJeuNavigable();
     std::string Nom1, Nom2;
     std::cout << u8"\nJoueur 1, veuillez entrer votre prénom : ";
     std::cin >> Nom1;
@@ -120,12 +135,7 @@ int main() {
         std::vector<Cartes> cartes = partie->getCartes();
         std::cout << "Nombre total de cartes dans la partie : " << cartes.size() << std::endl;
 
-        if (choixMode == 1 && choixType==1) {
-            veutRejouer = partie->jouer(); // mode normal
-        }
-        else if (choixMode == 2 && choixType == 1){
-            veutRejouer = partie->jouerIA(); // mode IA
-        }
+
     }
     return 0;
 }

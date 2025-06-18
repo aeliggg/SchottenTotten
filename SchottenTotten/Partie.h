@@ -8,7 +8,7 @@
 
 class Partie
 {
-private:
+protected:
     std::vector<Cartes> cartes;
     std::vector<Borne> bornes;
     Joueur* joueur1;
@@ -25,20 +25,19 @@ public:
     std::vector<Borne> getBornesJouables();
     Joueur* getJoueur1() { return joueur1; };
     Joueur* getJoueur2() { return joueur2; };
-    bool jouer();
+    virtual bool jouer();
     bool EstSuite(std::vector<Cartes> trioDeCarte);
     bool EstCouleur(std::vector<Cartes> trioDeCarte);
     bool EstSuiteCouleur(std::vector<Cartes> trioDeCarte);
     bool EstBrelan(std::vector<Cartes> trioDeCarte);
     int getRangCombinaison(std::vector<Cartes> trio);
-    bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2,Joueur* First);
-    void DistribuerCartes();
-    void VerifieBorneGagnee(int choixBorne);
-    void VerifieBorneRevendique(int choixRev);
+    virtual bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2,Joueur* First);
+    virtual void DistribuerCartes();
+    virtual void VerifieBorneGagnee(int choixBorne);
+    virtual void VerifieBorneRevendique(int choixRev);
     bool FinDePartie();
-    bool EstRevendiquable(const std::vector<Cartes>& trioDeCarteJ1, const std::vector<Cartes>& Cartesj2, Joueur* J1, Joueur* J2);
+    virtual bool EstRevendiquable(const std::vector<Cartes>& trioDeCarteJ1, const std::vector<Cartes>& Cartesj2, Joueur* J1, Joueur* J2);
     void UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur);
-    void TourDePartieIA(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* IA, int numJoueur);
-    void TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur);
-    bool jouerIA();
+    virtual void TourDePartieIA(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* IA, int numJoueur);
+    virtual void TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur);
 };
