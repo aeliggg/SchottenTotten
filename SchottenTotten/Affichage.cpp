@@ -7,6 +7,7 @@
 #include <iostream>
 #include <windows.h>
 #include <codecvt>
+#include <algorithm>
 #include <locale>
 #include <thread>
 #include <chrono>
@@ -399,6 +400,19 @@ void AfficherReady() {
             std::cout << u8"\nEntrée invalide. Appuyez sur Entrée pour continuer : ";
         }
     }
+}
+
+
+void TrierMain(Joueur* joueur) {
+    auto& main = joueur->getMain();  // référence modifiable à vector<shared_ptr<Carte>>
+    std::sort(
+        main.begin(), main.end(),
+        [](const std::shared_ptr<Carte>& a, const std::shared_ptr<Carte>& b) {
+            if (a->getCouleur() != b->getCouleur())
+                return a->getCouleur() < b->getCouleur();
+            return a->getNumero() < b->getNumero();
+        }
+    );
 }
 
 // Exemple : AfficherBornesPlusAJ (affichage simplifié)
