@@ -11,8 +11,8 @@ private:
     Partie* BORpartie = nullptr;
     Joueur* GagnantBorne = nullptr;
     Joueur* FirstPlayer = nullptr;
-    std::vector<std::unique_ptr<Carte>> vBORcartesJ1;
-    std::vector<std::unique_ptr<Carte>> vBORcartesJ2;
+    std::vector<std::shared_ptr<Carte>> vBORcartesJ1;
+    std::vector<std::shared_ptr<Carte>> vBORcartesJ2;
     bool protegee = false;
     bool colinMaillard = false;
     bool combatDeBoue = false;
@@ -26,10 +26,10 @@ public:
     void setpartie(Partie* partie) { BORpartie = partie; }
     void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
     void setFirst(Joueur* joueur) { FirstPlayer = joueur; }
-    const std::vector<std::unique_ptr<Carte>>& getCarteJ1() const;
-    const std::vector<std::unique_ptr<Carte>>& getCarteJ2() const;
-    void ajouterCarteJ1(std::unique_ptr<Carte> carte);
-    void ajouterCarteJ2(std::unique_ptr<Carte> carte);
+    const std::vector<std::shared_ptr<Carte>>& getCarteJ1() const;
+    const std::vector<std::shared_ptr<Carte>>& getCarteJ2() const;
+    void ajouterCarteJ1(std::shared_ptr<Carte> carte);
+    void ajouterCarteJ2(std::shared_ptr<Carte> carte);
     bool operator<(const Borne& other) const;
     void viderCartes();
     bool estProtegeeParBouclier() const { return protegee; }
