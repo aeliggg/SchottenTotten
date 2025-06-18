@@ -1,8 +1,10 @@
 ﻿#include <iostream>
-#include "Cartes.h"
+#include "Carte.h"
 #include "Joueur.h"
 #include "Partie.h"
 #include "PartieClassique.h"
+#include "PartieClassiquePvP.h"
+#include "PartieClassiquePvIA.h"
 #include <windows.h>
 #include <string>
 #include <codecvt>
@@ -148,7 +150,7 @@ int main() {
         std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
         std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
 
-        std::vector<Cartes> cartes = partie->getCartes();
+        std::vector<Carte> cartes = partie->getCartes();
         std::cout << "Nombre total de cartes dans la partie : " << cartes.size() << std::endl;
 
 
