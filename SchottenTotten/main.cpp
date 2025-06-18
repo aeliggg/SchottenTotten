@@ -149,8 +149,8 @@ int main() {
 
         std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
         std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
-
-
+        Partie* partoz = new PartieClassiquePvP(joueur1, joueur2);
+        partoz->jouer();
     }
     return 0;
 }

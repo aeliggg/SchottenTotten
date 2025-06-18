@@ -357,7 +357,10 @@ void AfficherBornesRevendiquees(Joueur* joueur) {
     }
 }
 //TO DO
-void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<std::shared_ptr<Carte>>& main1, const std::vector<std::shared_ptr<Carte>>& main2) {
+void AfficherBornesPlusAJ(const std::vector<Borne>& bornes,
+    const std::vector<std::shared_ptr<Carte>>& main1,
+    const std::vector<std::shared_ptr<Carte>>& main2)
+{
     std::vector<std::string> aideDeJeuSuite = {
         "\033[33m-----------------------\033[0m",
         "\033[33m|\033[0m   Couleur : \033[38;2;199;0;255m1 3 6   \033[33m|\033[0m",
@@ -367,14 +370,15 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<st
         "\033[33m|\033[0m    Somme : \033[38;5;208m3 \033[94m7 \033[38;2;199;0;255m9    \033[33m|\033[0m",
         "\033[33m-----------------------\033[0m"
     };
+
     int iLigneAideAffichee = 0;
 
-
+    // Affichage cartes joueur 1 (3 lignes)
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {
             const std::vector<std::shared_ptr<Carte>>& cartesJ1 = bornes[i].getCarteJ1();
             if (cartesJ1.size() <= uiLigneDeCartes) {
-                std::cout << "     0    ";
+                std::cout << "     0    ";  // pas de carte => afficher 0
             }
             else {
                 std::cout << "     ";
@@ -382,22 +386,39 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<st
                 std::cout << "    ";
             }
         }
-        std::cout << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++];
-        if (uiLigneDeCartes != 2) {
-            std::cout << "\n";
+        // Affiche ligne aide de jeu
+        if (iLigneAideAffichee < (int)aideDeJeuSuite.size()) {
+            std::cout << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++];
         }
+        std::cout << "\n";
     }
-    std::cout << "\n -----------------------------------------------------------------------------------------" << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
+
+    // Ligne séparatrice
+    std::cout << " -----------------------------------------------------------------------------------------"
+        << std::string(4, ' ') << (iLigneAideAffichee < (int)aideDeJeuSuite.size() ? aideDeJeuSuite[iLigneAideAffichee++] : "")
+        << std::endl;
+
+    // Affichage numéro des bornes
     for (unsigned int i = 0; i < bornes.size(); ++i) {
         std::cout << "| Borne " << bornes[i].getnumero() << " ";
     }
-    std::cout << "|" << std::string(3, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
-    std::cout << " -----------------------------------------------------------------------------------------" << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
+    std::cout << "|" << std::string(3, ' ');
+    if (iLigneAideAffichee < (int)aideDeJeuSuite.size()) {
+        std::cout << aideDeJeuSuite[iLigneAideAffichee++];
+    }
+    std::cout << std::endl;
+
+    // Ligne séparatrice
+    std::cout << " -----------------------------------------------------------------------------------------"
+        << std::string(4, ' ') << (iLigneAideAffichee < (int)aideDeJeuSuite.size() ? aideDeJeuSuite[iLigneAideAffichee++] : "")
+        << std::endl;
+
+    // Affichage cartes joueur 2 (3 lignes)
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {
             const std::vector<std::shared_ptr<Carte>>& cartesJ2 = bornes[i].getCarteJ2();
             if (cartesJ2.size() <= uiLigneDeCartes) {
-                std::cout << "     0    ";
+                std::cout << "     0    ";  // pas de carte => afficher 0
             }
             else {
                 std::cout << "     ";
@@ -405,12 +426,13 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<st
                 std::cout << "    ";
             }
         }
-        if (iLigneAideAffichee < 7) {
+        if (iLigneAideAffichee < (int)aideDeJeuSuite.size()) {
             std::cout << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++];
         }
         std::cout << "\n";
     }
 }
+
 
 void AfficherReady() {
     std::cout << u8"\nAppuyez sur Entrée si vous êtes prêt à voir votre main : ";
