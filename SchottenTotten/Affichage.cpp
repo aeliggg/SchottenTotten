@@ -82,32 +82,37 @@ void AffichePlateau(const std::vector<Borne>& bornes, Joueur* joueur1, Joueur* j
     AfficheASCII(joueur2->getNom());
 }
 
+void AfficheCarte(const std::shared_ptr<Carte>& carte) {
+    if (!carte) {
+        std::cout << " ";
+        return;
+    }
 
-void AfficheCarte(const Cartes& carte) {
-    switch (CouleurToEnum(carte.getcouleur())) {
+    switch (CouleurToEnum(carte->getCouleur())) {
     case BLEU:
-        std::cout << "\033[94m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[94m" << carte->getNumero() << "\033[0m";
         break;
     case VERT:
-        std::cout << "\033[32m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[32m" << carte->getNumero() << "\033[0m";
         break;
     case JAUNE:
-        std::cout << "\033[38;2;255;255;85m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[38;2;255;255;85m" << carte->getNumero() << "\033[0m";
         break;
     case ROUGE:
-        std::cout << "\033[31m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[31m" << carte->getNumero() << "\033[0m";
         break;
     case VIOLET:
-        std::cout << "\033[38;2;199;0;255m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[38;2;199;0;255m" << carte->getNumero() << "\033[0m";
         break;
     case ORANGE:
-        std::cout << "\033[38;5;208m" << carte.getnumero() << "\033[0m";
+        std::cout << "\033[38;5;208m" << carte->getNumero() << "\033[0m";
         break;
     default:
-        std::cout << carte.getnumero() << std::endl;
+        std::cout << carte->getNumero();
         break;
     }
 }
+
 
 int AfficheChoixCarteNavigable(Joueur* joueur, int choixCarte) {
     int nbCartes = joueur->getMain().size();
@@ -351,8 +356,8 @@ void AfficherBornesRevendiquees(Joueur* joueur) {
         std::cout << "\n";
     }
 }
-
-void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Cartes>& main1, const std::vector<Cartes>& main2) {
+//TO DO
+void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<std::shared_ptr<Carte>>& main1, const std::vector<std::shared_ptr<Carte>>& main2) {
     std::vector<std::string> aideDeJeuSuite = {
         "\033[33m-----------------------\033[0m",
         "\033[33m|\033[0m   Couleur : \033[38;2;199;0;255m1 3 6   \033[33m|\033[0m",
@@ -367,7 +372,7 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Ca
 
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {
-            std::vector<Cartes> cartesJ1 = bornes[i].getCarteJ1();
+            const std::vector<std::shared_ptr<Carte>>& cartesJ1 = bornes[i].getCarteJ1();
             if (cartesJ1.size() <= uiLigneDeCartes) {
                 std::cout << "     0    ";
             }
@@ -390,7 +395,7 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<Ca
     std::cout << " -----------------------------------------------------------------------------------------" << std::string(4, ' ') << aideDeJeuSuite[iLigneAideAffichee++] << std::endl;
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {
-            std::vector<Cartes> cartesJ2 = bornes[i].getCarteJ2();
+            const std::vector<std::shared_ptr<Carte>>& cartesJ2 = bornes[i].getCarteJ2();
             if (cartesJ2.size() <= uiLigneDeCartes) {
                 std::cout << "     0    ";
             }
