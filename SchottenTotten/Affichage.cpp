@@ -1,6 +1,7 @@
 ﻿#include "Affichage.h"
 #include "Borne.h"
-#include "Cartes.h"
+#include "Carte.h"
+#include <algorithm>
 #include <cstdlib>
 #include <sstream>
 #include <string>
@@ -421,15 +422,15 @@ void AfficherReady() {
 }
 
 void TrierMain(Joueur* joueur) {
-    std::vector<Cartes> main = joueur->getMain();
-
-    std::sort(main.begin(), main.end(), [](const Cartes& a, const Cartes& b) {  //Range les cartes par couleurs et par numero
-        if (a.getcouleur() != b.getcouleur())
-            return a.getcouleur() < b.getcouleur();
-        return a.getnumero() < b.getnumero();
-        });
-
-    joueur->setMain(main);
+    auto& main = joueur->getMain();  // référence modifiable à vector<shared_ptr<Carte>>
+    std::sort(
+        main.begin(), main.end(),
+        [](const std::shared_ptr<Carte>& a, const std::shared_ptr<Carte>& b) {
+            if (a->getCouleur() != b->getCouleur())
+                return a->getCouleur() < b->getCouleur();
+            return a->getNumero() < b->getNumero();
+        }
+    );
 }
 
 void AfficherBorneGagnee(Joueur* joueur1, Borne borne) {
@@ -445,25 +446,25 @@ bool AfficherVictoire(std::vector<Borne> bornes, Joueur* joueur1, Joueur* joueur
     if (joueur1->getBorne().size() == 5) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << std::endl;
         bFinDePartie = 1;
     }
     else if (joueur2->getBorne().size() == 5) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 5 bornes !" << std::endl;
         bFinDePartie = 1;
     }
     else if (joueur2->EstGagnant()) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur2->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << std::endl;
         bFinDePartie = 1;
     }
     else if (joueur1->EstGagnant()) {
         clearConsole();
         AffichePlateau(bornes, joueur1, joueur2);
-        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << endl;
+        std::cout << u8"\nLa partie est gagnée par 👑 " << joueur1->getNom() << u8" 👑 qui a revendiqué 3 bornes côte à côte !" << std::endl;
         bFinDePartie = 1;
     }
 
