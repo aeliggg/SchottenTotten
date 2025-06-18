@@ -126,10 +126,6 @@ int main() {
         else if (choixMode == 2 && choixType == 1){
             veutRejouer = partie->jouerIA(); // mode IA
         }
-        delete partie;
-        delete joueur1;
-        delete joueur2;
     }
-
     return 0;
 }
