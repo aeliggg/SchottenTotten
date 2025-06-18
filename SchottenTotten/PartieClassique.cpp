@@ -145,6 +145,24 @@ void PartieClassique::VerifieBorneRevendique(int choixBorne) {
     }
 }
 
+PartieClassique::PartieClassique(Joueur* j1, Joueur* j2) {
+    this->joueur1 = j1;
+    this->joueur2 = j2;
+
+    const std::string nomsCouleurs[6] = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
+
+    for (int i = 0; i < 9; ++i) {
+        bornes.emplace_back(i + 1);
+    }
+
+    for (int couleur = 0; couleur < 6; ++couleur) {
+        for (int numero = 1; numero <= 9; ++numero) {
+            cartes.push_back(std::make_unique<CarteClassique>(numero, nomsCouleurs[couleur]));
+        }
+    }
+}
+
+
 void PartieClassique::VerifieBorneGagnee(int choixBorne) {
     auto& cartesJ1 = bornes[choixBorne - 1].getCarteJ1();
     auto& cartesJ2 = bornes[choixBorne - 1].getCarteJ2();

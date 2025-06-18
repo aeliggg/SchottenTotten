@@ -5,6 +5,14 @@
 #include <ctime>
 #include <iostream>
 
+Partie::~Partie() {
+    // destructeur vide si rien à faire
+}
+
+Partie::Partie() {
+    // constructeur vide
+}
+
 void Partie::ajouterCarte(std::shared_ptr<Carte> carte) {
     cartes.push_back(std::move(carte));
 }
