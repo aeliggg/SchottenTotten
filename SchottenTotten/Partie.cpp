@@ -5,11 +5,11 @@
 #include <ctime>
 #include <iostream>
 
-void Partie::ajouterCarte(std::unique_ptr<Carte> carte) {
+void Partie::ajouterCarte(std::shared_ptr<Carte> carte) {
     cartes.push_back(std::move(carte));
 }
 
-std::vector<std::unique_ptr<Carte>>& Partie::getCartes() {
+std::vector<std::shared_ptr<Carte>>& Partie::getCartes() {
     return cartes;
 }
 
@@ -32,13 +32,13 @@ std::vector<Borne> Partie::getBornesJouables() {
 Joueur* Partie::getJoueur1() { return joueur1; }
 Joueur* Partie::getJoueur2() { return joueur2; }
 
-bool Partie::EstCouleur(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
+bool Partie::EstCouleur(const std::vector<std::shared_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     return (trioDeCarte[0]->getCouleur() == trioDeCarte[1]->getCouleur()
         && trioDeCarte[1]->getCouleur() == trioDeCarte[2]->getCouleur());
 }
 
-bool Partie::EstSuite(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
+bool Partie::EstSuite(const std::vector<std::shared_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
         trioDeCarte[0]->getNumero(),
@@ -49,7 +49,7 @@ bool Partie::EstSuite(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
     return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1);
 }
 
-bool Partie::EstSuiteCouleur(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
+bool Partie::EstSuiteCouleur(const std::vector<std::shared_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
         trioDeCarte[0]->getNumero(),
@@ -62,13 +62,13 @@ bool Partie::EstSuiteCouleur(const std::vector<std::unique_ptr<Carte>>& trioDeCa
         && trioDeCarte[1]->getCouleur() == trioDeCarte[2]->getCouleur());
 }
 
-bool Partie::EstBrelan(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
+bool Partie::EstBrelan(const std::vector<std::shared_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     return (trioDeCarte[0]->getNumero() == trioDeCarte[1]->getNumero()
         && trioDeCarte[1]->getNumero() == trioDeCarte[2]->getNumero());
 }
 
-int Partie::getRangCombinaison(const std::vector<std::unique_ptr<Carte>>& trio) {
+int Partie::getRangCombinaison(const std::vector<std::shared_ptr<Carte>>& trio) {
     if (EstSuiteCouleur(trio)) return 5;
     if (EstBrelan(trio)) return 4;
     if (EstCouleur(trio)) return 3;
@@ -76,7 +76,7 @@ int Partie::getRangCombinaison(const std::vector<std::unique_ptr<Carte>>& trio) 
     return 1;
 }
 
-bool Partie::EstGagnant(const std::vector<std::unique_ptr<Carte>>& trioDeCarteJ1, const std::vector<std::unique_ptr<Carte>>& trioDeCarteJ2, Joueur* J1, Joueur* J2, Joueur* First) {
+bool Partie::EstGagnant(const std::vector<std::shared_ptr<Carte>>& trioDeCarteJ1, const std::vector<std::shared_ptr<Carte>>& trioDeCarteJ2, Joueur* J1, Joueur* J2, Joueur* First) {
     if (trioDeCarteJ1.size() == 3 && trioDeCarteJ2.size() == 3) {
         int rangJ1 = getRangCombinaison(trioDeCarteJ1);
         int rangJ2 = getRangCombinaison(trioDeCarteJ2);
@@ -122,14 +122,14 @@ bool Partie::FinDePartie() {
     return false;
 }
 
-bool Partie::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>& /*cartesJoueur*/, const std::vector<std::unique_ptr<Carte>>& /*cartesAdverse*/, Joueur* /*J*/, Joueur* /*Adverse*/) {
+bool Partie::EstRevendiquable(const std::vector<std::shared_ptr<Carte>>& /*cartesJoueur*/, const std::vector<std::shared_ptr<Carte>>& /*cartesAdverse*/, Joueur* /*J*/, Joueur* /*Adverse*/) {
     // À spécialiser dans PartieClassique et ses dérivés
     return false;
 }
 
 void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur) {
     auto& main = joueur->getMain();
-    std::unique_ptr<Carte> carteChoisie = std::move(main[choixCarte - 1]);
+    std::shared_ptr<Carte> carteChoisie = std::move(main[choixCarte - 1]);
     main.erase(main.begin() + (choixCarte - 1));
     if (numJoueur == 1) {
         bornes[choixBorne - 1].ajouterCarteJ1(std::move(carteChoisie));

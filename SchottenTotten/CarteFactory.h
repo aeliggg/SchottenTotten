@@ -14,5 +14,5 @@
 
 class CarteFactory {
 public:
-    static std::unique_ptr<Carte> creerCarte(const std::string& type, int numero = 0, const std::string& couleur = "");
+    static std::shared_ptr<Carte> creerCarte(const std::string& type, int numero = 0, const std::string& couleur = "");
 };

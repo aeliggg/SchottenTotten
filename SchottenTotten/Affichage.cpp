@@ -23,7 +23,7 @@ CouleurCarte CouleurToEnum(const std::string& couleur) {
     return INCONNU;
 }
 
-// Affichage d'une carte unique_ptr
+// Affichage d'une carte shared_ptr
 void AfficheCarte(const Carte* carte) {
     if (!carte) { std::cout << " "; return; }
     switch (CouleurToEnum(carte->getCouleur())) {
@@ -124,10 +124,10 @@ int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, const std::vector
 
 // Autres fonctions à migrer sur le même modèle... 
 // Notamment AfficherBornesPlusAJ, AfficherBornes, TrierMain, AfficherReady, etc.
-// Utiliser const std::vector<std::unique_ptr<Carte>>& pour les mains, et accès via .get()
+// Utiliser const std::vector<std::shared_ptr<Carte>>& pour les mains, et accès via .get()
 
 // Exemple : AfficherBornesPlusAJ (affichage simplifié)
-void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<std::unique_ptr<Carte>>& main1, const std::vector<std::unique_ptr<Carte>>& main2) {
+void AfficherBornesPlusAJ(const std::vector<Borne>& bornes, const std::vector<std::shared_ptr<Carte>>& main1, const std::vector<std::shared_ptr<Carte>>& main2) {
     // Affiche 3 lignes pour chaque main
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {

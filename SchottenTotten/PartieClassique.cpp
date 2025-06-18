@@ -55,7 +55,7 @@ void PartieClassique::DistribuerCartes() {
     }
 }
 
-bool PartieClassique::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>& cartesJoueur, const std::vector<std::unique_ptr<Carte>>& cartesAdverse, Joueur* J, Joueur* Adverse) {
+bool PartieClassique::EstRevendiquable(const std::vector<std::shared_ptr<Carte>>& cartesJoueur, const std::vector<std::shared_ptr<Carte>>& cartesAdverse, Joueur* J, Joueur* Adverse) {
     if (cartesJoueur.size() != 3) return false;
     if (cartesAdverse.size() == 3)
         return this->EstGagnant(cartesJoueur, cartesAdverse, J, Adverse, J);
@@ -63,7 +63,7 @@ bool PartieClassique::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>
     int rangJoueur = this->getRangCombinaison(cartesJoueur);
     int sommeJoueur = cartesJoueur[0]->getNumero() + cartesJoueur[1]->getNumero() + cartesJoueur[2]->getNumero();
 
-    std::vector<std::unique_ptr<Carte>> cartesRestantes;
+    std::vector<std::shared_ptr<Carte>> cartesRestantes;
     for (auto& c : cartes) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
     for (const auto& c : joueur1->getMain()) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
     for (const auto& c : joueur2->getMain()) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
@@ -72,7 +72,7 @@ bool PartieClassique::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>
 
     if (nbCartesAdverseManquantes == 1) {
         for (unsigned int i = 0; i < cartesRestantes.size(); ++i) {
-            std::vector<std::unique_ptr<Carte>> combinaisonComplete;
+            std::vector<std::shared_ptr<Carte>> combinaisonComplete;
             for (const auto& c : cartesAdverse) combinaisonComplete.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
             combinaisonComplete.push_back(std::move(cartesRestantes[i]));
             int rangAdv = this->getRangCombinaison(combinaisonComplete);

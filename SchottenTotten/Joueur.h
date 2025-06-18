@@ -8,7 +8,7 @@
 class Joueur {
 private:
     std::string sJOUnom;
-    std::vector<std::unique_ptr<Carte>> vJOUCartesMain;
+    std::vector<std::shared_ptr<Carte>> vJOUCartesMain;
     std::vector<Borne> BorneGagnee;
 
 public:
@@ -17,12 +17,12 @@ public:
     ~Joueur() = default;
     std::vector<Borne> getBorne();
     void setBorne(std::vector<Borne> NewBorne);
-    void setMain(std::vector<std::unique_ptr<Carte>> nouvelleMain);
+    void setMain(std::vector<std::shared_ptr<Carte>> nouvelleMain);
     void AjouterBorne(Borne NewNbBorne);
     std::string getNom() const;
     void setNom(const std::string& nouveauNom);
-    void ajouterCarte(std::unique_ptr<Carte> carte);
+    void ajouterCarte(std::shared_ptr<Carte> carte);
     void retirerCarte(const Carte& carte);
-    std::vector<std::unique_ptr<Carte>>& getMain();
+    std::vector<std::shared_ptr<Carte>>& getMain();
     bool EstGagnant();
 };

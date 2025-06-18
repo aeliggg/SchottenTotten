@@ -7,7 +7,7 @@ Joueur::Joueur(const std::string& sNom) : sJOUnom(sNom) {}
 std::string Joueur::getNom() const { return sJOUnom; }
 void Joueur::setNom(const std::string& nouveauNom) { sJOUnom = nouveauNom; }
 
-void Joueur::ajouterCarte(std::unique_ptr<Carte> carte) {
+void Joueur::ajouterCarte(std::shared_ptr<Carte> carte) {
     vJOUCartesMain.push_back(std::move(carte));
 }
 
@@ -18,7 +18,7 @@ void Joueur::AjouterBorne(Borne NewNbBorne) {
 
 std::vector<Borne> Joueur::getBorne() { return BorneGagnee; }
 void Joueur::setBorne(std::vector<Borne> NewBorne) { BorneGagnee = NewBorne; }
-void Joueur::setMain(std::vector<std::unique_ptr<Carte>> nouvelleMain) {
+void Joueur::setMain(std::vector<std::shared_ptr<Carte>> nouvelleMain) {
     vJOUCartesMain = std::move(nouvelleMain);
 }
 
@@ -31,7 +31,7 @@ void Joueur::retirerCarte(const Carte& carte) {
     }
 }
 
-std::vector<std::unique_ptr<Carte>>& Joueur::getMain() { return vJOUCartesMain; }
+std::vector<std::shared_ptr<Carte>>& Joueur::getMain() { return vJOUCartesMain; }
 
 bool Joueur::EstGagnant() {
     if (BorneGagnee.size() < 3) return false;
