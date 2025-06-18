@@ -131,7 +131,7 @@
     <ClInclude Include="CombatDeBoue.h" />
     <ClInclude Include="PorteBouclier.h" />
     <ClInclude Include="CarteClassique.h" />
-    <ClInclude Include="Cartes.h" />
+    <ClInclude Include="Carte.h" />
     <ClInclude Include="Borne.h" />
     <ClInclude Include="CarteTactique.h" />
     <ClInclude Include="Joker.h" />
@@ -149,19 +149,14 @@
   <ItemGroup>
     <ClCompile Include="Affichage.cpp" />
     <ClCompile Include="Banshee.cpp" />
-    <ClCompile Include="Bouffon.cpp" />
-    <ClCompile Include="CarteClassique.cpp" />
     <ClCompile Include="CarteFactory.cpp" />
-    <ClCompile Include="CarteTactique.cpp" />
     <ClCompile Include="ChasseurDeTete.cpp" />
-    <ClCompile Include="Chef.cpp" />
     <ClCompile Include="ColinMaillard.cpp" />
     <ClCompile Include="CombatDeBoue.cpp" />
-    <ClCompile Include="Espion.cpp" />
     <ClCompile Include="Figlet.cc" />
     <ClCompile Include="Partie.cpp" />
     <ClCompile Include="Joueur.cpp" />
-    <ClCompile Include="Cartes.cpp" />
+    <ClCompile Include="Carte.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Borne.cpp" />
     <ClCompile Include="PartieClassique.cpp" />

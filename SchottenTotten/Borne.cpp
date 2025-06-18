@@ -1,55 +1,44 @@
-
 #include "Borne.h"
-#include "Partie.h"
-Borne::Borne() : iBORnuméro(0) {}
+#include <iostream>
 
+Borne::Borne() : iBORnuméro(0) {}
 Borne::Borne(int numéro) : iBORnuméro(numéro) {}
 
-int Borne::getnumero() const {
-    return iBORnuméro;
-}
+int Borne::getnumero() const { return iBORnuméro; }
+Joueur* Borne::getGagnant() const { return GagnantBorne; }
+Joueur* Borne::getFirst() const { return FirstPlayer; }
+void Borne::setnumero(int numéro) { iBORnuméro = numéro; }
 
-Joueur* Borne::getGagnant() const {
-    return GagnantBorne; 
-}
-
-Joueur* Borne::getFirst() const {
-    return FirstPlayer;
-}
-
-void Borne::setnumero(int numéro) {
-    iBORnuméro = numéro;
-}
-
-std::vector<Cartes> Borne::getCarteJ1() const{
+const std::vector<std::unique_ptr<Carte>>& Borne::getCarteJ1() const {
     return vBORcartesJ1;
 }
-
-std::vector<Cartes> Borne::getCarteJ2() const{
+const std::vector<std::unique_ptr<Carte>>& Borne::getCarteJ2() const {
     return vBORcartesJ2;
 }
 
-
-void Borne::ajouterCarteJ1(const Cartes& carte) {
-    if (vBORcartesJ1.size() < 3) {
-        vBORcartesJ1.push_back(carte);
-        BORpartie->getJoueur1()->retirerCarte(carte);
+void Borne::ajouterCarteJ1(std::unique_ptr<Carte> carte) {
+    if (vBORcartesJ1.size() < (combatDeBoue ? 4 : 3)) {
+        vBORcartesJ1.push_back(std::move(carte));
     }
     else {
-        std::cout<<" deja 3 cartes sur la borne"<<std::endl;
+        std::cout << "Deja " << (combatDeBoue ? 4 : 3) << " cartes sur la borne" << std::endl;
     }
 }
-
-void Borne::ajouterCarteJ2(const Cartes& carte) {
-    if (vBORcartesJ2.size() < 3) {
-        vBORcartesJ2.push_back(carte);
-        BORpartie->getJoueur2()->retirerCarte(carte);
+void Borne::ajouterCarteJ2(std::unique_ptr<Carte> carte) {
+    if (vBORcartesJ2.size() < (combatDeBoue ? 4 : 3)) {
+        vBORcartesJ2.push_back(std::move(carte));
     }
     else {
-        std::cout << " deja 3 cartes sur la borne" << std::endl;
+        std::cout << "Deja " << (combatDeBoue ? 4 : 3) << " cartes sur la borne" << std::endl;
     }
 }
 
 bool Borne::operator<(const Borne& other) const {
     return iBORnuméro < other.iBORnuméro;
+}
+
+void Borne::viderCartes() {
+    vBORcartesJ1.clear();
+    vBORcartesJ2.clear();
+    protegee = false;
 }

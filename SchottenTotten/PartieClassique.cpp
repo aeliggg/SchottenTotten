@@ -1,14 +1,13 @@
-#include "Partie.h"
 #include "PartieClassique.h"
 #include "Affichage.h"
 #include "Borne.h"
-#include <string>
-#include <vector>
-#include <iostream>
-#include <functional>
 #include <algorithm>
 #include <random>
 #include <ctime>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <functional>
 #include <windows.h>
 #include <codecvt>
 #include <locale>
@@ -16,6 +15,77 @@
 #include <limits>
 #include <iomanip>
 #include <thread> 
+
+PartieClassique::PartieClassique() : Partie() {}
+PartieClassique::PartieClassique(Joueur* J1, Joueur* J2) : Partie(J1, J2) {}
+
+bool PartieClassique::jouer() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
+    DistribuerCartes();
+
+    std::cout << "Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
+    bool bPartieFinie = false;
+    bool veutRejouer = false;
+    int tour = 0;
+    while (!bPartieFinie) {
+        if (tour != 0) { clearConsole(); }
+        SetConsoleOutputCP(CP_UTF8);
+        TourDePartie(tour, bornes, joueur1, joueur2, 1);
+
+        bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
+        if (bPartieFinie) { veutRejouer = FinDePartie(); }
+        else {
+            clearConsole();
+            TourDePartie(tour, bornes, joueur2, joueur1, 2);
+            bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
+            if (bPartieFinie) {
+                veutRejouer = FinDePartie();
+            }
+        }
+        tour++;
+    }
+    return veutRejouer;
+}
+
+void PartieClassique::DistribuerCartes() {
+    for (int i = 0; i < 6; ++i) {
+        joueur1->ajouterCarte(std::move(cartes.back()));
+        cartes.pop_back();
+        joueur2->ajouterCarte(std::move(cartes.back()));
+        cartes.pop_back();
+    }
+}
+
+bool PartieClassique::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>& cartesJoueur, const std::vector<std::unique_ptr<Carte>>& cartesAdverse, Joueur* J, Joueur* Adverse) {
+    if (cartesJoueur.size() != 3) return false;
+    if (cartesAdverse.size() == 3)
+        return this->EstGagnant(cartesJoueur, cartesAdverse, J, Adverse, J);
+
+    int rangJoueur = this->getRangCombinaison(cartesJoueur);
+    int sommeJoueur = cartesJoueur[0]->getNumero() + cartesJoueur[1]->getNumero() + cartesJoueur[2]->getNumero();
+
+    std::vector<std::unique_ptr<Carte>> cartesRestantes;
+    for (auto& c : cartes) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
+    for (const auto& c : joueur1->getMain()) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
+    for (const auto& c : joueur2->getMain()) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
+
+    unsigned int nbCartesAdverseManquantes = 3 - cartesAdverse.size();
+
+    if (nbCartesAdverseManquantes == 1) {
+        for (unsigned int i = 0; i < cartesRestantes.size(); ++i) {
+            std::vector<std::unique_ptr<Carte>> combinaisonComplete;
+            for (const auto& c : cartesAdverse) combinaisonComplete.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
+            combinaisonComplete.push_back(std::move(cartesRestantes[i]));
+            int rangAdv = this->getRangCombinaison(combinaisonComplete);
+            int sommeAdv = combinaisonComplete[0]->getNumero() + combinaisonComplete[1]->getNumero() + combinaisonComplete[2]->getNumero();
+            if (rangAdv > rangJoueur) return false;
+            if (rangAdv == rangJoueur && sommeAdv >= sommeJoueur) return false;
+        }
+    }
+    // Pour 2 ou 3 cartes manquantes, à implémenter de façon analogue si besoin
+    return true;
+}
 
 void PartieClassique::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur) {
     std::cout << "\n--- Tour " << tour + 1 << " ---\n";
@@ -25,17 +95,13 @@ void PartieClassique::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur*
     else {
         AffichePlateau(bornes, adversaire, joueur);
     }
-
     std::cout << "\nC'est au tour de " << joueur->getNom() << "\n";
-
     AfficherReady();
-
     TrierMain(joueur);
-    int choixCarte = 0;
-    choixCarte = AfficheChoixCarteNavigable(joueur, choixCarte);
+    int choixCarte = AfficheChoixCarteNavigable(joueur, 0);
 
     int choixBorne = 0;
-    std::vector<Borne> bornesJouables = Partie::getBornesJouables();
+    std::vector<Borne> bornesJouables = getBornesJouables();
     choixBorne = AfficheChoixBorneNavigable(joueur, choixBorne, bornesJouables, numJoueur);
     if (bornes[choixBorne - 1].getCarteJ1().size() == 0 && bornes[choixBorne - 1].getCarteJ2().size() == 0) {
         bornes[choixBorne - 1].setFirst(joueur);
@@ -59,86 +125,45 @@ void PartieClassique::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur*
     }
 }
 
-bool PartieClassique::EstRevendiquable(const std::vector<Carte>& cartesJoueur, const std::vector<Carte>& cartesAdverse, Joueur* J, Joueur* Adverse) {
-    if (cartesJoueur.size() != 3) return false; //Un joueur ne peut revendiquer que s'il a déjà posé 3 cartes
-
-    if (cartesAdverse.size() == 3)
-        return this->EstGagnant(cartesJoueur, cartesAdverse, J, Adverse, J); //Si adversaire a 3 cartes, comparer directement
-
-    int rangJoueur = this->getRangCombinaison(cartesJoueur); //Rang de la combinaison du joueur
-    int sommeJoueur = cartesJoueur[0].getNumero() + cartesJoueur[1].getNumero() + cartesJoueur[2].getNumero(); //Somme des valeurs des cartes du joueur
-
-    std::vector<Carte> cartesRestantes = this->cartes;//Cartes encore disponibles dans la pioche
-    for (int carteJ1 = 0; carteJ1 < joueur1->getMain().size(); carteJ1++) {
-        cartesRestantes.push_back(joueur1->getMain()[carteJ1]);
+void PartieClassique::VerifieBorneRevendique(int choixBorne) {
+    int indexBorne = 0;
+    while (bornes[indexBorne].getnumero() != choixBorne) {
+        indexBorne++;
     }
-    for (int carteJ2 = 0; carteJ2 < joueur2->getMain().size(); carteJ2++) {
-        cartesRestantes.push_back(joueur2->getMain()[carteJ2]);
+    auto& cartesJ1 = bornes[indexBorne].getCarteJ1();
+    auto& cartesJ2 = bornes[indexBorne].getCarteJ2();
+    if (EstRevendiquable(cartesJ1, cartesJ2, joueur1, joueur2) && cartesJ1.size() == 3) {
+        bornes[indexBorne].setGagnant(joueur1);
+        joueur1->AjouterBorne(bornes[indexBorne]);
+        std::cout << "\nRevendication par " << joueur1->getNom() << " sur la borne " << bornes[indexBorne].getnumero() << u8" validée !" << std::endl;
     }
-
-
-    unsigned int nbCartesAdverseManquantes = 3 - cartesAdverse.size(); //Cartes que l'adversaire doit encore poser
-
-    if (nbCartesAdverseManquantes == 0)
-        return this->EstGagnant(cartesJoueur, cartesAdverse, J, Adverse, J); //Déjà géré, sécurité
-
-    else if (nbCartesAdverseManquantes == 1) {
-        for (unsigned int indexCarteCompl = 0; indexCarteCompl < cartesRestantes.size(); ++indexCarteCompl) { //Tester avec chaque carte restante
-            std::vector<Carte> combinaisonComplete = cartesAdverse;
-            combinaisonComplete.push_back(cartesRestantes[indexCarteCompl]);
-
-            int rangAdv = this->getRangCombinaison(combinaisonComplete); //Rang adversaire avec carte complétée
-            int sommeAdv = combinaisonComplete[0].getNumero() + combinaisonComplete[1].getNumero() + combinaisonComplete[2].getNumero(); //Somme cartes adversaire
-
-            if (rangAdv > rangJoueur) return false; //Adversaire peut battre joueur
-            if (rangAdv == rangJoueur && sommeAdv >= sommeJoueur) return false; //Adversaire égal ou meilleur en somme
-        }
+    else if (EstRevendiquable(cartesJ2, cartesJ1, joueur2, joueur1) && cartesJ2.size() == 3) {
+        bornes[indexBorne].setGagnant(joueur2);
+        joueur2->AjouterBorne(bornes[indexBorne]);
+        std::cout << "\nRevendication par " << joueur2->getNom() << " sur la borne " << bornes[indexBorne].getnumero() << u8" validée !" << std::endl;
     }
-    else if (nbCartesAdverseManquantes == 2) {
-        for (unsigned int indexCarte1 = 0; indexCarte1 < cartesRestantes.size(); ++indexCarte1) { //Boucle carte 1
-            for (unsigned int indexCarte2 = indexCarte1 + 1; indexCarte2 < cartesRestantes.size(); ++indexCarte2) { //Boucle carte 2
-                std::vector<Carte> combinaisonComplete = cartesAdverse;
-                combinaisonComplete.push_back(cartesRestantes[indexCarte1]);
-                combinaisonComplete.push_back(cartesRestantes[indexCarte2]);
-
-                int rangAdv = this->getRangCombinaison(combinaisonComplete); //Rang adversaire
-                int sommeAdv = combinaisonComplete[0].getNumero() + combinaisonComplete[1].getNumero() + combinaisonComplete[2].getNumero(); //Somme adversaire
-
-                if (rangAdv > rangJoueur) return false; //Adversaire peut battre
-                if (rangAdv == rangJoueur && sommeAdv >= sommeJoueur) return false; //Adversaire égal ou mieux
-            }
-        }
-    }
-    else if (nbCartesAdverseManquantes == 3) {
-        for (unsigned int indexCarte1 = 0; indexCarte1 < cartesRestantes.size(); ++indexCarte1) { //Boucle carte 1
-            for (unsigned int indexCarte2 = indexCarte1 + 1; indexCarte2 < cartesRestantes.size(); ++indexCarte2) { //Boucle carte 2
-                for (unsigned int indexCarte3 = indexCarte2 + 1; indexCarte3 < cartesRestantes.size(); ++indexCarte3) { //Boucle carte 3
-                    std::vector<Carte> combinaisonComplete = {
-                        cartesRestantes[indexCarte1],
-                        cartesRestantes[indexCarte2],
-                        cartesRestantes[indexCarte3]
-                    };
-
-                    int rangAdv = this->getRangCombinaison(combinaisonComplete); //Rang adversaire
-                    int sommeAdv = combinaisonComplete[0].getNumero() + combinaisonComplete[1].getNumero() + combinaisonComplete[2].getNumero(); //Somme adversaire
-
-                    if (rangAdv > rangJoueur) return false; //Adversaire peut battre
-                    if (rangAdv == rangJoueur && sommeAdv >= sommeJoueur) return false; //Adversaire égal ou mieux
-                }
-            }
-        }
-    }
-
-    return true; //Aucune combinaison adverse ne peut battre ou égaler le joueur
-}
-
-void PartieClassique::DistribuerCartes() {
-    for (int i = 0; i < 6; ++i) {
-        joueur1->ajouterCarte(cartes.back());
-        cartes.pop_back();
-        joueur2->ajouterCarte(cartes.back());
-        cartes.pop_back();
+    else {
+        std::cout << "\nVous ne pouvez pas revendiquer cette borne.\n";
     }
 }
 
+void PartieClassique::VerifieBorneGagnee(int choixBorne) {
+    auto& cartesJ1 = bornes[choixBorne - 1].getCarteJ1();
+    auto& cartesJ2 = bornes[choixBorne - 1].getCarteJ2();
+    if (EstGagnant(cartesJ1, cartesJ2, joueur1, joueur2, bornes[choixBorne - 1].getFirst())) {
+        bornes[choixBorne - 1].setGagnant(joueur1);
+        clearConsole();
+        joueur1->AjouterBorne(bornes[choixBorne - 1]);
+        AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
+    }
+    if (EstGagnant(cartesJ2, cartesJ1, joueur2, joueur1, bornes[choixBorne - 1].getFirst())) {
+        bornes[choixBorne - 1].setGagnant(joueur2);
+        clearConsole();
+        joueur2->AjouterBorne(bornes[choixBorne - 1]);
+        AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
+    }
+}
 
+void PartieClassique::TourDePartieIA(int, std::vector<Borne>&, Joueur*, Joueur*, int) {
+    // Spécialisé dans PartieClassiquePvIA
+}

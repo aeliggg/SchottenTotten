@@ -1,5 +1,5 @@
 #pragma once
-#include "Cartes.h"
+#include "Carte.h"
 
 class CarteClassique : public Carte {
     int numero;

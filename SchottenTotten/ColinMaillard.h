@@ -1,5 +1,6 @@
 #pragma once
 #include "CarteTactique.h"
+
 class ColinMaillard : public CarteTactique {
 public:
     int getNumero() const override { return 0; }

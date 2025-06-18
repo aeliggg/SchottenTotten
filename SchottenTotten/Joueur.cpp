@@ -1,49 +1,43 @@
 #include "Joueur.h"
-#include <limits>
 #include <algorithm>
-Joueur::Joueur() : sJOUnom("Inconnu") {}
 
+Joueur::Joueur() : sJOUnom("Inconnu") {}
 Joueur::Joueur(const std::string& sNom) : sJOUnom(sNom) {}
 
-std::string Joueur::getNom() const {
-    return sJOUnom;
+std::string Joueur::getNom() const { return sJOUnom; }
+void Joueur::setNom(const std::string& nouveauNom) { sJOUnom = nouveauNom; }
+
+void Joueur::ajouterCarte(std::unique_ptr<Carte> carte) {
+    vJOUCartesMain.push_back(std::move(carte));
 }
 
-void Joueur::setNom(const std::string& nouveauNom) {
-    sJOUnom = nouveauNom;
+void Joueur::AjouterBorne(Borne NewNbBorne) {
+    BorneGagnee.push_back(NewNbBorne);
+    std::sort(BorneGagnee.begin(), BorneGagnee.end());
 }
 
-void Joueur::ajouterCarte(const Carte& carte) {
-    vJOUCartesMain.push_back(carte);
+std::vector<Borne> Joueur::getBorne() { return BorneGagnee; }
+void Joueur::setBorne(std::vector<Borne> NewBorne) { BorneGagnee = NewBorne; }
+void Joueur::setMain(std::vector<std::unique_ptr<Carte>> nouvelleMain) {
+    vJOUCartesMain = std::move(nouvelleMain);
 }
-
-void Joueur::AjouterBorne(Borne NewNbBorne) { 
-    BorneGagnee.push_back(NewNbBorne); 
-    std::sort(BorneGagnee.begin(),BorneGagnee.end());
-}
-
 
 void Joueur::retirerCarte(const Carte& carte) {
-    for (size_t i = 0; i < vJOUCartesMain.size(); ++i) {
-        if (vJOUCartesMain[i].getNumero() == carte.getNumero() && vJOUCartesMain[i].getCouleur() == carte.getCouleur()) {
-            vJOUCartesMain.erase(vJOUCartesMain.begin() + i);
+    for (auto it = vJOUCartesMain.begin(); it != vJOUCartesMain.end(); ++it) {
+        if ((*it)->getNumero() == carte.getNumero() && (*it)->getCouleur() == carte.getCouleur()) {
+            vJOUCartesMain.erase(it);
             break;
         }
     }
 }
-const std::vector<Carte>& Joueur::getMain() const {
-    return vJOUCartesMain;
-}
 
-void Joueur::setMain(const std::vector<Carte>& nouvelleMain) {
-    vJOUCartesMain = nouvelleMain;
-}
+std::vector<std::unique_ptr<Carte>>& Joueur::getMain() { return vJOUCartesMain; }
 
 bool Joueur::EstGagnant() {
     if (BorneGagnee.size() < 3) return false;
     std::vector<int> numeros;
-    for (size_t i = 0; i < BorneGagnee.size(); ++i) {
-        numeros.push_back(BorneGagnee[i].getnumero());
+    for (auto& borne : BorneGagnee) {
+        numeros.push_back(borne.getnumero());
     }
     std::sort(numeros.begin(), numeros.end());
     for (size_t i = 0; i <= numeros.size() - 3; ++i) {
@@ -52,6 +46,5 @@ bool Joueur::EstGagnant() {
             return true;
         }
     }
-
     return false;
 }

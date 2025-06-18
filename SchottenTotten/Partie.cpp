@@ -1,29 +1,15 @@
 ﻿#include "Partie.h"
-#include "Affichage.h"
-#include <limits>
-#include <iomanip>   // Pour std::setw
-#include <thread>    // Pour sleep_for
-#include <chrono>
-#include "Borne.h"
-#include <iostream>
-#include <functional>
+#include "CarteFactory.h"
 #include <algorithm>
 #include <random>
 #include <ctime>
-#include <windows.h>
-#include <string>
-#include <codecvt>
-#include <locale>
-#include <conio.h>
+#include <iostream>
 
-
-Partie::Partie(){
+Partie::Partie() : joueur1(nullptr), joueur2(nullptr) {
     std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
-
-    for (unsigned int uiIndexCouleur = 0; uiIndexCouleur < couleurs.size(); ++uiIndexCouleur) {
-        for (unsigned int uiIndexNumero = 1; uiIndexNumero <= 9; ++uiIndexNumero) {
-            Carte carte(uiIndexNumero, couleurs[uiIndexCouleur]);
-            ajouterCarte(carte);
+    for (auto& coul : couleurs) {
+        for (int num = 1; num <= 9; ++num) {
+            ajouterCarte(CarteFactory::creerCarte("classique", num, coul));
         }
     }
     for (int i = 0; i < 9; ++i) {
@@ -33,13 +19,11 @@ Partie::Partie(){
     }
 }
 
-Partie::Partie(Joueur* j1, Joueur* j2): joueur1(j1), joueur2(j2) {
+Partie::Partie(Joueur* j1, Joueur* j2) : joueur1(j1), joueur2(j2) {
     std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
-
-    for (unsigned int uiIndexCouleur = 0; uiIndexCouleur < couleurs.size(); ++uiIndexCouleur) {
-        for (unsigned int uiIndexNumero = 1; uiIndexNumero <= 9; ++uiIndexNumero) {
-            Carte carte(uiIndexNumero, couleurs[uiIndexCouleur]);
-            ajouterCarte(carte);
+    for (auto& coul : couleurs) {
+        for (int num = 1; num <= 9; ++num) {
+            ajouterCarte(CarteFactory::creerCarte("classique", num, coul));
         }
     }
     for (int i = 0; i < 9; ++i) {
@@ -54,46 +38,70 @@ Partie::~Partie() {
     delete joueur2;
 }
 
-bool Partie::EstCouleur(std::vector<Carte> trioDeCarte) {
-    if (trioDeCarte.size() != 3) {
-        return false;
-    }
-    return (trioDeCarte[0].getCouleur() == trioDeCarte[1].getCouleur() && trioDeCarte[1].getCouleur() == trioDeCarte[2].getCouleur());
+void Partie::ajouterCarte(std::unique_ptr<Carte> carte) {
+    cartes.push_back(std::move(carte));
 }
 
-bool Partie::EstSuite(std::vector<Carte> trioDeCarte) {
+std::vector<std::unique_ptr<Carte>>& Partie::getCartes() {
+    return cartes;
+}
+
+void Partie::ajouterBorne(const Borne& borne) {
+    bornes.push_back(borne);
+}
+
+std::vector<Borne>& Partie::getBornes() {
+    return bornes;
+}
+
+std::vector<Borne> Partie::getBornesJouables() {
+    std::vector<Borne> res;
+    for (auto& b : bornes) {
+        if (b.getGagnant() == nullptr) res.push_back(b);
+    }
+    return res;
+}
+
+Joueur* Partie::getJoueur1() { return joueur1; }
+Joueur* Partie::getJoueur2() { return joueur2; }
+
+bool Partie::EstCouleur(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
+    if (trioDeCarte.size() != 3) return false;
+    return (trioDeCarte[0]->getCouleur() == trioDeCarte[1]->getCouleur()
+        && trioDeCarte[1]->getCouleur() == trioDeCarte[2]->getCouleur());
+}
+
+bool Partie::EstSuite(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
-        trioDeCarte[0].getNumero(),
-        trioDeCarte[1].getNumero(),
-        trioDeCarte[2].getNumero()
+        trioDeCarte[0]->getNumero(),
+        trioDeCarte[1]->getNumero(),
+        trioDeCarte[2]->getNumero()
     };
     std::sort(numeros.begin(), numeros.end());
     return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1);
 }
 
-bool Partie::EstSuiteCouleur(std::vector<Carte> trioDeCarte) {
+bool Partie::EstSuiteCouleur(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
-        trioDeCarte[0].getNumero(),
-        trioDeCarte[1].getNumero(),
-        trioDeCarte[2].getNumero()
+        trioDeCarte[0]->getNumero(),
+        trioDeCarte[1]->getNumero(),
+        trioDeCarte[2]->getNumero()
     };
     std::sort(numeros.begin(), numeros.end());
-    return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1 && trioDeCarte[0].getCouleur() == trioDeCarte[1].getCouleur() && trioDeCarte[1].getCouleur() == trioDeCarte[2].getCouleur());
+    return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1
+        && trioDeCarte[0]->getCouleur() == trioDeCarte[1]->getCouleur()
+        && trioDeCarte[1]->getCouleur() == trioDeCarte[2]->getCouleur());
 }
 
-bool Partie::EstBrelan(std::vector<Carte> trioDeCarte) {
+bool Partie::EstBrelan(const std::vector<std::unique_ptr<Carte>>& trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
-    std::vector<int> numeros = {
-    trioDeCarte[0].getNumero(),
-    trioDeCarte[1].getNumero(),
-    trioDeCarte[2].getNumero()
-    };
-    return (numeros[0] == numeros[1] &&  numeros[1] == numeros[2]);
+    return (trioDeCarte[0]->getNumero() == trioDeCarte[1]->getNumero()
+        && trioDeCarte[1]->getNumero() == trioDeCarte[2]->getNumero());
 }
 
-int Partie::getRangCombinaison(std::vector<Carte> trio) {
+int Partie::getRangCombinaison(const std::vector<std::unique_ptr<Carte>>& trio) {
     if (EstSuiteCouleur(trio)) return 5;
     if (EstBrelan(trio)) return 4;
     if (EstCouleur(trio)) return 3;
@@ -101,135 +109,77 @@ int Partie::getRangCombinaison(std::vector<Carte> trio) {
     return 1;
 }
 
-bool Partie::EstGagnant(std::vector<Carte> trioDeCarteJ1, std::vector<Carte> trioDeCarteJ2, Joueur* J1, Joueur* J2,Joueur* First){
-    if (trioDeCarteJ1.size() == 3 && trioDeCarteJ2.size()==3) {
+bool Partie::EstGagnant(const std::vector<std::unique_ptr<Carte>>& trioDeCarteJ1, const std::vector<std::unique_ptr<Carte>>& trioDeCarteJ2, Joueur* J1, Joueur* J2, Joueur* First) {
+    if (trioDeCarteJ1.size() == 3 && trioDeCarteJ2.size() == 3) {
         int rangJ1 = getRangCombinaison(trioDeCarteJ1);
         int rangJ2 = getRangCombinaison(trioDeCarteJ2);
 
-        if (rangJ1 > rangJ2) {
-            return true;
-        }
-        else if (rangJ1 < rangJ2) {
-            return false;
-        }
-        int sommeJ1 = trioDeCarteJ1[0].getNumero() + trioDeCarteJ1[1].getNumero() + trioDeCarteJ1[2].getNumero();
-        int sommeJ2 = trioDeCarteJ2[0].getNumero() + trioDeCarteJ2[1].getNumero() + trioDeCarteJ2[2].getNumero();
+        if (rangJ1 > rangJ2) return true;
+        if (rangJ1 < rangJ2) return false;
+        int sommeJ1 = trioDeCarteJ1[0]->getNumero() + trioDeCarteJ1[1]->getNumero() + trioDeCarteJ1[2]->getNumero();
+        int sommeJ2 = trioDeCarteJ2[0]->getNumero() + trioDeCarteJ2[1]->getNumero() + trioDeCarteJ2[2]->getNumero();
 
-        if (sommeJ1 > sommeJ2) {
-            return true;
-        }
-        else if (sommeJ1 < sommeJ2) {
-            return false;
-        }
-        else if (sommeJ1 == sommeJ2) {
-            if (J1 == First) {
-                return true;
-            }
-            else {
-                return false;
-            }
+        if (sommeJ1 > sommeJ2) return true;
+        if (sommeJ1 < sommeJ2) return false;
+        if (sommeJ1 == sommeJ2) {
+            if (J1 == First) return true;
+            else return false;
         }
     }
     else {
-        cout << "\n Il y'a seulement " << trioDeCarteJ1.size() << " cartes sur la borne pour "<<J1->getNom()<<" et " << trioDeCarteJ2.size() << " pour "<<J2->getNom() << endl;
+        std::cout << "\n Il y'a seulement " << trioDeCarteJ1.size() << " cartes sur la borne pour " << J1->getNom() << " et "
+            << trioDeCarteJ2.size() << " pour " << J2->getNom() << std::endl;
     }
+    return false;
 }
 
-
-void Partie::VerifieBorneRevendique(int choixBorne) {
-    int indexBorne = 0;
-    while (bornes[indexBorne].getnumero() != choixBorne) {
-        indexBorne++;
-    }
-    if (EstRevendiquable(bornes[indexBorne].getCarteJ1(), bornes[indexBorne].getCarteJ2(), joueur1, joueur2)&& bornes[indexBorne].getCarteJ1().size() == 3) {
-        bornes[indexBorne].setGagnant(joueur1);
-        //clearConsole();
-        joueur1->AjouterBorne(bornes[indexBorne]);
-        //AfficherBorneGagnee(joueur1, bornes[indexBorne]);
-        std::cout << "\nRevendication par " << joueur1->getNom() << " sur la borne " << bornes[indexBorne].getnumero() << u8"validée !" << std::endl;
-    }
-    else if (EstRevendiquable(bornes[indexBorne].getCarteJ2(), bornes[indexBorne].getCarteJ1(), joueur2, joueur1)&& bornes[indexBorne].getCarteJ2().size() == 3) {
-        bornes[indexBorne].setGagnant(joueur2);
-        //clearConsole();
-        joueur2->AjouterBorne(bornes[indexBorne]);
-        //AfficherBorneGagnee(joueur2, bornes[indexBorne]);
-        std::cout << "\nRevendication par " << joueur2->getNom() << " sur la borne " << bornes[indexBorne].getnumero() << u8" validée !" << std::endl;
-    }
-    else {
-        std::cout << "\nVous ne pouvez pas revendiquer cette borne.\n";
-    }
-}
-
-void Partie::VerifieBorneGagnee(int choixBorne) {
-    if (EstGagnant(bornes[choixBorne - 1].getCarteJ1(), bornes[choixBorne - 1].getCarteJ2(), joueur1, joueur2,bornes[choixBorne-1].getFirst())) {
-        bornes[choixBorne - 1].setGagnant(joueur1);
-        clearConsole();
-        joueur1->AjouterBorne(bornes[choixBorne - 1]);
-        AfficherBorneGagnee(joueur1, bornes[choixBorne - 1]);
-    }
-    if (EstGagnant(bornes[choixBorne - 1].getCarteJ2(), bornes[choixBorne - 1].getCarteJ1(), joueur2, joueur1, bornes[choixBorne - 1].getFirst())) {
-        bornes[choixBorne - 1].setGagnant(joueur2);
-        clearConsole();
-        joueur2->AjouterBorne(bornes[choixBorne - 1]);
-        AfficherBorneGagnee(joueur2, bornes[choixBorne - 1]);
-    }
-}
-
-bool Partie::FinDePartie() {
-    int choixUtilisateur = 0;
-    std::vector<std::string> choix = { "Rejouer","Menu" };
-    while (true) {
-        std::cout << "\rQue souhaitez vous faire ? ";
-        for (int i = 0; i < 2; ++i) {
-            if (i == choixUtilisateur)
-                std::cout << "[" << choix[i] << "]";
-            else
-                std::cout << " " << choix[i] << " ";
-        }
-        std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
-
-        int key = _getch();
-        if (key == 224) { // Touche spéciale (flèche)
-            key = _getch();
-            if (key == 75 || key == 77) { // Flèche gauche ou droite
-                choixUtilisateur = (choixUtilisateur + 1) % 2;
-            }
-            
-        }
-        else if (key == 13) {
-            if (choixUtilisateur == 0) {
-                return TRUE;
-            }
-            else if (choixUtilisateur == 1) {
-                return FALSE;
-            }
-        }
-    }
-}
-
-void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur) {
-    std::vector<Carte> main = joueur->getMain();
-    Carte carteChoisie = main[choixCarte - 1];
-    if (numJoueur == 1) {
-        bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
-    }
-    else {
-        bornes[choixBorne - 1].ajouterCarteJ2(carteChoisie);
-    }
-    joueur->retirerCarte(carteChoisie);
-
-    if (!cartes.empty()) {
-        joueur->ajouterCarte(cartes.back());
+void Partie::DistribuerCartes() {
+    for (int i = 0; i < 6; ++i) {
+        joueur1->ajouterCarte(std::move(cartes.back()));
+        cartes.pop_back();
+        joueur2->ajouterCarte(std::move(cartes.back()));
         cartes.pop_back();
     }
 }
 
-std::vector<Borne> Partie::getBornesJouables() {
-    std::vector<Borne> res = {};
-    for (int iBorne = 0; iBorne < bornes.size() ; iBorne++) {
-        if (bornes[iBorne].getGagnant() == nullptr) {
-            res.push_back(bornes[iBorne]);
-        }
+void Partie::VerifieBorneRevendique(int /*choixBorne*/) {
+    // À spécialiser dans PartieClassique et ses dérivés
+}
+
+void Partie::VerifieBorneGagnee(int /*choixBorne*/) {
+    // À spécialiser dans PartieClassique et ses dérivés
+}
+
+bool Partie::FinDePartie() {
+    // Rends à false par défaut (à spécialiser si besoin)
+    return false;
+}
+
+bool Partie::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>& /*cartesJoueur*/, const std::vector<std::unique_ptr<Carte>>& /*cartesAdverse*/, Joueur* /*J*/, Joueur* /*Adverse*/) {
+    // À spécialiser dans PartieClassique et ses dérivés
+    return false;
+}
+
+void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur) {
+    auto& main = joueur->getMain();
+    std::unique_ptr<Carte> carteChoisie = std::move(main[choixCarte - 1]);
+    main.erase(main.begin() + (choixCarte - 1));
+    if (numJoueur == 1) {
+        bornes[choixBorne - 1].ajouterCarteJ1(std::move(carteChoisie));
     }
-    return res;
+    else {
+        bornes[choixBorne - 1].ajouterCarteJ2(std::move(carteChoisie));
+    }
+    if (!cartes.empty()) {
+        joueur->ajouterCarte(std::move(cartes.back()));
+        cartes.pop_back();
+    }
+}
+
+void Partie::TourDePartieIA(int, std::vector<Borne>&, Joueur*, Joueur*, int) {
+    // À spécialiser dans PartieClassiquePvIA
+}
+
+void Partie::TourDePartie(int, std::vector<Borne>&, Joueur*, Joueur*, int) {
+    // À spécialiser dans PartieClassique et ses dérivés
 }

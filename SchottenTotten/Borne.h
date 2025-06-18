@@ -1,34 +1,41 @@
 #pragma once
-#include <iostream>
-#include "Cartes.h"
-#include <string>
 #include <vector>
-
-
+#include <memory>
+#include "Carte.h"
 class Partie;
 class Joueur;
+
 class Borne {
 private:
-	int iBORnuméro;
-	Partie* BORpartie;
-	Joueur* GagnantBorne;
-	Joueur* FirstPlayer;
-	std::vector<Carte> vBORcartesJ1;
-	std::vector<Carte> vBORcartesJ2;
+    int iBORnuméro;
+    Partie* BORpartie = nullptr;
+    Joueur* GagnantBorne = nullptr;
+    Joueur* FirstPlayer = nullptr;
+    std::vector<std::unique_ptr<Carte>> vBORcartesJ1;
+    std::vector<std::unique_ptr<Carte>> vBORcartesJ2;
+    bool protegee = false;
+    bool colinMaillard = false;
+    bool combatDeBoue = false;
 public:
-	Borne();
-	Borne(int numéro);
-	int getnumero() const;
-	Joueur* getGagnant() const;
-	Joueur* getFirst() const;
-	void setnumero(int numéro);
-	void setpartie(Partie* partie) { BORpartie = partie; }
-	void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
-	void setFirst(Joueur* joueur) { FirstPlayer = joueur; }
-	std::vector<Carte> getCarteJ1() const;
-	std::vector<Carte> getCarteJoueur(Joueur* joueur) const;
-	std::vector<Carte> getCarteJ2() const;
-	void ajouterCarteJ1(const Carte& carte);
-	void ajouterCarteJ2(const Carte& carte);
-	bool operator<(const Borne& other) const;
+    Borne();
+    Borne(int numéro);
+    int getnumero() const;
+    Joueur* getGagnant() const;
+    Joueur* getFirst() const;
+    void setnumero(int numéro);
+    void setpartie(Partie* partie) { BORpartie = partie; }
+    void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
+    void setFirst(Joueur* joueur) { FirstPlayer = joueur; }
+    const std::vector<std::unique_ptr<Carte>>& getCarteJ1() const;
+    const std::vector<std::unique_ptr<Carte>>& getCarteJ2() const;
+    void ajouterCarteJ1(std::unique_ptr<Carte> carte);
+    void ajouterCarteJ2(std::unique_ptr<Carte> carte);
+    bool operator<(const Borne& other) const;
+    void viderCartes();
+    bool estProtegeeParBouclier() const { return protegee; }
+    void protegerParBouclier() { protegee = true; }
+    void setColinMaillard(bool v) { colinMaillard = v; }
+    void setCombatDeBoue(bool v) { combatDeBoue = v; }
+    bool isColinMaillard() const { return colinMaillard; }
+    bool isCombatDeBoue() const { return combatDeBoue; }
 };
