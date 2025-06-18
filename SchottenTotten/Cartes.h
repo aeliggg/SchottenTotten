@@ -1,21 +1,16 @@
 #pragma once
 #include <string>
-using namespace std;
 
-class Cartes
-{
-private:
-    int iCARnuméro;
-    std::string sCARcouleur;
+class Partie;
+class Joueur;
+class Borne;
+
+class Carte {
 public:
-    Cartes();
-    Cartes(int iCARnuméro, std::string sCARcouleur);
-    int getnumero() const { return iCARnuméro; }
-    std::string getcouleur() const { return sCARcouleur; }
-    void setnumero(int numero) {iCARnuméro = numero; }
-    void setcouleur(std::string& couleur) { sCARcouleur = couleur; }
+    virtual ~Carte() = default;
+    virtual int getNumero() const = 0;
+    virtual std::string getCouleur() const = 0;
+    virtual std::string getNom() const = 0;
+    virtual bool estTactique() const = 0;
+    virtual void appliquerEffet(Partie* partie, Joueur* joueur, Borne* cible = nullptr) {}
 };
-
-inline bool operator==(const Cartes& a, const Cartes& b) {
-    return a.getnumero() == b.getnumero() && a.getcouleur() == b.getcouleur();
-}

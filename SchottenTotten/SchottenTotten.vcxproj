@@ -124,8 +124,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Affichage.h" />
+    <ClInclude Include="Banshee.h" />
+    <ClInclude Include="CarteFactory.h" />
+    <ClInclude Include="ChasseurDeTete.h" />
+    <ClInclude Include="ColinMaillard.h" />
+    <ClInclude Include="CombatDeBoue.h" />
+    <ClInclude Include="PorteBouclier.h" />
+    <ClInclude Include="CarteClassique.h" />
     <ClInclude Include="Cartes.h" />
     <ClInclude Include="Borne.h" />
+    <ClInclude Include="CarteTactique.h" />
+    <ClInclude Include="Joker.h" />
+    <ClInclude Include="Espion.h" />
     <ClInclude Include="Figlet.hh" />
     <ClInclude Include="Joueur.h" />
     <ClInclude Include="Partie.h" />
@@ -133,9 +143,21 @@
     <ClInclude Include="PartieClassiquePvIA.h" />
     <ClInclude Include="PartieClassiquePvP.h" />
     <ClInclude Include="StandartFont.h" />
+    <ClInclude Include="Strategie.h" />
+    <ClInclude Include="Traitre.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Affichage.cpp" />
+    <ClCompile Include="Banshee.cpp" />
+    <ClCompile Include="Bouffon.cpp" />
+    <ClCompile Include="CarteClassique.cpp" />
+    <ClCompile Include="CarteFactory.cpp" />
+    <ClCompile Include="CarteTactique.cpp" />
+    <ClCompile Include="ChasseurDeTete.cpp" />
+    <ClCompile Include="Chef.cpp" />
+    <ClCompile Include="ColinMaillard.cpp" />
+    <ClCompile Include="CombatDeBoue.cpp" />
+    <ClCompile Include="Espion.cpp" />
     <ClCompile Include="Figlet.cc" />
     <ClCompile Include="Partie.cpp" />
     <ClCompile Include="Joueur.cpp" />
@@ -146,6 +168,8 @@
     <ClCompile Include="PartieClassiquePvIA.cpp" />
     <ClCompile Include="PartieClassiquePvP.cpp" />
     <ClCompile Include="StandartFont.cpp" />
+    <ClCompile Include="Strategie.cpp" />
+    <ClCompile Include="Traitre.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="musique.wav" />
