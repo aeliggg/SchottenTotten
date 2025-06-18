@@ -145,13 +145,10 @@ int main() {
 
         Joueur* joueur1 = new Joueur(Nom1);
         Joueur* joueur2 = new Joueur(Nom2);
-        Partie* partie = new Partie(joueur1, joueur2);
+
 
         std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
         std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
-
-        std::vector<Carte> cartes = partie->getCartes();
-        std::cout << "Nombre total de cartes dans la partie : " << cartes.size() << std::endl;
 
 
     }

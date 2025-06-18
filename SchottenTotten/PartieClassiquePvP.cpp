@@ -18,7 +18,7 @@
 #include <iomanip>
 #include <thread> 
 
-bool PartieClassique::jouer() {
+bool PartieClassiquePvP::jouer() {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     std::shuffle(cartes.begin(), cartes.end(), std::default_random_engine(std::rand()));
 

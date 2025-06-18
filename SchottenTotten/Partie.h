@@ -29,7 +29,7 @@ public:
     Joueur* getJoueur1();
     Joueur* getJoueur2();
 
-    virtual bool jouer();
+    virtual bool jouer()=0;
     bool EstSuite(const std::vector<std::shared_ptr<Carte>>& trioDeCarte);
     bool EstCouleur(const std::vector<std::shared_ptr<Carte>>& trioDeCarte);
     bool EstSuiteCouleur(const std::vector<std::shared_ptr<Carte>>& trioDeCarte);
