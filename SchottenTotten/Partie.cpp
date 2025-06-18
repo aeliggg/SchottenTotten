@@ -5,39 +5,6 @@
 #include <ctime>
 #include <iostream>
 
-Partie::Partie() : joueur1(nullptr), joueur2(nullptr) {
-    std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
-    for (auto& coul : couleurs) {
-        for (int num = 1; num <= 9; ++num) {
-            ajouterCarte(CarteFactory::creerCarte("classique", num, coul));
-        }
-    }
-    for (int i = 0; i < 9; ++i) {
-        Borne borne(i + 1);
-        borne.setpartie(this);
-        bornes.push_back(borne);
-    }
-}
-
-Partie::Partie(Joueur* j1, Joueur* j2) : joueur1(j1), joueur2(j2) {
-    std::vector<std::string> couleurs = { "rouge", "bleu", "vert", "jaune", "violet", "orange" };
-    for (auto& coul : couleurs) {
-        for (int num = 1; num <= 9; ++num) {
-            ajouterCarte(CarteFactory::creerCarte("classique", num, coul));
-        }
-    }
-    for (int i = 0; i < 9; ++i) {
-        Borne borne(i + 1);
-        borne.setpartie(this);
-        bornes.push_back(borne);
-    }
-}
-
-Partie::~Partie() {
-    delete joueur1;
-    delete joueur2;
-}
-
 void Partie::ajouterCarte(std::unique_ptr<Carte> carte) {
     cartes.push_back(std::move(carte));
 }

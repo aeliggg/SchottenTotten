@@ -9,8 +9,6 @@
 #include <algorithm>
 #include <windows.h>
 
-
-
 void PartieClassiquePvIA::TourDePartieIA(int tour, std::vector<Borne>& bornes, Joueur* IA, Joueur* adversaire, int numJoueur) {
     TrierMain(IA);
     int choixCarte = (rand() % IA->getMain().size()) + 1;

@@ -1,4 +1,5 @@
 #include "PartieClassique.h"
+#include "CarteClassique.h"
 #include "Affichage.h"
 #include "Borne.h"
 #include <algorithm>
@@ -15,9 +16,6 @@
 #include <limits>
 #include <iomanip>
 #include <thread> 
-
-PartieClassique::PartieClassique() : Partie() {}
-PartieClassique::PartieClassique(Joueur* J1, Joueur* J2) : Partie(J1, J2) {}
 
 bool PartieClassique::jouer() {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -70,7 +68,7 @@ bool PartieClassique::EstRevendiquable(const std::vector<std::unique_ptr<Carte>>
     for (const auto& c : joueur1->getMain()) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
     for (const auto& c : joueur2->getMain()) cartesRestantes.push_back(std::make_unique<CarteClassique>(c->getNumero(), c->getCouleur()));
 
-    unsigned int nbCartesAdverseManquantes = 3 - cartesAdverse.size();
+    size_t nbCartesAdverseManquantes = 3 - cartesAdverse.size();
 
     if (nbCartesAdverseManquantes == 1) {
         for (unsigned int i = 0; i < cartesRestantes.size(); ++i) {

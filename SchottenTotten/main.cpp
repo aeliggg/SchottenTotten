@@ -12,18 +12,34 @@
 #include <conio.h>
 #pragma comment(lib, "winmm.lib")
 
-Partie* CreationPartie(int choixVariable, int choixMode, Joueur * Joueur1, Joueur* Joueur2) {
-    if (choixVariable == 1 ) {//si la partie est classique
-        PartieClassique* partie = new PartieClassique(Joueur1,Joueur2);
+Partie* CreationPartie(int choixVariable, int choixMode, Joueur* Joueur1, Joueur* Joueur2) {
+    Partie* partie = nullptr;
+    if (choixVariable == 1) { //Si on a choisi la variable classique
+        if (choixMode == 1) {
+            partie = new PartieClassiquePvP(Joueur1, Joueur2);
+        }
+        else {
+            partie = new PartieClassiquePvIA(Joueur1, Joueur2);
+        }
     }
-    else if (choixVariable == 2 ) {//même chose pour expert
-        PartieClassique* partie = new PartieClassique(Joueur1, Joueur2);
+    else if (choixVariable == 2) { //Variable expert
+        if (choixMode == 1) {
+            //partie = new PartieExpertPvP(Joueur1, Joueur2);
+        }
+        else {
+            //partie = new PartieExpertPvIA(Joueur1, Joueur2);
+        }
     }
     else {
-        PartieClassique* partie = new PartieClassique(Joueur1, Joueur2);
+        if (choixMode == 1) {
+            //partie = new PartieTactiquePvP(Joueur1, Joueur2);
+        }
+        else {
+            //partie = new PartieTactiquePvIA(Joueur1, Joueur2);
+        }
     }
 
-
+    return partie;
 }
 
 // === Choix du mode de jeu avec flèches HAUT / BAS ===
