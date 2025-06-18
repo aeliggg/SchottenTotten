@@ -124,6 +124,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Affichage.h" />
+    <ClInclude Include="PartieExpert.h" />
+    <ClInclude Include="PartieExpertPvIA.h" />
+    <ClInclude Include="PartieExpertPvP.h" />
     <ClInclude Include="CarteClassique.h" />
     <ClInclude Include="Carte.h" />
     <ClInclude Include="Borne.h" />
@@ -148,7 +151,10 @@
     <ClCompile Include="PartieClassique.cpp" />
     <ClCompile Include="PartieClassiquePvIA.cpp" />
     <ClCompile Include="PartieClassiquePvP.cpp" />
-    <ClCompile Include="PartieTactique.cpp" />
+    <ClCompile Include="PartieExpert.cpp" />
+    <ClCompile Include="PartieExpertPvIA.cpp" />
+    <ClCompile Include="PartieExpertPvP.cpp" />
+    <ClCompile Include="StandartFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="musique.wav" />
