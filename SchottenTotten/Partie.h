@@ -9,7 +9,7 @@
 class Partie
 {
 protected:
-    std::vector<Cartes> cartes;
+    std::vector<Carte> cartes;
     std::vector<Borne> bornes;
     Joueur* joueur1;
     Joueur* joueur2;
@@ -18,20 +18,20 @@ public:
     Partie();
     Partie(Joueur* j1, Joueur* j2);
     ~Partie();
-    void ajouterCarte(const Cartes& carte) { cartes.push_back(carte); };
-    std::vector<Cartes> getCartes() { return cartes; };
+    void ajouterCarte(const Carte& carte) { cartes.push_back(carte); };
+    std::vector<Carte> getCartes() { return cartes; };
     void ajouterBorne(const Borne& borne) { bornes.push_back(borne); };
     std::vector<Borne> getBornes() { return bornes; };
     std::vector<Borne> getBornesJouables();
     Joueur* getJoueur1() { return joueur1; };
     Joueur* getJoueur2() { return joueur2; };
     virtual bool jouer();
-    bool EstSuite(std::vector<Cartes> trioDeCarte);
-    bool EstCouleur(std::vector<Cartes> trioDeCarte);
-    bool EstSuiteCouleur(std::vector<Cartes> trioDeCarte);
-    bool EstBrelan(std::vector<Cartes> trioDeCarte);
-    int getRangCombinaison(std::vector<Cartes> trio);
-    virtual bool EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCartej2, Joueur* J1, Joueur* J2,Joueur* First);
+    bool EstSuite(std::vector<Carte> trioDeCarte);
+    bool EstCouleur(std::vector<Carte> trioDeCarte);
+    bool EstSuiteCouleur(std::vector<Carte> trioDeCarte);
+    bool EstBrelan(std::vector<Carte> trioDeCarte);
+    int getRangCombinaison(std::vector<Carte> trio);
+    virtual bool EstGagnant(std::vector<Carte> trioDeCarteJ1, std::vector<Carte> trioDeCartej2, Joueur* J1, Joueur* J2,Joueur* First);
     virtual void DistribuerCartes();
     virtual void VerifieBorneGagnee(int choixBorne);
     virtual void VerifieBorneRevendique(int choixRev);

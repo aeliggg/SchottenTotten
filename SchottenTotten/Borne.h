@@ -13,8 +13,8 @@ private:
 	Partie* BORpartie;
 	Joueur* GagnantBorne;
 	Joueur* FirstPlayer;
-	std::vector<Cartes> vBORcartesJ1;
-	std::vector<Cartes> vBORcartesJ2;
+	std::vector<Carte> vBORcartesJ1;
+	std::vector<Carte> vBORcartesJ2;
 public:
 	Borne();
 	Borne(int numéro);
@@ -25,10 +25,10 @@ public:
 	void setpartie(Partie* partie) { BORpartie = partie; }
 	void setGagnant(Joueur* joueur) { GagnantBorne = joueur; }
 	void setFirst(Joueur* joueur) { FirstPlayer = joueur; }
-	std::vector<Cartes> getCarteJ1() const;
-	std::vector<Cartes> getCarteJoueur(Joueur* joueur) const;
-	std::vector<Cartes> getCarteJ2() const;
-	void ajouterCarteJ1(const Cartes& carte);
-	void ajouterCarteJ2(const Cartes& carte);
+	std::vector<Carte> getCarteJ1() const;
+	std::vector<Carte> getCarteJoueur(Joueur* joueur) const;
+	std::vector<Carte> getCarteJ2() const;
+	void ajouterCarteJ1(const Carte& carte);
+	void ajouterCarteJ2(const Carte& carte);
 	bool operator<(const Borne& other) const;
 };
