@@ -22,7 +22,7 @@ Partie::Partie(){
 
     for (unsigned int uiIndexCouleur = 0; uiIndexCouleur < couleurs.size(); ++uiIndexCouleur) {
         for (unsigned int uiIndexNumero = 1; uiIndexNumero <= 9; ++uiIndexNumero) {
-            Cartes carte(uiIndexNumero, couleurs[uiIndexCouleur]);
+            Carte carte(uiIndexNumero, couleurs[uiIndexCouleur]);
             ajouterCarte(carte);
         }
     }
@@ -38,7 +38,7 @@ Partie::Partie(Joueur* j1, Joueur* j2): joueur1(j1), joueur2(j2) {
 
     for (unsigned int uiIndexCouleur = 0; uiIndexCouleur < couleurs.size(); ++uiIndexCouleur) {
         for (unsigned int uiIndexNumero = 1; uiIndexNumero <= 9; ++uiIndexNumero) {
-            Cartes carte(uiIndexNumero, couleurs[uiIndexCouleur]);
+            Carte carte(uiIndexNumero, couleurs[uiIndexCouleur]);
             ajouterCarte(carte);
         }
     }
@@ -54,46 +54,46 @@ Partie::~Partie() {
     delete joueur2;
 }
 
-bool Partie::EstCouleur(std::vector<Cartes> trioDeCarte) {
+bool Partie::EstCouleur(std::vector<Carte> trioDeCarte) {
     if (trioDeCarte.size() != 3) {
         return false;
     }
-    return (trioDeCarte[0].getcouleur() == trioDeCarte[1].getcouleur() && trioDeCarte[1].getcouleur() == trioDeCarte[2].getcouleur());
+    return (trioDeCarte[0].getCouleur() == trioDeCarte[1].getCouleur() && trioDeCarte[1].getCouleur() == trioDeCarte[2].getCouleur());
 }
 
-bool Partie::EstSuite(std::vector<Cartes> trioDeCarte) {
+bool Partie::EstSuite(std::vector<Carte> trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
-        trioDeCarte[0].getnumero(),
-        trioDeCarte[1].getnumero(),
-        trioDeCarte[2].getnumero()
+        trioDeCarte[0].getNumero(),
+        trioDeCarte[1].getNumero(),
+        trioDeCarte[2].getNumero()
     };
     std::sort(numeros.begin(), numeros.end());
     return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1);
 }
 
-bool Partie::EstSuiteCouleur(std::vector<Cartes> trioDeCarte) {
+bool Partie::EstSuiteCouleur(std::vector<Carte> trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
-        trioDeCarte[0].getnumero(),
-        trioDeCarte[1].getnumero(),
-        trioDeCarte[2].getnumero()
+        trioDeCarte[0].getNumero(),
+        trioDeCarte[1].getNumero(),
+        trioDeCarte[2].getNumero()
     };
     std::sort(numeros.begin(), numeros.end());
-    return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1 && trioDeCarte[0].getcouleur() == trioDeCarte[1].getcouleur() && trioDeCarte[1].getcouleur() == trioDeCarte[2].getcouleur());
+    return (numeros[1] == numeros[0] + 1 && numeros[2] == numeros[1] + 1 && trioDeCarte[0].getCouleur() == trioDeCarte[1].getCouleur() && trioDeCarte[1].getCouleur() == trioDeCarte[2].getCouleur());
 }
 
-bool Partie::EstBrelan(std::vector<Cartes> trioDeCarte) {
+bool Partie::EstBrelan(std::vector<Carte> trioDeCarte) {
     if (trioDeCarte.size() != 3) return false;
     std::vector<int> numeros = {
-    trioDeCarte[0].getnumero(),
-    trioDeCarte[1].getnumero(),
-    trioDeCarte[2].getnumero()
+    trioDeCarte[0].getNumero(),
+    trioDeCarte[1].getNumero(),
+    trioDeCarte[2].getNumero()
     };
     return (numeros[0] == numeros[1] &&  numeros[1] == numeros[2]);
 }
 
-int Partie::getRangCombinaison(std::vector<Cartes> trio) {
+int Partie::getRangCombinaison(std::vector<Carte> trio) {
     if (EstSuiteCouleur(trio)) return 5;
     if (EstBrelan(trio)) return 4;
     if (EstCouleur(trio)) return 3;
@@ -101,7 +101,7 @@ int Partie::getRangCombinaison(std::vector<Cartes> trio) {
     return 1;
 }
 
-bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> trioDeCarteJ2, Joueur* J1, Joueur* J2,Joueur* First){
+bool Partie::EstGagnant(std::vector<Carte> trioDeCarteJ1, std::vector<Carte> trioDeCarteJ2, Joueur* J1, Joueur* J2,Joueur* First){
     if (trioDeCarteJ1.size() == 3 && trioDeCarteJ2.size()==3) {
         int rangJ1 = getRangCombinaison(trioDeCarteJ1);
         int rangJ2 = getRangCombinaison(trioDeCarteJ2);
@@ -112,8 +112,8 @@ bool Partie::EstGagnant(std::vector<Cartes> trioDeCarteJ1, std::vector<Cartes> t
         else if (rangJ1 < rangJ2) {
             return false;
         }
-        int sommeJ1 = trioDeCarteJ1[0].getnumero() + trioDeCarteJ1[1].getnumero() + trioDeCarteJ1[2].getnumero();
-        int sommeJ2 = trioDeCarteJ2[0].getnumero() + trioDeCarteJ2[1].getnumero() + trioDeCarteJ2[2].getnumero();
+        int sommeJ1 = trioDeCarteJ1[0].getNumero() + trioDeCarteJ1[1].getNumero() + trioDeCarteJ1[2].getNumero();
+        int sommeJ2 = trioDeCarteJ2[0].getNumero() + trioDeCarteJ2[1].getNumero() + trioDeCarteJ2[2].getNumero();
 
         if (sommeJ1 > sommeJ2) {
             return true;
@@ -208,8 +208,8 @@ bool Partie::FinDePartie() {
 }
 
 void Partie::UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur) {
-    std::vector<Cartes> main = joueur->getMain();
-    Cartes carteChoisie = main[choixCarte - 1];
+    std::vector<Carte> main = joueur->getMain();
+    Carte carteChoisie = main[choixCarte - 1];
     if (numJoueur == 1) {
         bornes[choixBorne - 1].ajouterCarteJ1(carteChoisie);
     }

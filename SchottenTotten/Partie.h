@@ -36,7 +36,7 @@ public:
     virtual void VerifieBorneGagnee(int choixBorne);
     virtual void VerifieBorneRevendique(int choixRev);
     bool FinDePartie();
-    virtual bool EstRevendiquable(const std::vector<Cartes>& trioDeCarteJ1, const std::vector<Cartes>& Cartesj2, Joueur* J1, Joueur* J2);
+    virtual bool EstRevendiquable(const std::vector<Carte>& trioDeCarteJ1, const std::vector<Carte>& Cartesj2, Joueur* J1, Joueur* J2);
     void UpdatePlateauApresCoupJoueur(Joueur* joueur, int choixCarte, std::vector<Borne>& bornes, int choixBorne, int numJoueur);
     virtual void TourDePartieIA(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* IA, int numJoueur);
     virtual void TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur);

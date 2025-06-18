@@ -13,7 +13,7 @@ void Joueur::setNom(const std::string& nouveauNom) {
     sJOUnom = nouveauNom;
 }
 
-void Joueur::ajouterCarte(const Cartes& carte) {
+void Joueur::ajouterCarte(const Carte& carte) {
     vJOUCartesMain.push_back(carte);
 }
 
@@ -23,19 +23,19 @@ void Joueur::AjouterBorne(Borne NewNbBorne) {
 }
 
 
-void Joueur::retirerCarte(const Cartes& carte) {
+void Joueur::retirerCarte(const Carte& carte) {
     for (size_t i = 0; i < vJOUCartesMain.size(); ++i) {
-        if (vJOUCartesMain[i].getnumero() == carte.getnumero() && vJOUCartesMain[i].getcouleur() == carte.getcouleur()) {
+        if (vJOUCartesMain[i].getNumero() == carte.getNumero() && vJOUCartesMain[i].getCouleur() == carte.getCouleur()) {
             vJOUCartesMain.erase(vJOUCartesMain.begin() + i);
             break;
         }
     }
 }
-const std::vector<Cartes>& Joueur::getMain() const {
+const std::vector<Carte>& Joueur::getMain() const {
     return vJOUCartesMain;
 }
 
-void Joueur::setMain(const std::vector<Cartes>& nouvelleMain) {
+void Joueur::setMain(const std::vector<Carte>& nouvelleMain) {
     vJOUCartesMain = nouvelleMain;
 }
 
