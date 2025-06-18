@@ -129,6 +129,9 @@
     <ClInclude Include="ChasseurDeTete.h" />
     <ClInclude Include="ColinMaillard.h" />
     <ClInclude Include="CombatDeBoue.h" />
+    <ClInclude Include="PartieExpert.h" />
+    <ClInclude Include="PartieExpertPvIA.h" />
+    <ClInclude Include="PartieExpertPvP.h" />
     <ClInclude Include="PorteBouclier.h" />
     <ClInclude Include="CarteClassique.h" />
     <ClInclude Include="Carte.h" />
@@ -162,6 +165,9 @@
     <ClCompile Include="PartieClassique.cpp" />
     <ClCompile Include="PartieClassiquePvIA.cpp" />
     <ClCompile Include="PartieClassiquePvP.cpp" />
+    <ClCompile Include="PartieExpert.cpp" />
+    <ClCompile Include="PartieExpertPvIA.cpp" />
+    <ClCompile Include="PartieExpertPvP.cpp" />
     <ClCompile Include="StandartFont.cpp" />
     <ClCompile Include="Strategie.cpp" />
     <ClCompile Include="Traitre.cpp" />

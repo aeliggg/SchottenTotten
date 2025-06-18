@@ -5,6 +5,9 @@
 #include "PartieClassique.h"
 #include "PartieClassiquePvP.h"
 #include "PartieClassiquePvIA.h"
+#include "PartieExpert.h"
+#include "PartieExpertPvP.h"
+#include "PartieExpertPvIA.h"
 #include <windows.h>
 #include <string>
 #include <codecvt>
@@ -26,10 +29,10 @@ Partie* CreationPartie(int choixVariable, int choixMode, Joueur* Joueur1, Joueur
     }
     else if (choixVariable == 2) { //Variable expert
         if (choixMode == 1) {
-            //partie = new PartieExpertPvP(Joueur1, Joueur2);
+            partie = new PartieExpertPvP(Joueur1, Joueur2);
         }
         else {
-            //partie = new PartieExpertPvIA(Joueur1, Joueur2);
+            partie = new PartieExpertPvIA(Joueur1, Joueur2);
         }
     }
     else {
@@ -149,8 +152,8 @@ int main() {
 
         std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
         std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
-        Partie* partoz = new PartieClassiquePvP(joueur1, joueur2);
-        partoz->jouer();
+        Partie* partie = CreationPartie(choixVariable, choixMode,joueur1,joueur2);
+        partie->jouer();
     }
     return 0;
 }

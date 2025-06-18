@@ -1,5 +1,6 @@
-#include "PartieClassique.h"
+#include "PartieExpert.h"
 #include "CarteClassique.h"
+#include "PartieExpert.h"
 #include "Affichage.h"
 #include "Borne.h"
 #include <algorithm>
@@ -17,11 +18,11 @@
 #include <iomanip>
 #include <thread> 
 
-bool PartieClassique::jouer() {
+bool PartieExpert::jouer() {
 
 }
 
-void PartieClassique::DistribuerCartes() {
+void PartieExpert::DistribuerCartes() {
     for (int i = 0; i < 6; ++i) {
         joueur1->ajouterCarte(std::move(cartes.back()));
         cartes.pop_back();
@@ -30,7 +31,7 @@ void PartieClassique::DistribuerCartes() {
     }
 }
 
-bool PartieClassique::EstRevendiquable(const std::vector<std::shared_ptr<Carte>>& cartesJoueur, const std::vector<std::shared_ptr<Carte>>& cartesAdverse, Joueur* J, Joueur* Adverse) {
+bool PartieExpert::EstRevendiquable(const std::vector<std::shared_ptr<Carte>>& cartesJoueur, const std::vector<std::shared_ptr<Carte>>& cartesAdverse, Joueur* J, Joueur* Adverse) {
     if (cartesJoueur.size() != 3) return false;
     if (cartesAdverse.size() == 3)
         return this->EstGagnant(cartesJoueur, cartesAdverse, J, Adverse, J);
@@ -60,7 +61,7 @@ bool PartieClassique::EstRevendiquable(const std::vector<std::shared_ptr<Carte>>
     return true;
 }
 
-void PartieClassique::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur) {
+void PartieExpert::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur* joueur, Joueur* adversaire, int numJoueur) {
     std::cout << "\n--- Tour " << tour + 1 << " ---\n";
     if (numJoueur == 1) {
         AffichePlateau(bornes, joueur, adversaire);
@@ -70,6 +71,21 @@ void PartieClassique::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur*
     }
     std::cout << "\nC'est au tour de " << joueur->getNom() << "\n";
     AfficherReady();
+    std::vector<Borne> bornesRevendicables = getBornesJouables();
+    int choixBorneRevendique = -1;
+    while (choixBorneRevendique != 0) {
+        choixBorneRevendique = AfficheChoixBorneRevendique(joueur, choixBorneRevendique, bornesRevendicables, numJoueur);
+        if (choixBorneRevendique != 0) {
+            VerifieBorneRevendique(choixBorneRevendique);
+        }
+    }
+    clearConsole();
+    if (numJoueur == 1) {
+        AffichePlateau(bornes, joueur, adversaire);
+    }
+    else {
+        AffichePlateau(bornes, adversaire, joueur);
+    }
     TrierMain(joueur);
     int choixCarte = AfficheChoixCarteNavigable(joueur, 0);
 
@@ -82,23 +98,9 @@ void PartieClassique::TourDePartie(int tour, std::vector<Borne>& bornes, Joueur*
     UpdatePlateauApresCoupJoueur(joueur, choixCarte, bornes, choixBorne, numJoueur);
     VerifieBorneGagnee(choixBorne);
     clearConsole();
-    if (numJoueur == 1) {
-        AffichePlateau(bornes, joueur, adversaire);
-    }
-    else {
-        AffichePlateau(bornes, adversaire, joueur);
-    }
-    std::vector<Borne> bornesRevendicables = getBornesJouables();
-    int choixBorneRevendique = -1;
-    while (choixBorneRevendique != 0) {
-        choixBorneRevendique = AfficheChoixBorneRevendique(joueur, choixBorneRevendique, bornesRevendicables, numJoueur);
-        if (choixBorneRevendique != 0) {
-            VerifieBorneRevendique(choixBorneRevendique);
-        }
-    }
 }
 
-void PartieClassique::VerifieBorneRevendique(int choixBorne) {
+void PartieExpert::VerifieBorneRevendique(int choixBorne) {
     int indexBorne = 0;
     while (bornes[indexBorne].getnumero() != choixBorne) {
         indexBorne++;
@@ -120,7 +122,7 @@ void PartieClassique::VerifieBorneRevendique(int choixBorne) {
     }
 }
 
-PartieClassique::PartieClassique(Joueur* j1, Joueur* j2) {
+PartieExpert::PartieExpert(Joueur* j1, Joueur* j2) {
     this->joueur1 = j1;
     this->joueur2 = j2;
 
@@ -138,7 +140,7 @@ PartieClassique::PartieClassique(Joueur* j1, Joueur* j2) {
 }
 
 
-void PartieClassique::VerifieBorneGagnee(int choixBorne) {
+void PartieExpert::VerifieBorneGagnee(int choixBorne) {
     auto& cartesJ1 = bornes[choixBorne - 1].getCarteJ1();
     auto& cartesJ2 = bornes[choixBorne - 1].getCarteJ2();
     if (EstGagnant(cartesJ1, cartesJ2, joueur1, joueur2, bornes[choixBorne - 1].getFirst())) {
@@ -155,6 +157,6 @@ void PartieClassique::VerifieBorneGagnee(int choixBorne) {
     }
 }
 
-void PartieClassique::TourDePartieIA(int, std::vector<Borne>&, Joueur*, Joueur*, int) {
-    // Spécialisé dans PartieClassiquePvIA
+void PartieExpert::TourDePartieIA(int, std::vector<Borne>&, Joueur*, Joueur*, int) {
+    // Spécialisé dans PartieExpertPvIA
 }
