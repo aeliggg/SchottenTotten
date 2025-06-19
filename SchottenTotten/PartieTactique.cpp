@@ -142,12 +142,12 @@ void PartieTactique::VerifieBorneRevendique(int choixBorne) {
     bool j1Peut = cartesJ1.size() == 3;
     bool j2Peut = cartesJ2.size() == 3;
 
-    if (j1Peut && EstGagnant(cartesJ1, cartesJ2, joueur1, joueur2, borne.getPremierJoueur())) {
+    if (j1Peut && EstGagnant(cartesJ1, cartesJ2, joueur1, joueur2, borne.getFirst())) {
         borne.setGagnant(joueur1);
         joueur1->AjouterBorne(borne);
         std::cout << "\nRevendication par " << joueur1->getNom() << " sur la borne " << borne.getnumero() << " validée !" << std::endl;
     }
-    else if (j2Peut && EstGagnant(cartesJ2, cartesJ1, joueur2, joueur1, borne.getPremierJoueur())) {
+    else if (j2Peut && EstGagnant(cartesJ2, cartesJ1, joueur2, joueur1, borne.getFirst())) {
         borne.setGagnant(joueur2);
         joueur2->AjouterBorne(borne);
         std::cout << "\nRevendication par " << joueur2->getNom() << " sur la borne " << borne.getnumero() << " validée !" << std::endl;
@@ -156,29 +156,34 @@ void PartieTactique::VerifieBorneRevendique(int choixBorne) {
         std::cout << "\nVous ne pouvez pas revendiquer cette borne.\n";
     }
 }
-
-// Version spéciale pour PorteBouclier, Joker, Espion (à appeler au moment de revendication)
 void PartieTactique::appliquerValeursChoisies(std::vector<std::shared_ptr<Carte>>& cartes, Joueur* joueur) {
     for (auto& carte : cartes) {
         if (carte->estJoker()) {
-            // Le joueur choisit couleur et valeur, ici simulation simple :
-            carte->setValeurChoisie(9);   // Exemple valeur choisie
-            carte->setCouleurChoisie(Couleur::Rouge); // Exemple couleur choisie
+            // Joker : le joueur choisit valeur (1-10 par exemple) et couleur
+            int valeurChoisie = joueur->choisirValeur(1, 10, "Choisissez la valeur du Joker (1-10) : ");
+            Couleur couleurChoisie = joueur->choisirCouleur("Choisissez la couleur du Joker : ");
+            carte->setValeur(valeurChoisie);
+            carte->setCouleurChoisie(couleurChoisie);
         }
         else if (carte->estPorteBouclier()) {
-            // Choix similaire (valeur entre 1 et 3)
-            carte->setValeurChoisie(2);
-            carte->setCouleurChoisie(Couleur::Bleu);
+            // PorteBouclier : valeur entre 1 et 3, couleur
+            int valeurChoisie = joueur->choisirValeur(1, 3, "Choisissez la valeur du PorteBouclier (1-3) : ");
+            Couleur couleurChoisie = joueur->choisirCouleur("Choisissez la couleur du PorteBouclier : ");
+            carte->setValeurChoisie(valeurChoisie);
+            carte->setCouleurChoisie(couleurChoisie);
         }
         else if (carte->estEspion()) {
-            // Valeur fixe 7, couleur choisie par le joueur
-            carte->setValeurChoisie(7);
-            carte->setCouleurChoisie(Couleur::Vert);
+            // Espion : valeur fixe 7, couleur choisie par joueur
+            int valeurChoisie = 7;
+            Couleur couleurChoisie = joueur->choisirCouleur("Choisissez la couleur de l'Espion : ");
+            carte->setValeurChoisie(valeurChoisie);
+            carte->setCouleurChoisie(couleurChoisie);
         }
         else {
-            // Carte normale, on prend sa valeur/couleur d'origine
+            // Carte normale, valeur/couleur d'origine
             carte->setValeurChoisie(carte->getValeur());
             carte->setCouleurChoisie(carte->getCouleur());
         }
     }
+}
 }
