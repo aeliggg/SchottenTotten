@@ -157,11 +157,9 @@ int AfficheChoixCarteNavigable(Joueur* joueur, int choixCarte) {
         }
     }
     std::cout << std::endl;
-    // On retourne l'index (1-based) pour correspondre à l'affichage utilisateur
     return choixCarte + 1;
 }
 
-// Ajoute un paramètre const Borne& borneActuelle
 int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, const std::vector<Borne>& bornesLibres, int numJoueur) {
     int nbBornesLibres = bornesLibres.size();
     if (nbBornesLibres == 0) {
@@ -236,7 +234,7 @@ int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::v
         int key = _getch();
         if (key == 224) { // Touche spéciale (flèche)
             key = _getch();
-            if (key == 75 || key == 77) { // Flèche 
+            if (key == 75 || key == 77) { // Flèche gauche (75) et droite (77)
                 choixOuiNon = (choixOuiNon + 1) % 2;
             }
         }
@@ -395,12 +393,10 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes,const std::vector<std
         std::cout << "\n";
     }
 
-    // Ligne séparatrice
     std::cout << " -----------------------------------------------------------------------------------------"
         << std::string(4, ' ') << (iLigneAideAffichee < (int)aideDeJeuSuite.size() ? aideDeJeuSuite[iLigneAideAffichee++] : "")
         << std::endl;
 
-    // Affichage numéro des bornes
     for (unsigned int i = 0; i < bornes.size(); ++i) {
         std::cout << "| Borne " << bornes[i].getnumero() << " ";
     }
@@ -410,12 +406,10 @@ void AfficherBornesPlusAJ(const std::vector<Borne>& bornes,const std::vector<std
     }
     std::cout << std::endl;
 
-    // Ligne séparatrice
     std::cout << " -----------------------------------------------------------------------------------------"
         << std::string(4, ' ') << (iLigneAideAffichee < (int)aideDeJeuSuite.size() ? aideDeJeuSuite[iLigneAideAffichee++] : "")
         << std::endl;
 
-    // Affichage cartes joueur 2 (3 lignes)
     for (unsigned int uiLigneDeCartes = 0; uiLigneDeCartes < 3; uiLigneDeCartes++) {
         for (unsigned int i = 0; i < bornes.size(); ++i) {
             const std::vector<std::shared_ptr<Carte>>& cartesJ2 = bornes[i].getCarteJ2();
