@@ -17,9 +17,7 @@
 #include <iomanip>
 #include <thread> 
 
-bool PartieClassique::jouer() {
 
-}
 
 void PartieClassique::DistribuerCartes() {
     for (int i = 0; i < 6; ++i) {

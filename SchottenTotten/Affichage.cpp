@@ -161,7 +161,8 @@ int AfficheChoixCarteNavigable(Joueur* joueur, int choixCarte) {
     return choixCarte + 1;
 }
 
-int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, std::vector<Borne>& bornesLibres, int numJoueur) {
+// Ajoute un paramètre const Borne& borneActuelle
+int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, const std::vector<Borne>& bornesLibres, int numJoueur) {
     int nbBornesLibres = bornesLibres.size();
     if (nbBornesLibres == 0) {
         std::cout << "Aucune borne disponible." << std::endl;
@@ -170,7 +171,6 @@ int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, std::vector<Borne
 
     choixBorne = bornesLibres.size() / 2;
     while (true) {
-        // Affichage dynamique
         std::cout << "\r" << joueur->getNom() << ", veuillez choisir une borne parmi : ";
         for (int i = 0; i < nbBornesLibres; ++i) {
             if (i == choixBorne)
@@ -181,30 +181,33 @@ int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, std::vector<Borne
         std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
 
         int key = _getch();
-        if (key == 224) { // Touche spéciale (flèche)
+        if (key == 224) {
             key = _getch();
-            if (key == 75) { // Flèche gauche
+            if (key == 75) { // gauche
                 choixBorne = (choixBorne - 1 + nbBornesLibres) % nbBornesLibres;
             }
-            else if (key == 77) { // Flèche droite
+            else if (key == 77) { // droite
                 choixBorne = (choixBorne + 1) % nbBornesLibres;
             }
         }
-        else if (key == 13) { // Entrée
+        else if (key == 13) { // entrée
+            const Borne& selectedBorne = bornesLibres[choixBorne];
+            int limiteCartes = selectedBorne.isCombatDeBoue() ? 4 : 3;
+
             if (numJoueur == 1) {
-                if (bornesLibres[choixBorne].getCarteJ1().size() < 3) {
+                if (selectedBorne.getCarteJ1().size() < limiteCartes) {
                     break;
                 }
                 else {
-                    std::cout << u8"\n\033[31mVous avez déjà 3 cartes sur cette borne, veuillez en choisir une autre\033[0m\n";
+                    std::cout << u8"\n\033[31mVous avez déjà " << limiteCartes << " cartes sur cette borne, veuillez en choisir une autre\033[0m\n";
                 }
             }
             else {
-                if (bornesLibres[choixBorne].getCarteJ2().size() < 3) {
+                if (selectedBorne.getCarteJ2().size() < limiteCartes) {
                     break;
                 }
                 else {
-                    std::cout << u8"\n\033[31mErreur : Vous avez déjà 3 cartes sur cette borne, veuillez en choisir une autre\033[0m\n";
+                    std::cout << u8"\n\033[31mErreur : Vous avez déjà " << limiteCartes << " cartes sur cette borne, veuillez en choisir une autre\033[0m\n";
                 }
             }
         }
@@ -212,6 +215,7 @@ int AfficheChoixBorneNavigable(Joueur* joueur, int choixBorne, std::vector<Borne
     std::cout << std::endl;
     return bornesLibres[choixBorne].getnumero();
 }
+
 
 int AfficheChoixBorneRevendique(Joueur* joueur, int choixBorneRevendique, std::vector<Borne> bornes, int numJoueur) {
     std::vector<std::string> ListeChoix = { "Non","Oui" };
@@ -357,9 +361,7 @@ void AfficherBornesRevendiquees(Joueur* joueur) {
     }
 }
 //TO DO
-void AfficherBornesPlusAJ(std::vector<Borne>& bornes,
-    const std::vector<std::shared_ptr<Carte>>& main1,
-    const std::vector<std::shared_ptr<Carte>>& main2)
+void AfficherBornesPlusAJ(const std::vector<Borne>& bornes,const std::vector<std::shared_ptr<Carte>>& main1,const std::vector<std::shared_ptr<Carte>>& main2)
 {
     std::vector<std::string> aideDeJeuSuite = {
         "\033[33m-----------------------\033[0m",

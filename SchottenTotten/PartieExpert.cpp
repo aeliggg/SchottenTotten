@@ -18,9 +18,7 @@
 #include <iomanip>
 #include <thread> 
 
-bool PartieExpert::jouer() {
 
-}
 
 void PartieExpert::DistribuerCartes() {
     for (int i = 0; i < 6; ++i) {

@@ -154,6 +154,7 @@
     <ClCompile Include="PartieExpert.cpp" />
     <ClCompile Include="PartieExpertPvIA.cpp" />
     <ClCompile Include="PartieExpertPvP.cpp" />
+    <ClCompile Include="PartieTactique.cpp" />
     <ClCompile Include="StandartFont.cpp" />
   </ItemGroup>
   <ItemGroup>

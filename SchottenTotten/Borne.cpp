@@ -9,10 +9,10 @@ Joueur* Borne::getGagnant() const { return GagnantBorne; }
 Joueur* Borne::getFirst() const { return FirstPlayer; }
 void Borne::setnumero(int numéro) { iBORnuméro = numéro; }
 
-const std::vector<std::shared_ptr<Carte>>& Borne::getCarteJ1()  {
+const std::vector<std::shared_ptr<Carte>>& Borne::getCarteJ1() const {
     return vBORcartesJ1;
 }
-const std::vector<std::shared_ptr<Carte>>& Borne::getCarteJ2()  {
+const std::vector<std::shared_ptr<Carte>>& Borne::getCarteJ2()  const {
     return vBORcartesJ2;
 }
 
@@ -39,8 +39,14 @@ bool Borne::operator<(const Borne& other) const {
     return iBORnuméro < other.iBORnuméro;
 }
 
+bool Borne::estRevendiquee() const {
+    return getGagnant() != nullptr;
+}
+
+
+
 void Borne::viderCartes() {
     vBORcartesJ1.clear();
     vBORcartesJ2.clear();
-    protegee = false;
+    PorteBouclier=false;
 }

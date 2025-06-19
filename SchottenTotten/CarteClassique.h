@@ -10,4 +10,5 @@ public:
     std::string getCouleur() const override { return couleur; }
     std::string getNom() const override { return "Classique"; }
     bool estTactique() const override { return false; }
+    void appliquerEffet(Partie* partie, Joueur* joueur, Borne* cible = nullptr, int idJoueur = 0){}
 };
