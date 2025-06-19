@@ -34,7 +34,7 @@ bool PartieClassiquePvIA::jouer() {
     std::cout << "Début de la partie entre " << joueur1->getNom() << " et l'IA";
     joueur2->setNom("IA");
     bool bPartieFinie = false;
-    bool veutRejouer = false;
+    bool veutRejouer = true;
     int tour = 0;
     while (!bPartieFinie) {
         if (tour != 0) { clearConsole(); }
@@ -42,7 +42,9 @@ bool PartieClassiquePvIA::jouer() {
         TourDePartie(tour, bornes, joueur1, joueur2, 1);
 
         bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2);
-        if (bPartieFinie) { veutRejouer = FinDePartie(); }
+        if (bPartieFinie) { 
+            veutRejouer = FinDePartie(); 
+        }
         else {
             clearConsole();
             TourDePartieIA(tour, bornes, joueur2, joueur1, 2);

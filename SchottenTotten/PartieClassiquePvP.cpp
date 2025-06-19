@@ -26,7 +26,7 @@ bool PartieClassiquePvP::jouer() {
 
     std::cout << u8"Début de la partie entre " << joueur1->getNom() << " et " << joueur2->getNom() << " !\n";
     bool bPartieFinie = 0;
-    bool veutRejouer = FALSE;
+    bool veutRejouer = false;
     int tour = 0;
     while (bPartieFinie == 0) {
         if (tour != 0) {
@@ -36,7 +36,9 @@ bool PartieClassiquePvP::jouer() {
         TourDePartie(tour, bornes, joueur1, joueur2, 1);
 
         bPartieFinie = AfficherVictoire(bornes, joueur1, joueur2); // AfficherVictoire renvoie 1 dans le cas où la partie est terminée
-        if (bPartieFinie) { FinDePartie(); }
+        if (bPartieFinie) {
+            veutRejouer = FinDePartie();
+        }
         else { // TOUR DU DEUXIEME JOUEUR
             clearConsole();
             TourDePartie(tour, bornes, joueur2, joueur1, 2);

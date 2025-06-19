@@ -18,7 +18,7 @@
 #include <thread> 
 
 
-
+    
 void PartieClassique::DistribuerCartes() {
     for (int i = 0; i < 6; ++i) {
         joueur1->ajouterCarte(std::move(cartes.back()));

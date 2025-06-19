@@ -1,9 +1,20 @@
-﻿    #include "Partie.h"
-    #include "CarteTactique.h"
-    #include <algorithm>
-    #include <random>
-    #include <ctime>
-    #include <iostream>
+﻿#include "Partie.h"
+#include "Affichage.h"
+#include <limits>
+#include <iomanip>   // Pour std::setw
+#include <thread>    // Pour sleep_for
+#include <chrono>
+#include "Borne.h"
+#include <iostream>
+#include <functional>
+#include <algorithm>
+#include <random>
+#include <ctime>
+#include <windows.h>
+#include <string>
+#include <codecvt>
+#include <locale>
+#include <conio.h>
 
     Partie::~Partie() {
         // destructeur vide si rien à faire
@@ -126,8 +137,35 @@
     }
 
     bool Partie::FinDePartie() {
-        // Rends à false par défaut (à spécialiser si besoin)
-        return false;
+        int choixUtilisateur = 0;
+        std::vector<std::string> choix = { "Rejouer","Menu" };
+        while (true) {
+            std::cout << "\rQue souhaitez vous faire ? ";
+            for (int i = 0; i < 2; ++i) {
+                if (i == choixUtilisateur)
+                    std::cout << "[" << choix[i] << "]";
+                else
+                    std::cout << " " << choix[i] << " ";
+            }
+            std::cout << u8" (Flèches gauche/droite, Entrée pour valider)   " << std::flush;
+
+            int key = _getch();
+            if (key == 224) { //Touche spéciale (flèche)
+                key = _getch();
+                if (key == 75 || key == 77) { //Flèche gauche ou droite
+                    choixUtilisateur = (choixUtilisateur + 1) % 2;
+                }
+
+            }
+            else if (key == 13) {
+                if (choixUtilisateur == 0) {
+                    return true;
+                }
+                else if (choixUtilisateur == 1) {
+                    return false;
+                }
+            }
+        }
     }
 
     bool Partie::EstRevendiquable(const std::vector<std::shared_ptr<Carte>>& /*cartesJoueur*/, const std::vector<std::shared_ptr<Carte>>& /*cartesAdverse*/, Joueur* /*J*/, Joueur* /*Adverse*/) {

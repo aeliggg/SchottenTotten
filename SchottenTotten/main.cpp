@@ -86,7 +86,6 @@ int AfficheChoixVariableJeuNavigable() {
     int choix = 0; // Index du mode sélectionné (0 à 2)
     const int nbModes = 3;
     const std::string modes[nbModes] = { "Normal", "Expert", "Tactique" };
-
     while (true) {
         clearConsole();
         std::cout << "=== Choisissez le mode de jeu ===\n\n";
@@ -105,55 +104,54 @@ int AfficheChoixVariableJeuNavigable() {
         int key = _getch();
         if (key == 224) {
             key = _getch();
-            if (key == 72) { // Flèche HAUT
+            if (key == 72) { //Flèche HAUT
                 choix = (choix - 1 + nbModes) % nbModes;
             }
-            else if (key == 80) { // Flèche BAS
+            else if (key == 80) { //Flèche BAS
                 choix = (choix + 1) % nbModes;
             }
         }
-        else if (key == 13) { // Entrée
-            return choix + 1; // 1 = Normal, 2 = Expert, 3 = Tactique
+        else if (key == 13) { //Entrée
+            return choix + 1; //1 = Normal, 2 = Expert, 3 = Tactique
         }
     }
 }
 
 int main() {
-    std::cout << "Chargement du jeu ..." << std::endl;
-    PlaySound(TEXT("Start_sound.wav"), NULL, SND_FILENAME | SND_ASYNC);
-    //AfficheBanniereAnim();
-    PlaySound(NULL, 0, 0);
-    clearConsole();
-    PlaySound(TEXT("musique.wav"), NULL, SND_FILENAME | SND_ASYNC);
-    SetConsoleOutputCP(CP_UTF8);
-
-    std::cout << u8"=== Bienvenue dans le jeu des Bornes ===\n\n";
-    int choixMode = AfficheChoixModeJeuNavigable();
-    int choixVariable = AfficheChoixVariableJeuNavigable();
-    std::string Nom1, Nom2;
-    std::cout << u8"\nJoueur 1, veuillez entrer votre prénom : ";
-    std::cin >> Nom1;
-
-    if (choixMode == 1) { // PvP
-        std::cout << u8"Joueur 2, veuillez entrer votre prénom : ";
-        std::cin >> Nom2;
-    }
-    else {
-        Nom2 = "IA";
-    }
-
-    bool veutRejouer = true;
-    while (veutRejouer) {
+    while (true) {
+        std::cout << "Chargement du jeu ..." << std::endl;
+        PlaySound(TEXT("Start_sound.wav"), NULL, SND_FILENAME | SND_ASYNC);
+        //AfficheBanniereAnim();
+        PlaySound(NULL, 0, 0);
         clearConsole();
+        PlaySound(TEXT("musique.wav"), NULL, SND_FILENAME | SND_ASYNC);
+        SetConsoleOutputCP(CP_UTF8);
 
-        Joueur* joueur1 = new Joueur(Nom1);
-        Joueur* joueur2 = new Joueur(Nom2);
+        std::cout << u8"=== Bienvenue dans le jeu des Bornes ===\n\n";
+        int choixMode = AfficheChoixModeJeuNavigable();
+        int choixVariable = AfficheChoixVariableJeuNavigable();
+        std::string Nom1, Nom2;
+        std::cout << u8"\nJoueur 1, veuillez entrer votre prénom : ";
+        std::cin >> Nom1;
 
+        if (choixMode == 1) { //PvP
+            std::cout << u8"Joueur 2, veuillez entrer votre prénom : ";
+            std::cin >> Nom2;
+        }
+        else {
+            Nom2 = "IA";
+        }
 
-        std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
-        std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
-        Partie* partie = CreationPartie(choixVariable, choixMode,joueur1,joueur2);
-        partie->jouer();
+        bool veutRejouer = true;
+        while (veutRejouer) {
+            clearConsole();
+            Joueur* joueur1 = new Joueur(Nom1);
+            Joueur* joueur2 = new Joueur(Nom2);
+            std::cout << "Joueur 1 : " << joueur1->getNom() << std::endl;
+            std::cout << "Joueur 2 : " << joueur2->getNom() << std::endl;
+            Partie* partie = CreationPartie(choixVariable, choixMode, joueur1, joueur2);
+            veutRejouer = partie->jouer();
+        }
     }
     return 0;
 }
