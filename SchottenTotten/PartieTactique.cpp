@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 
+/*
+
 // Constructeurs
 PartieTactique::PartieTactique() : Partie() {}
 
@@ -187,3 +189,4 @@ void PartieTactique::appliquerValeursChoisies(std::vector<std::shared_ptr<Carte>
     }
 }
 }
+*/

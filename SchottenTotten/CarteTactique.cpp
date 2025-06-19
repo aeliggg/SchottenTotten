@@ -7,7 +7,7 @@
 #include "PartieTactique.h"
 #include "Affichage.h"
 #include <tuple>
-
+/*
 // Implémentation de la fabrique
 std::shared_ptr<Carte> CarteFactory::creerCarte(const std::string& type, int numero, const std::string& couleur) {
     if (type == "Banshee") {
@@ -286,7 +286,7 @@ void Strategie::appliquerEffet(Partie* partie, Joueur* joueur, Borne* cible, int
     std::cout << "Effet Stratège terminé.\n";
 }
 
-void Traitre::appliquerEffet(Partie* partie, Joueur* joueur, Borne* /*cible*/, int idJoueur) {
+void Traitre::appliquerEffet(Partie* partie, Joueur* joueur, Borne* cible, int idJoueur) {
     PartieTactique* partieTactique = dynamic_cast<PartieTactique*>(partie);
     if (!partieTactique) {
         std::cout << "Erreur : cette carte ne peut être jouée que dans une PartieTactique.\n";
@@ -375,3 +375,4 @@ void Traitre::appliquerEffet(Partie* partie, Joueur* joueur, Borne* /*cible*/, i
     std::cout << "Carte \"" << carteChoisie->getNom() << "\" déplacée avec succès.\n";
     std::cout << "Effet Traître terminé.\n";
 }
+*/

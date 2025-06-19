@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include "CarteClassique.h"
-
+/*
 
 class CarteTactique : public Carte {
 public:
@@ -87,3 +87,4 @@ public:
     std::string getNom() const override { return "Traître"; }
     void appliquerEffet(Partie* partie, Joueur* joueur, Borne* cible, int idJoueur = 0) override;
 };
+*/

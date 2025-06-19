@@ -2,7 +2,7 @@
 #include "Partie.h"
 #include <vector>
 #include <memory>
-
+/*
 class PartieTactique : public Partie {
 public:
     PartieTactique();
@@ -47,3 +47,4 @@ private:
     std::vector<std::shared_ptr<Carte>> piocheTactiques;
     std::vector<std::shared_ptr<Carte>> defausse;
 };
+*/
